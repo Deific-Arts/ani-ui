@@ -70,7 +70,7 @@ export default css`
     width: 96%;
     margin-top: 2%;
     transform: translateX(-50%);
-    background: rgb(var(--app-background-color));
+    background: var(--app-background-color);
   }
 
   kemet-alert[opened] {

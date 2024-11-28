@@ -4,7 +4,7 @@ import { Router } from '@vaadin/router';
 import alertStore, { IAlertStore } from '../../store/alert';
 import appStore, { IAppStore } from '../../store/app';
 import userStore, { IUserStore } from '../../store/user';
-import { setGeoLocation, switchRoute } from '../../shared/utilities';
+import { switchRoute } from '../../shared/utilities';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 import routes from '../../routes';
@@ -58,8 +58,6 @@ export class AniApp extends LitElement {
     userStore.subscribe((state) => {
       this.userState = state;
     });
-
-    setGeoLocation();
   }
 
   firstUpdated() {

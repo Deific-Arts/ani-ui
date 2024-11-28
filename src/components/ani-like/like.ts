@@ -36,7 +36,6 @@ export default class AniLike extends LitElement {
 
     const latestQuoteRequest = await fetch(`${API_URL}/quotes/${this.quote.documentId}`);
     const latestQuoteResponse = await latestQuoteRequest.json();
-    console.log(latestQuoteResponse)
     const likes = latestQuoteResponse.data.likes || [];
 
     const addLike = {
@@ -49,7 +48,7 @@ export default class AniLike extends LitElement {
 
     const likeRequestBody = this.liked ? removeLike : addLike;
 
-    await fetch(`${API_URL}/quotes/${this.quote.documentId}`, {
+    await fetch(`${API_URL}/api/quotes/${this.quote.documentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

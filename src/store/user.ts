@@ -23,11 +23,11 @@ const getProfile = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${user.token}`
+      'Authorization': `Bearer ${user.jwt}`
     }
   };
 
-  const userProfile = await fetch(`${API_URL}/wp-json/wp/v2/users/${user.user_id.toString()}?context=edit`, options)
+  const userProfile = await fetch(`${API_URL}/api/users/me`, options)
     .then((response) => response.json());
 
   if (userProfile) {

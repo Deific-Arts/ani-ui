@@ -10,7 +10,7 @@ import KemetButton from 'kemet-ui/dist/components/kemet-button/kemet-button';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 interface ICredentials {
-  username: string;
+  identifier: string;
   password: string;
 }
 
@@ -35,7 +35,7 @@ export class aniLogin extends LitElement {
   @state()
   resetPassword: string = '';
 
-  @query('form[action*=jwt-auth]')
+  @query('form[action*=auth]')
   loginForm!: HTMLFormElement;
 
   @query('form[action*=register]')
@@ -47,8 +47,8 @@ export class aniLogin extends LitElement {
   @query('form[action*=set-password]')
   setPasswordForm!: HTMLFormElement;
 
-  @query('[name=username]')
-  loginUsername!: KemetInput;
+  @query('[name=identifier]')
+  loginIdentifier!: KemetInput;
 
   @query('[name=password]')
   loginPassword!: KemetInput;
@@ -64,10 +64,10 @@ export class aniLogin extends LitElement {
           <kemet-tab slot="tab">Register</kemet-tab>
           <kemet-tab slot="tab">Forgot Password</kemet-tab>
           <kemet-tab-panel slot="panel">
-            <form method="post" action="wp-json/jwt-auth/v1/token" @submit=${(event: SubmitEvent) => this.handleLogin(event)}>
+            <form method="post" action="auth/local" @submit=${(event: SubmitEvent) => this.handleLogin(event)}>
               <p>
                 <kemet-field label="Username">
-                  <kemet-input required slot="input" name="username" rounded validate-on-blur></kemet-input>
+                  <kemet-input required slot="input" name="identifier" rounded validate-on-blur></kemet-input>
                 </kemet-field>
               </p>
               <p>
@@ -108,11 +108,12 @@ export class aniLogin extends LitElement {
     `
   }
 
+
   handleLogin(event: SubmitEvent) {
     event.preventDefault();
 
     const credentials = {
-      username: this.loginUsername.value,
+      identifier: this.loginIdentifier.value,
       password: this.loginPassword.value,
     };
 
@@ -128,38 +129,40 @@ export class aniLogin extends LitElement {
 
     const endpoint = this.loginForm.getAttribute('action');
 
-    fetch(`${API_URL}/${endpoint}`, options)
+    fetch(`${API_URL}/api/${endpoint}`, options)
       .then(response => response.json())
       .then(async response => {
+        console.log(response);
+
         // bad access
-        if (response.data?.status === 403) {
+        if (response.error?.status === 400) {
           this.alertState.setStatus('error');
-          this.alertState.setMessage(unsafeHTML(response.message));
+          this.alertState.setMessage(unsafeHTML('Oh boy, looks like a bad username or password.'));
           this.alertState.setOpened(true);
           this.alertState.setIcon('exclamation-circle');
         }
 
         // success
-        if (response.token) {
+        if (response.jwt) {
           const options = {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${response.token}`
+              'Authorization': `Bearer ${response.jwt}`
             }
           };
-          const userProfile = await fetch(`${API_URL}/wp-json/wp/v2/users/${response.user_id.toString()}?context=edit`, options).then((response) => response.json());
+          const userProfile = await fetch(`${API_URL}/api/users/me`, options).then((response) => response.json());
           this.userState.updateProfile(userProfile);
           this.userState.login(response);
-          switchRoute('/mine');
+          switchRoute('home');
         }
       })
-      .catch(() => {
-        this.alertState.setStatus('error');
-        this.alertState.setMessage('There was an unknown problem while logging you in.');
-        this.alertState.setOpened(true);
-        this.alertState.setIcon('exclamation-circle');
-      });
+      // .catch(() => {
+      //   this.alertState.setStatus('error');
+      //   this.alertState.setMessage('There was an unknown problem while logging you in.');
+      //   this.alertState.setOpened(true);
+      //   this.alertState.setIcon('exclamation-circle');
+      // });
   }
 
   handleRegistration(event: SubmitEvent) {
@@ -198,7 +201,7 @@ export class aniLogin extends LitElement {
 
           if (responseData.status === 'ok') {
             const credentials = {
-              username: responseData.data['user_name'],
+              identifier: responseData.data['user_name'],
               password: responseData.data['user_pass'],
             }
 
@@ -266,7 +269,7 @@ export class aniLogin extends LitElement {
       .then((responseData) => {
         if (responseData.data.status === 200) {
           const credentials = {
-            username: this.resetEmail,
+            identifier: this.resetEmail,
             password: this.resetPassword
           }
 
