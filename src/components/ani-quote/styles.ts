@@ -22,6 +22,7 @@ export default css`
 
   blockquote {
     font-style: italic;
+    text-align: justify;
     display: flex;
     align-items: flex-start;
     position: relative;
@@ -37,6 +38,7 @@ export default css`
 
   blockquote::after {
     content: '❞';
+    right: -0.5rem;
   }
 
   blockquote::before,

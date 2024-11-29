@@ -8,6 +8,7 @@ import styles from './styles';
 import sharedStyles from '../../shared/styles';
 import KemetButton from 'kemet-ui/dist/components/kemet-button/kemet-button';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import { ENUM_ALERT_STATUS } from '../../shared/enums';
 
 interface ICredentials {
   identifier: string;
@@ -64,7 +65,7 @@ export class aniLogin extends LitElement {
           <kemet-tab slot="tab">Register</kemet-tab>
           <kemet-tab slot="tab">Forgot Password</kemet-tab>
           <kemet-tab-panel slot="panel">
-            <form method="post" action="auth/local" @submit=${(event: SubmitEvent) => this.handleLogin(event)}>
+            <form method="post" action="api/auth/local" @submit=${(event: SubmitEvent) => this.handleLogin(event)}>
               <p>
                 <kemet-field label="Username">
                   <kemet-input required slot="input" name="identifier" rounded validate-on-blur></kemet-input>
@@ -75,27 +76,28 @@ export class aniLogin extends LitElement {
                   <kemet-input required slot="input" type="password" name="password" validate-on-blur></kemet-input>
                 </kemet-field>
               </p>
-              <kemet-button>
+              <br />
+              <kemet-button variant="rounded">
                Login <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
               </kemet-button>
             </form>
           </kemet-tab-panel>
           <kemet-tab-panel slot="panel">
-            <form method="post" action="wp-json/ani/v1/register" @submit=${(event: SubmitEvent) => this.handleRegistration(event)}>
-              <kemet-field slug="user_name" label="Username" message="A valid username is required">
-                <kemet-input required slot="input" name="user_name" validate-on-blur></kemet-input>
+            <form method="post" action="api/auth/local/register" @submit=${(event: SubmitEvent) => this.handleRegistration(event)}>
+              <kemet-field slug="username" label="Username" message="A valid username is required">
+                <kemet-input required slot="input" name="username" validate-on-blur></kemet-input>
               </kemet-field>
               <br />
               <kemet-field slug="user_pass" label="New Password" status="standard">
-                <kemet-input slot="input" type="password" name="user_pass" status="standard"></kemet-input>
+                <kemet-input slot="input" type="password" name="password" status="standard"></kemet-input>
                 <kemet-password slot="component" message="Please make sure you meet all the requirements."></kemet-password>
               </kemet-field>
               <br />
-              <kemet-field slug="user_email" label="Email" message="A valid email is required">
-                <kemet-input required slot="input" name="user_email" type="email" validate-on-blur></kemet-input>
+              <kemet-field slug="email" label="Email" message="A valid email is required">
+                <kemet-input required slot="input" name="email" type="email" validate-on-blur></kemet-input>
               </kemet-field>
               <br />
-              <kemet-button>
+              <kemet-button variant="rounded">
                 Register <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
               </kemet-button>
             </form>
@@ -129,7 +131,7 @@ export class aniLogin extends LitElement {
 
     const endpoint = this.loginForm.getAttribute('action');
 
-    fetch(`${API_URL}/api/${endpoint}`, options)
+    fetch(`${API_URL}/${endpoint}`, options)
       .then(response => response.json())
       .then(async response => {
         console.log(response);
@@ -184,34 +186,32 @@ export class aniLogin extends LitElement {
     fetch(`${API_URL}/${endpoint}`, options)
       .then(response => response.json())
       .then((responseData) => {
-          this.alertState.setMessage('An error was encountered while registering.');
+          // this.alertState.setMessage('An error was encountered while registering.');
 
-          if (responseData.status === 'error') {
-            if (responseData.data.errors.existing_user_login) {
-              this.alertState.setMessage('That username is already taken!');
-            }
-
-            if (responseData.data.errors.existing_user_email) {
-              this.alertState.setMessage('Email is registered with another user!');
-            }
-
+          if (responseData.error) {
             this.alertState.setStatus('error');
+            this.alertState.setMessage(responseData.error.message);
+            this.alertState.setOpened(true);
             this.alertState.setIcon('exclamation-circle');
           }
 
-          if (responseData.status === 'ok') {
+          if (responseData.user) {
             const credentials = {
-              identifier: responseData.data['user_name'],
-              password: responseData.data['user_pass'],
+              identifier: responseData.user.email,
+              password: formData.get('password'),
             }
+
+            this.alertState.setStatus(ENUM_ALERT_STATUS.PRIMARY);
+            this.alertState.setOpened(true);
+            this.alertState.setMessage('You\'re all set!');
 
             this.fetchLogin(credentials);
           }
 
-          this.alertState.setOpened(true);
+
       })
       .catch(() => {
-        this.alertState.setStatus('error');
+        this.alertState.setStatus(ENUM_ALERT_STATUS.ERROR);
         this.alertState.setMessage('There was an unknown problem while registering.');
         this.alertState.setOpened(true);
         this.alertState.setIcon('exclamation-circle');

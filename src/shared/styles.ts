@@ -54,6 +54,10 @@ export default css`
     display: none;
   }
 
+  kemet-button {
+    --kemet-button-padding: 0.75rem 1rem;
+  }
+
   kemet-toggle {
     --kemet-toggle-track-shadow: none;
     --kemet-toggle-track-color: transparent;

@@ -4,7 +4,10 @@ import { Router } from '@vaadin/router';
 import alertStore, { IAlertStore } from '../../store/alert';
 import appStore, { IAppStore } from '../../store/app';
 import userStore, { IUserStore } from '../../store/user';
+import modalsStore, { IModalsStore } from '../../store/modals';
 import { switchRoute } from '../../shared/utilities';
+import { svgLogo } from '../../shared/svgs';
+
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 import routes from '../../routes';
@@ -15,15 +18,9 @@ import '../ani-home/home';
 import '../ani-profile/profile';
 import '../ani-login/login';
 import '../ani-mine/mine';
+import { ENUM_ALERT_STATUS } from '../../shared/enums';
 
 
-export enum ENUM_ALERT_STATUS {
-  SUCCESS = 'success',
-  ERROR = 'error',
-  STANDARD = 'standard',
-  WARNING = 'warning',
-  PRIMARY = 'primary',
-}
 
 @customElement('ani-app')
 export class AniApp extends LitElement {
@@ -37,6 +34,12 @@ export class AniApp extends LitElement {
 
   @state()
   userState: IUserStore = userStore.getInitialState();
+
+  @state()
+  modalsState: IModalsStore = modalsStore.getInitialState();
+
+  @state()
+  signModalOpened: boolean = false;
 
   @query('main')
   main!: HTMLElement;
@@ -58,6 +61,10 @@ export class AniApp extends LitElement {
     userStore.subscribe((state) => {
       this.userState = state;
     });
+
+    modalsStore.subscribe((state) => {
+      this.modalsState = state;
+    });
   }
 
   firstUpdated() {
@@ -68,6 +75,7 @@ export class AniApp extends LitElement {
 
   render() {
     const { status, message, opened, icon } = this.alertState;
+    const { signInOpened } = this.modalsState;
 
     return html`
       <kemet-alert
@@ -104,6 +112,25 @@ export class AniApp extends LitElement {
           <main></main>
         </section>
       </kemet-drawer>
+      <kemet-modal
+        id="modal-sign-in"
+        close-on-click
+        effect="fadein-scaleup"
+        .opened=${signInOpened}
+         @kemet-modal-closed=${() => modalsStore.setState({ signInOpened: false })}>
+        <section>
+          ${svgLogo}
+          <p>Want to join in on the fun? Login now!</p>
+          <kemet-button
+            variant="rounded"
+            @click=${() => {
+              modalsStore.setState({ signInOpened: false });
+              switchRoute('login', 'Login');
+            }}>
+            Login
+          </kemet-button>
+        </section>
+      </kemet-modal>
     `
   }
 

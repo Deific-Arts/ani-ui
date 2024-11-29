@@ -26,4 +26,21 @@ export default css`
     align-items: flex-start;
     font-size: 1.25rem;
   }
+
+  kemet-modal {
+    --kemet-modal-dialog-background-color: var(--app-background-color);
+    text-align: center;
+  }
+
+  kemet-modal p {
+    color: var(--app-color);
+  }
+
+  kemet-modal section {
+    padding: 1rem 1.5rem;
+  }
+
+  #modal-sign-in svg {
+    width: 128px;
+  }
 `;
