@@ -22,21 +22,19 @@ export default class AniHome extends LitElement {
     return html`
       <kemet-tabs divider>
         <kemet-tab slot="tab">All</kemet-tab>
+        <kemet-tab slot="tab">Following</kemet-tab>
         <kemet-tab slot="tab">Mine</kemet-tab>
-        <kemet-tab slot="tab">Private</kemet-tab>
-        <kemet-tab slot="tab">Random</kemet-tab>
         <kemet-tab-panel slot="panel">
           <ani-feed .quotes=${this.quotes}></ani-feed>
         </kemet-tab-panel>
+        <kemet-tab-panel slot="panel">Following</kemet-tab-panel>
         <kemet-tab-panel slot="panel">Mine</kemet-tab-panel>
-        <kemet-tab-panel slot="panel">Private</kemet-tab-panel>
-        <kemet-tab-panel slot="panel">Random</kemet-tab-panel>
       </kemet-tabs>
     `
   }
 
   async getQuotes() {
-    const response = await fetch(`${API_URL}/api/quotes?populate=*`);
+    const response = await fetch(`${API_URL}/api/quotes?populate=user.avatar&populate=book&populate=author&populate=comments`);
     const { data }= await response.json();
     this.quotes = data;
   }

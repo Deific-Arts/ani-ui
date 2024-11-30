@@ -16,6 +16,7 @@ import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import FilePondStyles from 'filepond/dist/filepond.min.css';
 import FilePondImagePreviewStyles from 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
+import { ENUM_ALERT_STATUS } from '../../shared/enums.ts';
 
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -77,7 +78,7 @@ export default class aniProfile extends LitElement {
         <kemet-tab slot="tab"><kemet-icon icon="info-circle" size="24"></kemet-icon>&nbsp;&nbsp;Information</kemet-tab>
         <kemet-tab slot="tab"><kemet-icon icon="passport" size="24"></kemet-icon>&nbsp;&nbsp;Change Password</kemet-tab>
         <kemet-tab-panel slot="panel">
-          <form method="post" action="wp-json/wp/v2/users" @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
+          <form method="post" action="api/users" @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
             <fieldset>
               <legend>Your Profile</legend>
               <section class="profile">
@@ -85,12 +86,12 @@ export default class aniProfile extends LitElement {
                 <div>
                   <p>
                     <kemet-field label="First Name">
-                      <kemet-input slot="input" name="first_name" rounded value=${this.userState?.profile?.first_name}></kemet-input>
+                      <kemet-input slot="input" name="firstName" rounded value=${this.userState?.profile?.firstName}></kemet-input>
                     </kemet-field>
                   </p>
                   <p>
                     <kemet-field label="Last Name">
-                      <kemet-input slot="input" name="last_name" rounded value=${this.userState?.profile?.last_name}></kemet-input>
+                      <kemet-input slot="input" name="lastName" rounded value=${this.userState?.profile?.lastName}></kemet-input>
                     </kemet-field>
                   </p>
                   <p>
@@ -101,7 +102,7 @@ export default class aniProfile extends LitElement {
                 </div>
               </section>
               <br /><hr /><br />
-              <kemet-button>
+              <kemet-button variant="rounded">
                 Update Profile <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
               </kemet-button>
             </fieldset>
@@ -109,27 +110,27 @@ export default class aniProfile extends LitElement {
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <kemet-card>
-            <form method="post" action="wp-json/ani/v1/change-password" @submit=${(event: SubmitEvent) => this.changePassword(event)}>
+            <form method="post" action="api/auth/change-password" @submit=${(event: SubmitEvent) => this.changePassword(event)}>
               <fieldset>
                 <legend>Change Password</legend>
                 <p>
                   <kemet-field label="Current Password">
-                    <kemet-input required slot="input" type="password" name="current_password" validate-on-blur></kemet-input>
+                    <kemet-input required rounded slot="input" type="password" name="current_password" validate-on-blur></kemet-input>
                   </kemet-field>
                 </p>
                 <p>
                   <kemet-field slug="new_password" label="New Password">
-                    <kemet-input slot="input" type="password" name="new_password" required validate-on-blur></kemet-input>
+                    <kemet-input slot="input" rounded type="password" name="new_password" required validate-on-blur></kemet-input>
                     <kemet-password slot="component" message="Please make sure you meet all the requirements."></kemet-password>
                   </kemet-field>
                 </p>
                 <p>
                   <kemet-field label="Confirm Password">
-                    <kemet-input required slot="input" type="password" name="confirm_password" validate-on-blur></kemet-input>
+                    <kemet-input required rounded slot="input" type="password" name="confirm_password" validate-on-blur></kemet-input>
                   </kemet-field>
                 </p>
                 <br /><hr /><br />
-                <kemet-button>
+                <kemet-button variant="rounded">
                   Change Password <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
                 </kemet-button>
               </fieldset>
@@ -154,12 +155,14 @@ export default class aniProfile extends LitElement {
   }
 
   makeProfileImage() {
-    const profileImage = this.userState.profile?.meta?.ani_profile_image['0'];
+    const profileImage = this.userState.profile?.avatar?.url;
+
+    console.log(profileImage)
 
     if (profileImage && !this.showUploadProfileImage) {
       return html`
         <button class="image" @click=${() => this.showUploadProfileImage = true}>
-          <div class="profile-picture" style="background-image: url('${profileImage}')"></div>
+          <div class="profile-picture" style="background-image: url('${API_URL}${profileImage}')"></div>
         </button>
         <button class="delete" aria-label="delete" @click=${(event: SubmitEvent) => this.deleteProfileImage(event)}>
           <kemet-icon icon="trash" size="32"></kemet-icon>
@@ -178,7 +181,7 @@ export default class aniProfile extends LitElement {
   async updateProfile(event: SubmitEvent) {
     event.preventDefault();
 
-    if (!this.userState.user.user_id) {
+    if (!this.userState.user) {
       return;
     }
 
@@ -187,17 +190,17 @@ export default class aniProfile extends LitElement {
     const formData = new FormData(this.userForm) as any;
 
     const options = {
-      method: this.userForm.getAttribute('method')?.toUpperCase() || 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.token}`
+        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
       body: JSON.stringify(Object.fromEntries(formData))
     };
 
     const endpoint = this.userForm.getAttribute('action');
 
-    const profile = await fetch(`${API_URL}/${endpoint}/${this.userState.user.user_id.toString()}?context=edit`, options)
+    const profile = await fetch(`${API_URL}/${endpoint}/${this.userState.user.user.id}`, options)
       .then((response) => response.json())
       .catch((error) => console.error(error));
 
@@ -213,66 +216,67 @@ export default class aniProfile extends LitElement {
     const uploadFormData = new FormData();
 
     if (hasFile) {
-      uploadFormData.append('async-upload', this.filePond.getFile().file);
+      uploadFormData.append('files', this.filePond.getFile().file);
     }
 
     const uploadOptions = {
       method: 'POST',
       header: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${this.userState.user.token}`
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
       body: uploadFormData
     }
 
-    let mediaUpload;
+    let avatar;
 
     if (hasFile) {
-      mediaUpload = await fetch(`${API_URL}/wp-json/ani/v1/media-upload`, uploadOptions)
+      avatar = await fetch(`${API_URL}/api/upload`, uploadOptions)
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
+
+      const avatarOptions = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.userState.user.jwt}`
+        },
+        body: JSON.stringify({ avatar })
+      };
+
+      await fetch(`${API_URL}/${endpoint}/${this.userState.user.user.id}`, avatarOptions)
         .then((response) => response.json())
         .catch((error) => console.error(error));
     }
-
-
-    // Profile Image
-    // -------------
-
-    const profileImageOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.token}`
-      },
-      body: JSON.stringify({
-        image_src: mediaUpload ? mediaUpload.data.url : '',
-        image_id: mediaUpload ? mediaUpload.data.id : '',
-        user_id: this.userState.user.user_id
-      })
-    };
-
-    await fetch(`${API_URL}/wp-json/ani/v1/profile-image`, profileImageOptions)
-      .then((response) => response.json())
-      .catch((error) => console.error(error));
   }
 
   async deleteProfileImage(event: SubmitEvent) {
     event.preventDefault();
     this.showUploadProfileImage = true;
-    this.userState.profile.meta.ani_profile_image[0] = '';
+    this.userState.profile.avatar.url = '';
 
     const options = {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.userState.user.token}`
+        'Authorization': `Bearer ${this.userState.user.jwt}`
       },
       body: JSON.stringify({
-        image_id: this.userState.profile.meta.ani_profile_image_id[0],
-        user_id: this.userState.user.user_id
+        avatar: null,
       })
     }
 
-    await fetch(`${API_URL}/wp-json/ani/v1/media-delete`, options);
+    await fetch(`${API_URL}/api/users/${this.userState.user.user.id}`, options);
+
+    const deleteOptions = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.userState.user.jwt}`
+      },
+    }
+
+    await fetch(`${API_URL}/api/upload/files/${this.userState.profile.avatar.id}`, deleteOptions);
   }
 
   changePassword(event: SubmitEvent) {
@@ -306,25 +310,31 @@ export default class aniProfile extends LitElement {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.userState.user.token}`
+          'Authorization': `Bearer ${this.userState.user.jwt}`
         },
         body: JSON.stringify({
           user_id: this.userState.user.user_id,
-          current_password: currentPasswordInput.value,
-          new_password: newPasswordInput.value,
+          currentPassword: currentPasswordInput.value,
+          password: newPasswordInput.value,
+          passwordConfirmation: confirmPasswordInput.value
         })
       }
 
-      await fetch(`${API_URL}/wp-json/ani/v1/change-password`, options)
+      await fetch(`${API_URL}/api/auth/change-password`, options)
         .then((response) => response.json())
         .then((responseData) => {
-          this.alertState.setStatus(responseData.status);
-          this.alertState.setMessage(responseData.message);
+          console.log(responseData)
           this.alertState.setOpened(true);
 
-          if (responseData.status === 'error') {
+          if (responseData.error) {
+            this.alertState.setStatus(ENUM_ALERT_STATUS.ERROR);
+            this.alertState.setMessage(responseData.error.message);
             this.alertState.setIcon('exclamation-circle');
-          } else {
+          }
+
+          if (responseData.jwt) {
+            this.alertState.setStatus(ENUM_ALERT_STATUS.PRIMARY);
+            this.alertState.setMessage('Password changed successfully.');
             this.alertState.setIcon('check-circle');
           }
         })

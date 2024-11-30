@@ -6,6 +6,8 @@ export default css`
     gap: 1rem;
     grid-template-columns: auto 1fr;
     padding: 1rem;
+    margin-top: 2rem;
+    border-bottom: 1px solid rgb(var(--kemet-color-white) / 25%);
   }
 
   img {

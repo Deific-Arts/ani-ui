@@ -7,6 +7,8 @@ import sharedStyles from '../../shared/styles';
 
 import '../ani-like/like';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 @customElement('ani-quote')
 export default class AniQuote extends LitElement {
   static styles = [styles, sharedStyles];
@@ -17,7 +19,10 @@ export default class AniQuote extends LitElement {
   render() {
     return html`
       <div>
-        <img src="https://i.ytimg.com/vi/N3YE2gH3QC0/mqdefault.jpg" alt="place holder" />
+        ${this.quote.user.avatar
+          ? html`<img src="${API_URL}/${this.quote.user.avatar.url}" alt="${this.quote.user.username}" />`
+          : html `<img src="https://placehold.co/80x80?text=${this.quote.user.username}" alt="${this.quote.user.username}" />`
+        }
       </div>
       <div>
         <header>

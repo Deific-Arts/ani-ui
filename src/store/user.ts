@@ -27,11 +27,11 @@ const getProfile = async () => {
     }
   };
 
-  const userProfile = await fetch(`${API_URL}/api/users/me`, options)
+  const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options)
     .then((response) => response.json());
 
   if (userProfile) {
-    return { profile: userProfile };
+    return userProfile;
   }
 
   return;
@@ -41,7 +41,7 @@ const profileResponse = await getProfile();
 
 const store = createStore<IUserStore>(set => ({
   user: Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : {},
-  profile: profileResponse?.profile,
+  profile: profileResponse,
   updateProfile: (profile: any) => set(() => { return { profile } }),
   isLoggedIn: !!Cookies.get('ani-user'),
   login: (loginData) => set(() => {

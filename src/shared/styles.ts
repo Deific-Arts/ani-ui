@@ -132,7 +132,7 @@ export default css`
     aspect-ratio: 1 / 1;
     min-width: 48px;
     border-radius: 50%;
-    background-size: 100% auto;
+    background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
   }
