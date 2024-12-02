@@ -78,35 +78,37 @@ export default class aniProfile extends LitElement {
         <kemet-tab slot="tab"><kemet-icon icon="info-circle" size="24"></kemet-icon>&nbsp;&nbsp;Information</kemet-tab>
         <kemet-tab slot="tab"><kemet-icon icon="passport" size="24"></kemet-icon>&nbsp;&nbsp;Change Password</kemet-tab>
         <kemet-tab-panel slot="panel">
-          <form method="post" action="api/users" @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
-            <fieldset>
-              <legend>Your Profile</legend>
-              <section class="profile">
-                <div class="profile-image">${this.makeProfileImage()}</div>
-                <div>
-                  <p>
-                    <kemet-field label="First Name">
-                      <kemet-input slot="input" name="firstName" rounded value=${this.userState?.profile?.firstName}></kemet-input>
-                    </kemet-field>
-                  </p>
-                  <p>
-                    <kemet-field label="Last Name">
-                      <kemet-input slot="input" name="lastName" rounded value=${this.userState?.profile?.lastName}></kemet-input>
-                    </kemet-field>
-                  </p>
-                  <p>
-                    <kemet-field label="Email">
-                      <kemet-input slot="input" name="email" rounded value=${this.userState?.profile?.email}></kemet-input>
-                    </kemet-field>
-                  </p>
-                </div>
-              </section>
-              <br /><hr /><br />
-              <kemet-button variant="rounded">
-                Update Profile <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
-              </kemet-button>
-            </fieldset>
-          </form>
+          <kemet-card>
+            <form method="post" action="api/users" @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
+              <fieldset>
+                <legend>Welcome, ${this.userState?.profile?.username}</legend>
+                <section class="profile">
+                  <div class="profile-image">${this.makeProfileImage()}</div>
+                  <div>
+                    <p>
+                      <kemet-field label="First Name">
+                        <kemet-input slot="input" name="firstName" rounded value=${this.userState?.profile?.firstName}></kemet-input>
+                      </kemet-field>
+                    </p>
+                    <p>
+                      <kemet-field label="Last Name">
+                        <kemet-input slot="input" name="lastName" rounded value=${this.userState?.profile?.lastName}></kemet-input>
+                      </kemet-field>
+                    </p>
+                    <p>
+                      <kemet-field label="Email">
+                        <kemet-input slot="input" name="email" rounded value=${this.userState?.profile?.email}></kemet-input>
+                      </kemet-field>
+                    </p>
+                  </div>
+                </section>
+                <br /><hr /><br />
+                <kemet-button variant="rounded">
+                  Update Profile <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
+                </kemet-button>
+              </fieldset>
+            </form>
+          </kemet-card>
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <kemet-card>

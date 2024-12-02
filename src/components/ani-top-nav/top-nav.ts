@@ -1,8 +1,12 @@
 import { LitElement, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
+import { svgLogo } from '../../shared/svgs';
+import userStore, { IUserStore } from '../../store/user';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
-import { svgLogo } from '../../shared/svgs';
+import { switchRoute } from '../../shared/utilities';
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-top-nav')
 export default class AniTopNav extends LitElement {
@@ -10,6 +14,9 @@ export default class AniTopNav extends LitElement {
 
   @property({ type: Boolean, reflect: true })
   loading: boolean = false;
+
+  @state()
+  userState: IUserStore = userStore.getInitialState();
 
   render() {
     return html`
@@ -21,7 +28,22 @@ export default class AniTopNav extends LitElement {
       <button aria-label="Home">
         <a href="/">${svgLogo}</a>
       </button>
+      <div>${this.makeProfileImage()}</div>
     `
+  }
+
+  makeProfileImage() {
+    const profileImage = this.userState.profile?.avatar?.url;
+
+    if (this.userState.isLoggedIn) {
+      return html`<a href="/profile"><img src="${API_URL}/${profileImage}" alt="${this.userState.profile.username}" /></a>`
+    }
+
+    return html`
+      <button @click=${() => switchRoute('login', 'aniCards | Login')} aria-label="Login">
+        <kemet-icon icon="door-open" size="24"></kemet-icon>
+      </button>
+    `;
   }
 }
 

@@ -20,24 +20,32 @@ export default css`
     margin-top: 1rem;
   }
 
+  legend {
+    text-align: center;
+  }
+
+  fieldset {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
   .profile {
     display: block;
-    margin: 2vw 4vw;
-    padding: 4vw;
+    margin: 0;
     border: var(--app-border);
   }
 
   .profile-image {
     text-align: center;
+    max-width: 320px;
     position: relative;
+    margin: auto;
   }
 
-  @media screen and (min-width: 769px) {
-    .profile {
-      display: grid;
-      gap: 8vw;
-      align-items: center;
-      grid-template-columns: 1fr 1fr;
-    }
+  .profile-image + div {
+    display: flex;
+    gap: 1px;
+    flex-direction: column;
+    width: 100%;
   }
 `;

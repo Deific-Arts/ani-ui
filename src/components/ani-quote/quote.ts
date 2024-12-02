@@ -21,7 +21,6 @@ export default class AniQuote extends LitElement {
   isSingle = location.pathname.includes('quote');
 
   render() {
-    console.log(this.isSingle)
     return this.quote ? html`
       <div>
         ${this.quote.user.avatar
