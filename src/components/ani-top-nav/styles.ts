@@ -12,7 +12,7 @@ export default  css`
 
   [aria-label="Home"] {
     position: absolute;
-    top: 0.5rem;
+    top: 1rem;
     left: 50%;
     transform: translateX(-50%);
   }

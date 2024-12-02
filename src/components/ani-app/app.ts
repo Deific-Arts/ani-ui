@@ -6,7 +6,8 @@ import appStore, { IAppStore } from '../../store/app';
 import userStore, { IUserStore } from '../../store/user';
 import modalsStore, { IModalsStore } from '../../store/modals';
 import { switchRoute } from '../../shared/utilities';
-import { svgLogo } from '../../shared/svgs';
+import { ENUM_ALERT_STATUS } from '../../shared/enums';
+import { commentModalTemplate, signInModalTemplate } from './templates';
 
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
@@ -18,8 +19,7 @@ import '../ani-home/home';
 import '../ani-profile/profile';
 import '../ani-login/login';
 import '../ani-mine/mine';
-import { ENUM_ALERT_STATUS } from '../../shared/enums';
-
+import '../ani-quote-view/quote-view';
 
 
 @customElement('ani-app')
@@ -75,7 +75,7 @@ export class AniApp extends LitElement {
 
   render() {
     const { status, message, opened, icon } = this.alertState;
-    const { signInOpened } = this.modalsState;
+    const { signInOpened, commentOpened } = this.modalsState;
 
     return html`
       <kemet-alert
@@ -112,24 +112,11 @@ export class AniApp extends LitElement {
           <main></main>
         </section>
       </kemet-drawer>
-      <kemet-modal
-        id="modal-sign-in"
-        close-on-click
-        effect="fadein-scaleup"
-        .opened=${signInOpened}
-         @kemet-modal-closed=${() => modalsStore.setState({ signInOpened: false })}>
-        <section>
-          ${svgLogo}
-          <p>Want to join in on the fun? Login now!</p>
-          <kemet-button
-            variant="rounded"
-            @click=${() => {
-              modalsStore.setState({ signInOpened: false });
-              switchRoute('login', 'Login');
-            }}>
-            Login
-          </kemet-button>
-        </section>
+      <kemet-modal id="modal-sign-in" close-on-click rounded effect="fadein-scaleup" .opened=${signInOpened} @kemet-modal-closed=${() => modalsStore.setState({ signInOpened: false })}>
+        ${signInModalTemplate}
+      </kemet-modal>
+      <kemet-modal id="modal-comment" close-on-click rounded effect="fadein-scaleup" .opened=${commentOpened} @kemet-modal-closed=${() => modalsStore.setState({ commentOpened: false })}>
+        ${commentModalTemplate}
       </kemet-modal>
     `
   }

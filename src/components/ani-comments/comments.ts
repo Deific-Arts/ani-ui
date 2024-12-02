@@ -1,0 +1,61 @@
+
+import { LitElement, html } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import userStore, { IUserStore } from '../../store/user.ts';
+import modalsStore, { IModalsStore } from '../../store/modals.ts';
+import { IQuote } from '../../shared/interfaces';
+import styles from './styles';
+import sharedStyles from '../../shared/styles';
+
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+@customElement('ani-comments')
+export default class AniComments extends LitElement {
+  static styles = [styles, sharedStyles];
+
+  @property({ type: Object})
+  quote!: IQuote;
+
+  @state()
+  comments: any = [];
+
+  @state()
+  userState: IUserStore = userStore.getInitialState();
+
+  @state()
+  modalsState: IModalsStore = modalsStore.getInitialState();
+
+  firstUpdated() {
+    this.getComments()
+  }
+
+  render() {
+    return html`
+      <button aria-label="Comments"><kemet-icon icon="chat-left" size="24" @click=${() => this.openComment()}></kemet-icon></button>
+      <span>${this.comments.length}</span>
+    `
+  }
+
+  async getComments() {
+    const commentsResponse = await fetch(`${API_URL}/api/comments?filters[quoteId][$eq]=${this.quote.id}`);
+    const { data } = await commentsResponse.json();
+    this.comments = data;
+  }
+
+  openComment() {
+    if (this.userState.isLoggedIn) {
+      this.modalsState.setCommentOpened(true);
+      console.log(this.quote);
+      this.modalsState.setCurrentQuote(this.quote);
+    } else {
+      this.modalsState.setSignInOpened(true);
+    }
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ani-comments': AniComments
+  }
+}

@@ -10,6 +10,10 @@ export default css`
     border-bottom: 1px solid rgb(var(--kemet-color-white) / 25%);
   }
 
+  a {
+    color: inherit;
+  }
+
   img {
     width: 56px;
     height: 56px;

@@ -19,7 +19,7 @@ export default class AniTopNav extends LitElement {
         </button>
       </nav>
       <button aria-label="Home">
-        ${svgLogo}
+        <a href="/">${svgLogo}</a>
       </button>
     `
   }

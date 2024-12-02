@@ -34,8 +34,8 @@ export default class AniHome extends LitElement {
   }
 
   async getQuotes() {
-    const response = await fetch(`${API_URL}/api/quotes?populate=user.avatar&populate=book&populate=author&populate=comments`);
-    const { data }= await response.json();
+    const response = await fetch(`${API_URL}/api/quotes?populate=user.avatar&populate=book&populate=author`);
+    const { data } = await response.json();
     this.quotes = data;
   }
 }

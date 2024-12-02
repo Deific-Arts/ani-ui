@@ -46,6 +46,15 @@ export default css`
     border-bottom: var(--app-border);
   }
 
+  cite {
+    font-size: 0.9rem;
+  }
+
+  figure {
+    margin: 0;
+    padding: 0;
+  }
+
   hr {
     opacity: 0.25;
   }
@@ -112,6 +121,11 @@ export default css`
     padding: 8px;
   }
 
+  kemet-field {
+    color: var(--app-color);
+    text-align: left;
+  }
+
   ::part(input) {
     outline-offset: 6px;
   }
@@ -126,6 +140,16 @@ export default css`
     left: -100vw;
     top: -100vh;
     background: rgb(var(--kemet-color-black) / 40%);
+  }
+
+  ::part(textarea) {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    line-height: 1.5;
+    font-size: 1rem;
+    font-weight: 400;
+    font-synthesis: none;
   }
 
   .profile-picture {
