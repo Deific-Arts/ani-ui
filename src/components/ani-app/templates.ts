@@ -4,6 +4,7 @@ import { switchRoute } from "../../shared/utilities";
 import modalsStore from "../../store/modals";
 
 import '../ani-post-comment/post-comment';
+import '../ani-new-quote/new-quote';
 
 export const signInModalTemplate = html`
   <section>
@@ -23,3 +24,8 @@ export const signInModalTemplate = html`
 export const commentModalTemplate = html`
   <ani-post-comment></ani-post-comment>
 `;
+
+export const newQuoteModalTemplate = html`
+  <ani-new-quote></ani-new-quote>
+`;
+

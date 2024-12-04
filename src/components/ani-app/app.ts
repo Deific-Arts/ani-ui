@@ -7,7 +7,7 @@ import userStore, { IUserStore } from '../../store/user';
 import modalsStore, { IModalsStore } from '../../store/modals';
 import { switchRoute } from '../../shared/utilities';
 import { ENUM_ALERT_STATUS } from '../../shared/enums';
-import { commentModalTemplate, signInModalTemplate } from './templates';
+import { commentModalTemplate, signInModalTemplate, newQuoteModalTemplate } from './templates';
 
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
@@ -75,7 +75,7 @@ export class AniApp extends LitElement {
 
   render() {
     const { status, message, opened, icon } = this.alertState;
-    const { signInOpened, commentOpened } = this.modalsState;
+    const { signInOpened, commentOpened, newQuoteOpened } = this.modalsState;
 
     return html`
       <kemet-alert
@@ -115,8 +115,11 @@ export class AniApp extends LitElement {
       <kemet-modal id="modal-sign-in" close-on-click rounded effect="fadein-scaleup" .opened=${signInOpened} @kemet-modal-closed=${() => modalsStore.setState({ signInOpened: false })}>
         ${signInModalTemplate}
       </kemet-modal>
-      <kemet-modal id="modal-comment" close-on-click rounded effect="fadein-scaleup" .opened=${commentOpened} @kemet-modal-closed=${() => modalsStore.setState({ commentOpened: false })}>
+      <kemet-modal id="modal-comment" rounded effect="fadein-scaleup" .opened=${commentOpened} @kemet-modal-closed=${() => modalsStore.setState({ commentOpened: false })}>
         ${commentModalTemplate}
+      </kemet-modal>
+      <kemet-modal id="modal-new-quote" rounded effect="fadein-scaleup" .opened=${newQuoteOpened} @kemet-modal-closed=${() => modalsStore.setState({ newQuoteOpened: false })}>
+        ${newQuoteModalTemplate}
       </kemet-modal>
     `
   }

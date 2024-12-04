@@ -1,15 +1,6 @@
 import { css } from 'lit';
 
 export default css`
-  :host {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: auto 1fr;
-    padding: 1rem;
-    margin-top: 2rem;
-    border-bottom: 1px solid rgb(var(--kemet-color-white) / 25%);
-  }
-
   a {
     color: inherit;
   }
@@ -21,15 +12,27 @@ export default css`
     border-radius: 50%;
   }
 
+  header {
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+    grid-template-columns: auto 1fr;
+  }
+
   header span {
     opacity: 0.75;
     font-size: 0.85rem;
+  }
+
+  header > :first-child {
+    display: flex;
   }
 
   blockquote {
     font-style: italic;
     text-align: justify;
     display: flex;
+    gap: var(--kemet-spacer-md);
     align-items: flex-start;
     position: relative;
     margin: 1rem 0 1.5rem 0;
@@ -39,12 +42,10 @@ export default css`
 
   blockquote::before {
     content: '❝';
-    left: -0.5rem;
   }
 
   blockquote::after {
     content: '❞';
-    right: -0.5rem;
   }
 
   blockquote::before,
@@ -59,13 +60,15 @@ export default css`
     display: flex;
     justify-content: space-between;
     grid-column: span 2;
+    margin-top: var(--kemet-spacer-md);
+    padding: var(--kemet-spacer-md) 0 var(--kemet-spacer-2xl) 0;
+    border-bottom: var(--app-border);
   }
 
   footer > * {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    padding: 1rem 1.5rem;
   }
 
   ani-note {
@@ -84,5 +87,11 @@ export default css`
   [aria-label="Like"][active],
   [aria-label="Like"][active] + * {
     color: var(--ani-quote-color-like);
+  }
+
+  @media screen and (min-width: 768px) {
+    figure {
+      margin-left: 5rem;
+    }
   }
 `;

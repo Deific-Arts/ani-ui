@@ -1,9 +1,11 @@
-import { LitElement, PropertyValues, html } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import styles from './styles';
+import modalsStore, { IModalsStore } from '../../store/modals';
 import { IQuote } from '../../shared/interfaces';
+import styles from './styles';
 
 import '../ani-feed/feed';
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -13,6 +15,9 @@ export default class AniHome extends LitElement {
 
   @state()
   quotes: IQuote[] = [];
+
+  @state()
+  modalsState: IModalsStore = modalsStore.getInitialState();
 
   firstUpdated() {
     this.getQuotes();
@@ -25,11 +30,16 @@ export default class AniHome extends LitElement {
         <kemet-tab slot="tab">Following</kemet-tab>
         <kemet-tab slot="tab">Mine</kemet-tab>
         <kemet-tab-panel slot="panel">
+          <br />
           <ani-feed .quotes=${this.quotes}></ani-feed>
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">Following</kemet-tab-panel>
         <kemet-tab-panel slot="panel">Mine</kemet-tab-panel>
       </kemet-tabs>
+      <kemet-fab pill @click=${() => this.modalsState.setNewQuoteOpened(true)}>
+        <kemet-icon slot="icon" icon="pencil-square" size="24"></kemet-icon>
+        New Quote
+      </kemet-fab>
     `
   }
 

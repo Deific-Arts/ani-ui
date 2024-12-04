@@ -2,14 +2,17 @@
 
 @mixin light-vars {
   --app-color: rgb(var(--kemet-color-stone-900));
+  --app-border-color: rgb(var(--kemet-color-black) / 50%);
   --app-background-color: rgb(var(--kemet-color-stone-200));
 }
 
 :root {
   --app-page-width: 1280px;
   --app-color: rgb(var(--kemet-color-gray-100));
-  --app-border: 1px solid rgb(var(--kemet-color-gray-900) / 50%);
+  --app-border: 1px solid var(--app-border-color);
+  --app-border-color: rgb(var(--kemet-color-white) / 25%);
   --app-background-color: rgb(var(--kemet-color-gray-900));
+  --app-input-filled-background-color: rgb(var(--kemet-color-black) / 25%);
 
   --kemet-color-text: var(--app-color);
   --kemet-color-primary: var(--kemet-color-sky-600);

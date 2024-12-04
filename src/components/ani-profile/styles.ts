@@ -32,7 +32,6 @@ export default css`
   .profile {
     display: block;
     margin: 0;
-    border: var(--app-border);
   }
 
   .profile-image {

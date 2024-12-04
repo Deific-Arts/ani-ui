@@ -35,7 +35,7 @@ export default class AniLike extends LitElement {
 
   render() {
     return html`
-      <button aria-label="Like"><kemet-icon icon="heart" size="24" @click=${() => this.handleLike()}></kemet-icon></button>
+      <button aria-label="Like"><kemet-icon icon="${this.liked ? 'heart-fill' : 'heart'}" size="24" @click=${() => this.handleLike()}></kemet-icon></button>
       <span>${this.likes}</span>
     `
   }

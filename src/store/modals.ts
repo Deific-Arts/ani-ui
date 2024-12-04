@@ -8,6 +8,8 @@ export interface IModalsStore {
   setCommentOpened: (opened: boolean) => void;
   currentQuote: IQuote | null;
   setCurrentQuote: (currentQuote: IQuote) => void;
+  newQuoteOpened: boolean;
+  setNewQuoteOpened: (opened: boolean) => void;
 }
 
 const store = createStore<IModalsStore>(set => ({
@@ -17,6 +19,8 @@ const store = createStore<IModalsStore>(set => ({
   setCommentOpened: (commentOpened: boolean) => set(() => { return { commentOpened } }),
   currentQuote: null,
   setCurrentQuote: (currentQuote: IQuote) => set(() => { return { currentQuote }}),
+  newQuoteOpened: false,
+  setNewQuoteOpened: (newQuoteOpened: boolean) => set(() => { return { newQuoteOpened } }),
 }));
 
 export default store;

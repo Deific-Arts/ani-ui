@@ -16,7 +16,6 @@ export default  css`
     height: 32px;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid var(--app-color);
   }
 
   [aria-label="Home"] {

@@ -14,11 +14,6 @@ export default css`
     margin-bottom: 0;
   }
 
-  kemet-textarea {
-    width: 80vw;
-    max-width: 768px;
-  }
-
   kemet-button {
     position: absolute;
     right: 1rem;

@@ -12,7 +12,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-quote')
 export default class AniQuote extends LitElement {
-  static styles = [styles, sharedStyles];
+  static styles = [sharedStyles, styles];
 
   @property({ type: Object })
   quote!: IQuote;
@@ -22,21 +22,21 @@ export default class AniQuote extends LitElement {
 
   render() {
     return this.quote ? html`
-      <div>
-        ${this.quote.user.avatar
-          ? html`<img src="${API_URL}/${this.quote.user.avatar.url}" alt="${this.quote.user.username}" />`
-          : html`<img src="https://placehold.co/80x80?text=${this.quote.user.username}" alt="${this.quote?.user?.username}" />`
-        }
-      </div>
-      <div>
-        <header>
+      <header>
+        <div>
+          ${this.quote.user.avatar
+            ? html`<img src="${API_URL}/${this.quote.user.avatar.url}" alt="${this.quote.user.username}" />`
+            : html`<img src="https://placehold.co/80x80?text=${this.quote.user.username}" alt="${this.quote?.user?.username}" />`
+          }
+        </div>
+        <div>
           <strong>${this.quote.user.username}</strong> <span>quoted ${this.displayDate()} ago</span>
-        </header>
-        <figure>
-          <blockquote>${this.quote.quote}</blockquote>
-          <cite>&mdash;&nbsp;${this.quote.book.title}, ${this.quote.page && html`page: ${this.quote.page}`}</cite>
-        </figure>
-      </div>
+        </div>
+      </header>
+      <figure>
+        <blockquote>${this.quote.quote}</blockquote>
+        <cite>&mdash;&nbsp;${this.quote.book.title}, ${this.quote.page && html`page: ${this.quote.page}`}</cite>
+      </figure>
       <footer>
         <div>
           <ani-comments .quote=${this.quote}></ani-comments>
@@ -56,7 +56,7 @@ export default class AniQuote extends LitElement {
         ${this.quote.note ? html`
           <div>
             <kemet-tooltip distance="24" strategy="absolute">
-              <button slot="trigger" aria-label="Show note"><kemet-icon icon="journal" size="24"></kemet-icon></button>
+              <button slot="trigger" aria-label="Show note"><kemet-icon icon="${this.quote.note ? 'journal-text' : 'journal'}" size="24"></kemet-icon></button>
               <div slot="content"><strong>Note:</strong> ${this.quote.note}</div>
             </kemet-tooltip>
           </div>

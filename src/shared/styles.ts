@@ -109,7 +109,7 @@ export default css`
   }
 
   kemet-card {
-    --kemet-card-border: var(--app-border);
+    --kemet-card-border: none;
     --kemet-card-background-color: none;
 
     display: block;
@@ -124,6 +124,24 @@ export default css`
   kemet-field {
     color: var(--app-color);
     text-align: left;
+  }
+
+  kemet-input {
+    --kemet-input-background-color-filled: var(--app-input-filled-background-color);
+  }
+
+  kemet-select {
+    --kemet-select-background-color-filled: var(--app-input-filled-background-color);
+  }
+
+  kemet-textarea {
+    --kemet-textarea-background-color-filled: var(--app-input-filled-background-color);
+    width: 80vw;
+    max-width: 768px;
+  }
+
+  kemet-count {
+    text-align: right;
   }
 
   ::part(input) {

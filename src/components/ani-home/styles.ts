@@ -8,4 +8,10 @@ export default css`
   kemet-tabs::part(divider) {
     opacity: 0.75;
   }
+
+  kemet-fab {
+    position: fixed;
+    bottom: var(--kemet-spacer-xl);
+    right: var(--kemet-spacer-xl);
+  }
 `;

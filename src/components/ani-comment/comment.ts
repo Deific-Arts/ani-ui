@@ -21,7 +21,7 @@ export default class AniComment extends LitElement {
           : html`<img src="https://placehold.co/80x80?text=${this.comment.user.username}" alt="${this.comment.user.username}" />`
         }
       </div>
-      <div>
+      <div class="comment">
         <header>
           <strong>${this.comment.user.username}</strong> <span>commented ${this.displayDate()} ago</span>
         </header>
