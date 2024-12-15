@@ -87,17 +87,17 @@ export default class aniProfile extends LitElement {
                   <div>
                     <p>
                       <kemet-field label="First Name">
-                        <kemet-input slot="input" name="firstName" rounded value=${this.userState?.profile?.firstName}></kemet-input>
+                        <kemet-input slot="input" name="firstName" rounded filled value=${this.userState?.profile?.firstName}></kemet-input>
                       </kemet-field>
                     </p>
                     <p>
                       <kemet-field label="Last Name">
-                        <kemet-input slot="input" name="lastName" rounded value=${this.userState?.profile?.lastName}></kemet-input>
+                        <kemet-input slot="input" name="lastName" rounded filled value=${this.userState?.profile?.lastName}></kemet-input>
                       </kemet-field>
                     </p>
                     <p>
                       <kemet-field label="Email">
-                        <kemet-input slot="input" name="email" rounded value=${this.userState?.profile?.email}></kemet-input>
+                        <kemet-input slot="input" name="email" rounded filled value=${this.userState?.profile?.email}></kemet-input>
                       </kemet-field>
                     </p>
                   </div>
