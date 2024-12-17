@@ -20,7 +20,6 @@ const redirectHomeWhenNotLoggedIn = () => {
 export default [
   { path: '/', component: 'ani-home' },
   { path: '/home', component: 'ani-home' },
-  { path: '/library', component: 'ani-library' },
   { path: '/quote/:id', component: 'ani-quote-view' },
   { path: '/add', component: 'ani-add', action: redirectHomeWhenNotLoggedIn },
   { path: '/profile', component: 'ani-profile', action: redirectHomeWhenNotLoggedIn },

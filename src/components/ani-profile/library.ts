@@ -1,16 +1,16 @@
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import userStore, { IUserStore } from '../../store/user.ts';
-import styles from './styles.ts';
-import sharedStyles from '../../shared/styles.ts';
+import { libraryStyles } from './styles.ts';
+import { IBook } from '../../shared/interfaces.ts';
 import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
+import sharedStyles from '../../shared/styles.ts';
 
 import '../ani-book/book.ts';
-import { IBook } from '../../shared/interfaces.ts';
 
 @customElement('ani-library')
 export default class aniLibrary extends LitElement {
-  static styles = [sharedStyles, styles];
+  static styles = [sharedStyles, libraryStyles];
 
   @state()
   searchID: number = 0;
@@ -44,22 +44,15 @@ export default class aniLibrary extends LitElement {
 
   render() {
     return html`
-      <kemet-tabs placement="top" divider>
-        <kemet-tab slot="tab"><kemet-icon icon="bookmark" size="24"></kemet-icon>&nbsp;&nbsp;My Books</kemet-tab>
-        <kemet-tab slot="tab"><kemet-icon icon="bookmark-plus" size="24"></kemet-icon>&nbsp;&nbsp;Add Books</kemet-tab>
-        <kemet-tab-panel slot="panel">
-          ${this.makeMyBooks()}
-        </kemet-tab-panel>
-        <kemet-tab-panel slot="panel">
-          <br />
-          <form method="get" action="" @submit=${() => this.handleBookSearch()}>
-            <kemet-field slug="search" label="Search by author or book title">
-              <kemet-input type="search" slot="input" name="search" rounded filled @keypress=${() => this.handleBookSearch()} @kemet-input-focused=${(event: CustomEvent) => this.handleBookSearchFocus(event)}></kemet-input>
-            </kemet-field>
-            ${this.makeBooks()}
-          </form>
-        </kemet-tab-panel>
-      </kemet-tabs>
+      <h2>Manage Books</h2>
+      <form method="get" action="" @submit=${() => this.handleBookSearch()}>
+        <kemet-field slug="search" label="Search by author or book title">
+          <kemet-input type="search" slot="input" name="search" rounded filled @keypress=${() => this.handleBookSearch()} @kemet-input-focused=${(event: CustomEvent) => this.handleBookSearchFocus(event)}></kemet-input>
+        </kemet-field>
+        ${this.makeBooks()}
+      </form>
+      <h2>Saved Books</h2>
+      ${this.makeMyBooks()}
     `;
   }
 

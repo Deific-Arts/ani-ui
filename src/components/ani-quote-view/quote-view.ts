@@ -37,7 +37,7 @@ export default class AniQuoteView extends LitElement {
   async getQuote() {
     const path = location.pathname.split('/');
     this.documentId = path[path.length - 1];
-    const response = await fetch(`${API_URL}/api/quotes/${this.documentId}?populate=user.avatar&populate=book&populate=author`);
+    const response = await fetch(`${API_URL}/api/quotes/${this.documentId}?populate=user.avatar&populate=book`);
     const { data } = await response.json();
     this.quote = data;
     // we need quote data before we get comments

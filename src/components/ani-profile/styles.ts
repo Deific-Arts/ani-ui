@@ -1,6 +1,6 @@
 import { css } from 'lit';
 
-export default css`
+export const informationStyles = css`
   :host {
     display: block;
   }
@@ -46,5 +46,35 @@ export default css`
     gap: 1px;
     flex-direction: column;
     width: 100%;
+  }
+`;
+
+export const libraryStyles = css`
+  :host {
+    display: block;
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    gap: var(--kemet-spacer-xl);
+    flex-wrap: wrap;
+    margin: var(--kemet-spacer-xl);
+    padding: 0;
+    list-style: none;
+  }
+
+  h2 {
+    padding: 0 2rem;
+    margin: var(--kemet-spacer-xl) 0;
+    border-bottom: none;
+  }
+
+  form {
+    padding: 0 1rem 1rem 1rem;
+  }
+
+  kemet-field {
+    padding: 1rem;
   }
 `;

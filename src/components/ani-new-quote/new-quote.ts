@@ -1,8 +1,11 @@
 import { LitElement, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, query, state } from 'lit/decorators.js';
 import modalsStore,{ IModalsStore } from '../../store/modals';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
+import { IBook } from '../../shared/interfaces';
+import userStore,{ IUserStore } from '../../store/user';
+import KemetSelect from 'kemet-ui/dist/components/kemet-select/kemet-select';
 
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -14,9 +17,15 @@ export default class AniNewQuote extends LitElement {
   @state()
   modalsState: IModalsStore = modalsStore.getInitialState();
 
+  @state()
+  userState: IUserStore = userStore.getInitialState();
+
+  @query('kemet-select')
+  userBook!: KemetSelect;
+
   render() {
     return html`
-      <form>
+      <form @submit=${(event: SubmitEvent) => this.addQuote(event)}>
         <kemet-field slug="quote" label="The quote">
           <kemet-textarea slot="input" name="quote" filled rounded required></kemet-textarea>
           <kemet-count slot="component" message="characters remaining." limit="300"></kemet-count>
@@ -24,10 +33,7 @@ export default class AniNewQuote extends LitElement {
         <div>
           <kemet-field slug="book" label="Book">
             <kemet-select slot="input" name="book" required filled rounded>
-              <kemet-option label="Item 1" value="1"></kemet-option>
-              <kemet-option label="Item 2" value="2" selected=""></kemet-option>
-              <kemet-option label="Item 3" value="3"></kemet-option>
-              <kemet-option label="Item 4" value="4" disabled=""></kemet-option>
+              ${this.makeBookOptions()}
             </kemet-select>
           </kemet-field>
           <kemet-field slug="page" label="Page">
@@ -48,6 +54,43 @@ export default class AniNewQuote extends LitElement {
         </footer>
       </form>
     `;
+  }
+
+  async addQuote(event: SubmitEvent) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target as HTMLFormElement);
+    const userData = Object.fromEntries(formData);
+
+    userData.book = this.userBook ? this.userBook.shadowRoot!.querySelector('select')?.value as string : '';
+
+    const { data } = await fetch(`${API_URL}/api/books?filters[identifier][$eq]=${userData.book}`).then(response => response.json());
+    const book = data[0];
+    const user = this.userState.profile;
+
+    const payload = {
+      quote: userData.quote,
+      requote: 0,
+      user: user.id,
+      book: book.id,
+      page: userData.page,
+      note: userData.note,
+      private: false,
+      likes: 0
+    }
+
+    fetch(`${API_URL}/api/quotes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.userState.user.jwt}`
+      },
+      body: JSON.stringify({ data: payload })
+    });
+  }
+
+  makeBookOptions() {
+    return this.userState.profile.books.map((book: IBook) => html`<kemet-option label="${book.title}" value="${book.identifier}"></kemet-option>`)
   }
 }
 
