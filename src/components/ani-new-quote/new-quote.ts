@@ -70,13 +70,14 @@ export default class AniNewQuote extends LitElement {
 
     const payload = {
       quote: userData.quote,
-      requote: 0,
+      requote: '',
+      requotes: [],
       user: user.id,
       book: book.id,
       page: userData.page,
       note: userData.note,
       private: false,
-      likes: 0
+      likes: []
     }
 
     fetch(`${API_URL}/api/quotes`, {

@@ -1,6 +1,6 @@
 
 import { LitElement, html } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { customElement, query, state } from 'lit/decorators.js';
 import userStore, { IUserStore } from '../../store/user.ts';
 import modalsStore, { IModalsStore } from '../../store/modals.ts';
 import alertStore, { IAlertStore } from '../../store/alert.ts';
@@ -18,7 +18,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-post-comment')
 export default class AniPostComment extends LitElement {
-  static styles = [styles, sharedStyles];
+  static styles = [sharedStyles, styles];
 
   @state()
   userState: IUserStore = userStore.getInitialState();

@@ -6,7 +6,8 @@ export interface IQuote {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  requote: number;
+  requote: string;
+  requotes: number[];
   page: string;
   note: string;
   private: boolean;

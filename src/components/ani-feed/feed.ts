@@ -1,13 +1,14 @@
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import styles from './styles';
 import { IQuote } from '../../shared/interfaces';
+import styles from './styles';
+import sharedStyles from '../../shared/styles';
 
 import '../ani-quote/quote';
 
 @customElement('ani-feed')
 export default class AniFeed extends LitElement {
-  static styles = [styles];
+  static styles = [sharedStyles, styles];
 
   @property({ type: Array })
   quotes: IQuote[] = [];

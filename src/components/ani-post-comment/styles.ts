@@ -14,6 +14,10 @@ export default css`
     margin-bottom: 0;
   }
 
+  kemet-count {
+    text-align: left;
+  }
+
   kemet-button {
     position: absolute;
     right: 1rem;
