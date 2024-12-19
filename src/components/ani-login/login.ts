@@ -134,8 +134,6 @@ export class aniLogin extends LitElement {
     fetch(`${API_URL}/${endpoint}`, options)
       .then(response => response.json())
       .then(async response => {
-        console.log(response);
-
         // bad access
         if (response.error?.status === 400) {
           this.alertState.setStatus('error');
@@ -153,7 +151,7 @@ export class aniLogin extends LitElement {
               'Authorization': `Bearer ${response.jwt}`
             }
           };
-          const userProfile = await fetch(`${API_URL}/api/users/me`, options).then((response) => response.json());
+          const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options).then((response) => response.json());
           this.userState.updateProfile(userProfile);
           this.userState.login(response);
           switchRoute('home');

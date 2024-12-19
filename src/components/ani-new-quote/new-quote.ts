@@ -23,43 +23,47 @@ export default class AniNewQuote extends LitElement {
   @query('kemet-select')
   userBook!: KemetSelect;
 
+  @query('form')
+  quoteForm!: HTMLFormElement;
+
   render() {
-    return html`
-      <form @submit=${(event: SubmitEvent) => this.addQuote(event)}>
-        <kemet-field slug="quote" label="The quote">
-          <kemet-textarea slot="input" name="quote" filled rounded required></kemet-textarea>
-          <kemet-count slot="component" message="characters remaining." limit="300"></kemet-count>
-        </kemet-field>
-        <div>
-          <kemet-field slug="book" label="Book">
-            <kemet-select slot="input" name="book" required filled rounded>
-              ${this.makeBookOptions()}
-            </kemet-select>
+    if (this.userState.isLoggedIn) {
+      return html`
+        <form>
+          <kemet-field slug="quote" label="The quote">
+            <kemet-textarea slot="input" name="quote" filled rounded required></kemet-textarea>
+            <kemet-count slot="component" message="characters remaining." limit="300"></kemet-count>
           </kemet-field>
-          <kemet-field slug="page" label="Page">
-            <kemet-input slot="input" name="page" rounded filled></kemet-input>
+          <div>
+            <kemet-field slug="book" label="Book">
+              <kemet-select slot="input" name="book" required filled rounded>
+                ${this.makeBookOptions()}
+              </kemet-select>
+            </kemet-field>
+            <kemet-field slug="page" label="Page">
+              <kemet-input slot="input" name="page" rounded filled></kemet-input>
+            </kemet-field>
+          </div>
+          <kemet-field slug="note" label="Enter any notes you may have about this quote">
+            <kemet-textarea slot="input" name="note" filled rounded></kemet-textarea>
+            <kemet-count slot="component" message="characters remaining." limit="300"></kemet-count>
           </kemet-field>
-        </div>
-        <kemet-field slug="note" label="Enter any notes you may have about this quote">
-          <kemet-textarea slot="input" name="note" filled rounded></kemet-textarea>
-          <kemet-count slot="component" message="characters remaining." limit="300"></kemet-count>
-        </kemet-field>
-        <footer>
-          <kemet-button type="submit" variant="rounded" @click=${() => this.modalsState.setNewQuoteOpened(false)}>
-            Cancel
-          </kemet-button>
-          <kemet-button variant="circle">
-            <kemet-icon icon="send" size="24"></kemet-icon>
-          </kemet-button>
-        </footer>
-      </form>
-    `;
+          <footer>
+            <kemet-button type="submit" variant="rounded" @click=${() => this.modalsState.setNewQuoteOpened(false)}>
+              Cancel
+            </kemet-button>
+            <kemet-button variant="circle" @click=${() => this.addQuote()}>
+              <kemet-icon icon="send" size="24"></kemet-icon>
+            </kemet-button>
+          </footer>
+        </form>
+      `;
+    }
+    return null;
   }
 
-  async addQuote(event: SubmitEvent) {
-    event.preventDefault();
-
-    const formData = new FormData(event.target as HTMLFormElement);
+  async addQuote() {
+    const formData = new FormData(this.quoteForm);
     const userData = Object.fromEntries(formData);
 
     userData.book = this.userBook ? this.userBook.shadowRoot!.querySelector('select')?.value as string : '';
@@ -87,7 +91,7 @@ export default class AniNewQuote extends LitElement {
         'Authorization': `Bearer ${this.userState.user.jwt}`
       },
       body: JSON.stringify({ data: payload })
-    });
+    }).then(() => location.reload());
   }
 
   makeBookOptions() {

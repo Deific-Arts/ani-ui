@@ -48,7 +48,6 @@ export default class AniComments extends LitElement {
   openComment() {
     if (this.userState.isLoggedIn) {
       this.modalsState.setCommentOpened(true);
-      console.log(this.quote);
       this.modalsState.setCurrentQuote(this.quote);
     } else {
       this.modalsState.setSignInOpened(true);

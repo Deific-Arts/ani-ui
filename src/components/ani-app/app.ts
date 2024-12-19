@@ -5,7 +5,6 @@ import alertStore, { IAlertStore } from '../../store/alert';
 import appStore, { IAppStore } from '../../store/app';
 import userStore, { IUserStore } from '../../store/user';
 import modalsStore, { IModalsStore } from '../../store/modals';
-import { switchRoute } from '../../shared/utilities';
 import { ENUM_ALERT_STATUS } from '../../shared/enums';
 import { commentModalTemplate, signInModalTemplate, newQuoteModalTemplate } from './templates';
 
@@ -90,22 +89,15 @@ export class AniApp extends LitElement {
           <div>${message}</div>
         </div>
       </kemet-alert>
-      <kemet-drawer overlay side="left" effect="push" ?opened=${this.appState.isDrawerOpened}>
+      <kemet-drawer overlay side="top" effect="push" ?opened=${this.appState.isDrawerOpened}>
         <aside slot="navigation">
-          ${this.userState.isLoggedIn ? html`
-            <figure>
-              <button @click=${() => switchRoute('profile', 'Ani | Profile')}>
-                <img src="https://i.ytimg.com/vi/N3YE2gH3QC0/mqdefault.jpg" alt="Profile picture" style="max-width:100%; border-radius:50%; object-fit:cover;" />
-              </button>
-              <figcaption>Hello [user].</figcaption>
-              <p><button @click=${() => this.userState.logout()}>Log Out</button>.</p>
-            </figure>
-            [nav here]
-          ` : html`
-            <figure>
-              <kemet-button variant="rounded" @click=${() => switchRoute('login', 'Login')}>Login</kemet-button>
-            </figure>
-          `}
+          <form>
+            <p>
+              <kemet-field label="Search Quotes">
+                <kemet-input slot="input" name="search" rounded filled></kemet-input>
+              </kemet-field>
+            </p>
+          </form>
         </aside>
         <section slot="content">
           <ani-top-nav></ani-top-nav>
@@ -115,12 +107,14 @@ export class AniApp extends LitElement {
       <kemet-modal id="modal-sign-in" close-on-click rounded effect="fadein-scaleup" .opened=${signInOpened} @kemet-modal-closed=${() => modalsStore.setState({ signInOpened: false })}>
         ${signInModalTemplate}
       </kemet-modal>
-      <kemet-modal id="modal-comment" rounded effect="fadein-scaleup" .opened=${commentOpened} @kemet-modal-closed=${() => modalsStore.setState({ commentOpened: false })}>
-        ${commentModalTemplate}
-      </kemet-modal>
-      <kemet-modal id="modal-new-quote" rounded effect="fadein-scaleup" .opened=${newQuoteOpened} @kemet-modal-closed=${() => modalsStore.setState({ newQuoteOpened: false })}>
-        ${newQuoteModalTemplate}
-      </kemet-modal>
+      ${this.userState.isLoggedIn ? html`
+        <kemet-modal id="modal-comment" rounded effect="fadein-scaleup" .opened=${commentOpened} @kemet-modal-closed=${() => modalsStore.setState({ commentOpened: false })}>
+          ${commentModalTemplate}
+        </kemet-modal>
+        <kemet-modal id="modal-new-quote" rounded effect="fadein-scaleup" .opened=${newQuoteOpened} @kemet-modal-closed=${() => modalsStore.setState({ newQuoteOpened: false })}>
+          ${newQuoteModalTemplate}
+        </kemet-modal>
+      ` : null}
     `
   }
 

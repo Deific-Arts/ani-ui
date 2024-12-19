@@ -97,7 +97,6 @@ export default class aniChangePassword extends LitElement {
       await fetch(`${API_URL}/api/auth/change-password`, options)
         .then((response) => response.json())
         .then((responseData) => {
-          console.log(responseData)
           this.alertState.setOpened(true);
 
           if (responseData.error) {

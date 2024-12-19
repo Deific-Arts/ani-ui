@@ -67,6 +67,10 @@ export default css`
     --kemet-button-padding: 0.75rem 1rem;
   }
 
+  kemet-drawer {
+    --kemet-drawer-height: auto;
+  }
+
   kemet-toggle {
     --kemet-toggle-track-shadow: none;
     --kemet-toggle-track-color: transparent;

@@ -36,6 +36,10 @@ export default class AniQuote extends LitElement {
 
   render() {
     return this.quote ? html`
+      ${this.quote.user.id === this.userState.profile?.id
+        ? html`<button aria-label="Delete"><kemet-icon icon="x-lg" size="16" @click=${() => this.deleteQuote()}></kemet-icon></button>`
+        : null
+      }
       <header>
         <div>
           ${this.quote.user.avatar
@@ -45,9 +49,9 @@ export default class AniQuote extends LitElement {
         </div>
         <div>
           ${this.originalQuote
-            ? html`<strong>${this.userState.user.user.username}</strong> <span>requoted ${this.originalQuote.user.username} ${this.displayDate()} ago</span>`
-            : html`<strong>${this.quote.user.username}</strong> <span>quoted ${this.displayDate()} ago</span>
-          `}
+            ? html`<strong>${this.quote.user.username}</strong> <span>requoted ${this.originalQuote.user.username} ${this.displayDate()} ago</span>`
+            : html`<strong>${this.quote.user.username}</strong> <span>quoted ${this.displayDate()} ago</span>`
+          }
         </div>
       </header>
       <figure>
@@ -98,11 +102,20 @@ export default class AniQuote extends LitElement {
     return null;
   }
 
+  deleteQuote() {
+    this.setAttribute('hidden', '');
+    fetch(`${API_URL}/api/quotes/${this.quote.documentId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${this.userState.user.jwt}`
+      }
+    });
+  }
+
   async fetchOriginalQuote() {
     const { data } = await fetch(`${API_URL}/api/quotes/${this.quote.requote}?populate=*`)
       .then(response => response.json());
     this.originalQuote = data;
-    // console.log('original quote: ',this.originalQuote);
   }
 }
 

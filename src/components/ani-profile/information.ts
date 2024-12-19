@@ -15,6 +15,7 @@ import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import FilePondStyles from 'filepond/dist/filepond.min.css';
 import FilePondImagePreviewStyles from 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import { switchRoute } from '../../shared/utilities.ts';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -71,6 +72,7 @@ export default class aniInformation extends LitElement {
       <kemet-card>
         <form method="post" action="api/users" @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
           <fieldset>
+            <p><kemet-button variant="text" @click=${() => this.logout()}>Log Out</kemet-button></p>
             <legend>Welcome, ${this.userState?.profile?.username}</legend>
             <section class="profile">
               <div class="profile-image">${this.makeProfileImage()}</div>
@@ -117,8 +119,6 @@ export default class aniInformation extends LitElement {
 
   makeProfileImage() {
     const profileImage = this.userState.profile?.avatar?.url;
-
-    console.log(profileImage)
 
     if (profileImage && !this.showUploadProfileImage) {
       return html`
@@ -238,6 +238,11 @@ export default class aniInformation extends LitElement {
     }
 
     await fetch(`${API_URL}/api/upload/files/${this.userState.profile.avatar.id}`, deleteOptions);
+  }
+
+  logout() {
+    this.userState.logout();
+    switchRoute('home', 'Ani | Home');
   }
 }
 

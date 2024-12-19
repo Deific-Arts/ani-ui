@@ -1,17 +1,15 @@
 import { switchRoute } from './shared/utilities';
 import userStore from './store/user';
 
-const userState = userStore.getInitialState();
-
 const redirectHomeWhenLoggedIn = () => {
-  if (userState.isLoggedIn) {
+  if (userStore.getState().isLoggedIn) {
     switchRoute('home');
   }
   return;
 }
 
 const redirectHomeWhenNotLoggedIn = () => {
-  if (!userState.isLoggedIn) {
+  if (!userStore.getState().isLoggedIn) {
     switchRoute('home');
   }
   return;

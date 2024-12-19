@@ -4,19 +4,20 @@ export interface IAppStore {
   isMobile: boolean;
   isDrawerOpened: boolean;
   setIsDrawerOpened: (isDrawerOpened: boolean) => void;
+  currentRoute: string;
+  setCurrentRoute: (route: string) => void;
 }
 
 const isMobile = () => {
-  if (matchMedia('(min-width: 769px)').matches) {
-    return false;
-  }
-  return true;
+  return !matchMedia('(min-width: 769px)').matches;
 }
 
 const store = createStore<IAppStore>(set => ({
   isMobile: isMobile(),
   isDrawerOpened: false,
   setIsDrawerOpened: (isDrawerOpened: boolean) => set(() => { return { isDrawerOpened } }),
+  currentRoute: location.pathname,
+  setCurrentRoute: (route: string) => set(() => { return { currentRoute: route } })
 }));
 
 window.addEventListener('resize', () => {

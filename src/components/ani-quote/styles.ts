@@ -1,6 +1,10 @@
 import { css } from 'lit';
 
 export default css`
+  :host {
+    position: relative;
+  }
+
   a {
     color: inherit;
   }
@@ -87,6 +91,12 @@ export default css`
   [aria-label="Like"][active],
   [aria-label="Like"][active] + * {
     color: var(--ani-quote-color-like);
+  }
+
+  [aria-label="Delete"] {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 
   @media screen and (min-width: 768px) {

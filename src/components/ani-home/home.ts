@@ -30,7 +30,7 @@ export default class AniHome extends LitElement {
   }
 
   updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('quotes')) {
+    if (changedProperties.has('quotes') && this.userState.isLoggedIn) {
       this.myQuotes = this.quotes.filter(quote => quote.user.id === this.userState.user.user.id);
     }
   }

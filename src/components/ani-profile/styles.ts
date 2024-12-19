@@ -22,6 +22,7 @@ export const informationStyles = css`
 
   legend {
     text-align: center;
+    margin-bottom: 0;
   }
 
   fieldset {

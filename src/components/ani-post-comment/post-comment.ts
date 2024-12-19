@@ -41,6 +41,7 @@ export default class AniPostComment extends LitElement {
 
   render() {
     return html`
+      <button aria-label="Close" @click=${() => this.modalsState.setCommentOpened(false)}><kemet-icon icon="x-lg" size="24"></kemet-icon></button>
       <form method="post" action="api/comments" @submit=${(event: SubmitEvent) => this.handlePost(event)}>
         <kemet-field slug="comment" label="What do you have to say?" message="Your comment cannot be blank">
           <kemet-textarea slot="input" name="comment" rows="5" rounded required filled></kemet-textarea>

@@ -23,4 +23,11 @@ export default css`
     right: 1rem;
     bottom: 1rem;
   }
+
+  [aria-label="Close"] {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    z-index: 9;
+  }
 `;

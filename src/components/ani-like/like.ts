@@ -30,10 +30,6 @@ export default class AniLike extends LitElement {
 
   updated() {
     this.likes = this.quote.likes.length;
-    // if (this.quote.documentId === 'bgiv5hr1c9rddh3goblaghlk') {
-    //   // console.log(this.quote)
-    //   console.log(this.quote.likes.includes(this.userState.user.user.id));
-    // }
     if (this.userState.isLoggedIn) this.liked = this.quote.likes.includes(this.userState.user.user.id);
   }
 

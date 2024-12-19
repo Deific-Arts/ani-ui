@@ -2,9 +2,10 @@ import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { svgLogo } from '../../shared/svgs';
 import userStore, { IUserStore } from '../../store/user';
+import appStore, { IAppStore } from '../../store/app';
+import { switchRoute } from '../../shared/utilities';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
-import { switchRoute } from '../../shared/utilities';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -18,16 +19,32 @@ export default class AniTopNav extends LitElement {
   @state()
   userState: IUserStore = userStore.getInitialState();
 
+  @state()
+  appState: IAppStore = appStore.getInitialState();
+
+  constructor() {
+    super();
+
+    appStore.subscribe((state) => {
+      this.appState = state;
+    });
+
+    userStore.subscribe((state) => {
+      this.userState = state;
+    });
+  }
+
   render() {
     return html`
       <nav>
-        <button aria-label="Menu">
-          <kemet-icon icon="list" size="32"></kemet-icon>
-        </button>
+        ${this.appState.currentRoute.includes('home') || this.appState.currentRoute === '/' ? html`
+          <button aria-label="Menu" @click=${() => this.appState.setIsDrawerOpened(!this.appState.isDrawerOpened)}>
+            <kemet-icon icon="search" size="24"></kemet-icon>
+          </button>
+          ` : null
+        }
       </nav>
-      <button aria-label="Home">
-        <a href="/">${svgLogo}</a>
-      </button>
+      <button aria-label="Home" @click=${() => switchRoute('home', 'Ani | Home')}>${svgLogo}</button>
       <div>${this.makeProfileImage()}</div>
     `
   }
@@ -37,17 +54,17 @@ export default class AniTopNav extends LitElement {
 
     if (this.userState.isLoggedIn) {
       return html`
-        <a href="/profile">
+        <button @click=${() => switchRoute('profile', 'Ani | Profile')}>
           ${profileImage
             ? html`<img src="${API_URL}/${profileImage}" alt="${this.userState.profile.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.userState.profile.username}" alt="${this.userState.profile.username}" />`
           }
-        </a>
+        </button>
       `
     }
 
     return html`
-      <button @click=${() => switchRoute('login', 'aniCards | Login')} aria-label="Login">
+      <button @click=${() => switchRoute('login', 'Ani | Login')} aria-label="Login">
         <kemet-icon icon="door-open" size="24"></kemet-icon>
       </button>
     `;

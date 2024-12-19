@@ -38,24 +38,30 @@ export default class aniBook extends LitElement {
   }
 
   updated(changedProperties: Map<string, unknown>) {
-    changedProperties.has('identifier') && this.fetchBook();
+    if (changedProperties.has('identifier') && this.identifier) {
+      this.fetchBook();
+    }
   }
 
   render() {
-    return html`
-      <figure>
-        <div>
-          <img slot="media" src="${this.book?.volumeInfo?.imageLinks?.thumbnail}" alt="${this.book?.volumeInfo.title}" />
-        </div>
-        <header>${this.book?.volumeInfo.title}</header>
-        <footer>${this.book?.volumeInfo?.authors ? this.book.volumeInfo.authors[0] : ''}</footer>
-      </figure>
-    `;
+    if (this.book) {
+      return html`
+        <figure>
+          <div>
+            <img slot="media" src="${this.book?.volumeInfo?.imageLinks?.thumbnail}" alt="${this.book?.volumeInfo?.title}" />
+          </div>
+          <header>${this.book?.volumeInfo?.title}</header>
+          <footer>${this.book?.volumeInfo?.authors ? this.book.volumeInfo?.authors[0] : ''}</footer>
+        </figure>
+      `;
+    }
+    return html`<p>There has been an error loading the book details.</p>`;
   }
 
   async fetchBook() {
     const response = await fetch(`https://www.googleapis.com/books/v1/volumes/${this.identifier}?key=${import.meta.env.VITE_BOOKS_API_KEY}`);
-    this.book = await response.json();
+    const bookData = await response.json();
+    this.book = !bookData.error ? bookData : undefined;
   }
 
   handleSelected() {
