@@ -43,7 +43,7 @@ export default class AniQuote extends LitElement {
       <header>
         <div>
           ${this.quote.user.avatar
-            ? html`<img src="${API_URL}/${this.quote.user.avatar.url}" alt="${this.quote.user.username}" />`
+            ? html`<img src="${API_URL}${this.quote.user.avatar.url}" alt="${this.quote.user.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.quote.user.username}" alt="${this.quote?.user?.username}" />`
           }
         </div>

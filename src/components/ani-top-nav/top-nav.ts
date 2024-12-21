@@ -65,7 +65,7 @@ export default class AniTopNav extends LitElement {
       return html`
         <button @click=${() => switchRoute('profile', 'Ani | Profile')}>
           ${profileImage
-            ? html`<img src="${API_URL}/${profileImage}" alt="${this.userState.profile.username}" />`
+            ? html`<img src="${API_URL}${profileImage}" alt="${this.userState.profile.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.userState.profile.username}" alt="${this.userState.profile.username}" />`
           }
         </button>
