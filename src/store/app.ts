@@ -17,7 +17,7 @@ const store = createStore<IAppStore>(set => ({
   isDrawerOpened: false,
   setIsDrawerOpened: (isDrawerOpened: boolean) => set(() => { return { isDrawerOpened } }),
   currentRoute: location.pathname,
-  setCurrentRoute: (route: string) => set(() => { return { currentRoute: route } })
+  setCurrentRoute: (route: string) => set(() => { return { currentRoute: route } }),
 }));
 
 window.addEventListener('resize', () => {

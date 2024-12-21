@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { svgLogo } from '../../shared/svgs';
 import userStore, { IUserStore } from '../../store/user';
+import quoteStore, { IQuoteStore } from '../../store/quote';
 import appStore, { IAppStore } from '../../store/app';
 import { switchRoute } from '../../shared/utilities';
 import styles from './styles';
@@ -20,18 +21,25 @@ export default class AniTopNav extends LitElement {
   userState: IUserStore = userStore.getInitialState();
 
   @state()
+  quoteState: IQuoteStore = quoteStore.getInitialState();
+
+  @state()
   appState: IAppStore = appStore.getInitialState();
 
   constructor() {
     super();
 
-    appStore.subscribe((state) => {
-      this.appState = state;
+    quoteStore.subscribe((state) => {
+      this.quoteState = state;
     });
 
     userStore.subscribe((state) => {
       this.userState = state;
     });
+
+    appStore.subscribe((state) => {
+      this.appState = state;
+    })
   }
 
   render() {
@@ -41,6 +49,7 @@ export default class AniTopNav extends LitElement {
           <button aria-label="Menu" @click=${() => this.appState.setIsDrawerOpened(!this.appState.isDrawerOpened)}>
             <kemet-icon icon="search" size="24"></kemet-icon>
           </button>
+          <span>${this.quoteState.searchQuery ? html`Looking for: <strong>${this.quoteState.searchQuery}</strong>` : ''}</span>
           ` : null
         }
       </nav>

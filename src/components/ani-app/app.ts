@@ -19,6 +19,7 @@ import '../ani-profile/profile';
 import '../ani-login/login';
 import '../ani-mine/mine';
 import '../ani-quote-view/quote-view';
+import '../ani-search/ani-search';
 
 
 @customElement('ani-app')
@@ -89,19 +90,14 @@ export class AniApp extends LitElement {
           <div>${message}</div>
         </div>
       </kemet-alert>
-      <kemet-drawer overlay side="top" effect="push" ?opened=${this.appState.isDrawerOpened}>
-        <aside slot="navigation">
-          <form>
-            <p>
-              <kemet-field label="Search Quotes">
-                <kemet-input slot="input" name="search" rounded filled></kemet-input>
-              </kemet-field>
-            </p>
-          </form>
-        </aside>
+      <kemet-drawer overlay side="top" effect="push">
+        <aside slot="navigation"></aside>
         <section slot="content">
-          <ani-top-nav></ani-top-nav>
-          <main></main>
+          <ani-search></ani-search>
+          <div class="wrapper">
+            <ani-top-nav></ani-top-nav>
+            <main></main>
+          </div>
         </section>
       </kemet-drawer>
       <kemet-modal id="modal-sign-in" close-on-click rounded effect="fadein-scaleup" .opened=${signInOpened} @kemet-modal-closed=${() => modalsStore.setState({ signInOpened: false })}>

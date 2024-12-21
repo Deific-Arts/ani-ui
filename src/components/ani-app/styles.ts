@@ -40,6 +40,10 @@ export default css`
     padding: 1rem 1.5rem;
   }
 
+  .wrapper {
+    position: relative;
+  }
+
   #modal-sign-in svg {
     width: 128px;
   }

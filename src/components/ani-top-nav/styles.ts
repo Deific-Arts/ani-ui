@@ -25,5 +25,11 @@ export default  css`
     transform: translateX(-50%);
   }
 
-
+  nav {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    max-width: 40vw;
+  }
 `;
