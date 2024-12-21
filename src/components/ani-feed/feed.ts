@@ -13,7 +13,6 @@ export default class AniFeed extends LitElement {
   @property({ type: Array })
   quotes: IQuote[] = [];
 
-
   render() {
     return html`
       <ul>${this.makeFeed()}</ul>

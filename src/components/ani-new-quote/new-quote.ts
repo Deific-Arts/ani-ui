@@ -1,12 +1,12 @@
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
-import modalsStore,{ IModalsStore } from '../../store/modals';
+import modalsStore, { IModalsStore } from '../../store/modals';
+import quoteStore, { IQuoteStore } from '../../store/quote';
+import userStore,{ IUserStore } from '../../store/user';
+import { IBook } from '../../shared/interfaces';
+import KemetSelect from 'kemet-ui/dist/components/kemet-select/kemet-select';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
-import { IBook } from '../../shared/interfaces';
-import userStore,{ IUserStore } from '../../store/user';
-import KemetSelect from 'kemet-ui/dist/components/kemet-select/kemet-select';
-
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -19,6 +19,9 @@ export default class AniNewQuote extends LitElement {
 
   @state()
   userState: IUserStore = userStore.getInitialState();
+
+  @state()
+  quoteState: IQuoteStore = quoteStore.getInitialState();
 
   @query('kemet-select')
   userBook!: KemetSelect;
@@ -84,14 +87,17 @@ export default class AniNewQuote extends LitElement {
       likes: []
     }
 
-    fetch(`${API_URL}/api/quotes`, {
+    const newQuoteResponse = await fetch(`${API_URL}/api/quotes?populate=*`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.userState.user.jwt}`
       },
       body: JSON.stringify({ data: payload })
-    }).then(() => location.reload());
+    }).then((response) => response.json());
+
+    this.modalsState.setNewQuoteOpened(false);
+    this.quoteState.addQuote(newQuoteResponse.data);
   }
 
   makeBookOptions() {

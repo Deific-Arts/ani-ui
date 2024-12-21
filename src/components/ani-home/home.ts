@@ -44,12 +44,17 @@ export default class AniHome extends LitElement {
 
     quoteStore.subscribe((state) => {
       this.quoteState = state;
+      this.quotes = state.quotes;
     })
+  }
+
+  firstUpdated() {
+    this.getQuotes(true);
   }
 
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('quotes') && this.userState.isLoggedIn) {
-      this.myQuotes = this.quotes.filter(quote => quote.user.id === this.userState.user.user.id);
+      this.myQuotes = this.quoteState.quotes.filter(quote => quote.user.id === this.userState.user.user.id);
     }
 
     if (changedProperties.has('quoteState')) {
@@ -86,12 +91,12 @@ export default class AniHome extends LitElement {
     `
   }
 
-  async getQuotes() {
+  async getQuotes(init: boolean = false) {
     // search by whether or not the user, book, or quote contain the search query
     const searchParams = this.quoteState.searchQuery ?`&filters[$or][0][quote][$contains]=${this.quoteState.searchQuery}&filters[$or][1][book][title][$contains]=${this.quoteState.searchQuery}&filters[$or][2][user][username][$contains]=${this.quoteState.searchQuery}` : '';
     const response = await fetch(`${API_URL}/api/quotes?sort[0]=createdAt:desc&populate=user.avatar&populate=book${searchParams}&pagination[pageSize]=10&pagination[page]=1`);
     const { data } = await response.json();
-    this.quotes = data;
+    init && this.quoteState.addInitialQuotes(data);
   }
 }
 

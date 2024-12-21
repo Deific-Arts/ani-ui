@@ -30,6 +30,7 @@ export default class AniQuote extends LitElement {
 
   updated(changedProperties: Map<string, any>) {
     if (changedProperties.has('quote')) {
+      console.log(this.quote.requote);
       this.quote.requote && this.fetchOriginalQuote();
     }
   }
