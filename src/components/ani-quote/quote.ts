@@ -26,11 +26,14 @@ export default class AniQuote extends LitElement {
   isSingle = location.pathname.includes('quote');
 
   @state()
+  isRequote: boolean = false;
+
+  @state()
   userState: IUserStore = userStore.getInitialState();
 
   updated(changedProperties: Map<string, any>) {
     if (changedProperties.has('quote')) {
-      console.log(this.quote.requote);
+      this.isRequote = !!this.quote.requote;
       this.quote.requote && this.fetchOriginalQuote();
     }
   }
@@ -49,7 +52,7 @@ export default class AniQuote extends LitElement {
           }
         </div>
         <div>
-          ${this.originalQuote
+          ${this.isRequote && this.originalQuote
             ? html`<strong>${this.quote.user.username}</strong> <span>requoted ${this.originalQuote.user.username} ${this.displayDate()} ago</span>`
             : html`<strong>${this.quote.user.username}</strong> <span>quoted ${this.displayDate()} ago</span>`
           }
@@ -61,12 +64,12 @@ export default class AniQuote extends LitElement {
       </figure>
       <footer>
         <div>
-          <ani-comments .quote=${this.originalQuote ? this.originalQuote : this.quote}></ani-comments>
+          <ani-comments .quote=${this.isRequote ? this.originalQuote : this.quote}></ani-comments>
         </div>
-        ${!this.originalQuote ? html`<div><ani-requotes .quote=${this.quote}></ani-requotes></div>` : null}
+        ${!this.isRequote ? html`<div><ani-requotes .quote=${this.quote}></ani-requotes></div>` : null}
         </div>
         <div>
-          <ani-like .quote=${this.originalQuote ? this.originalQuote : this.quote}></ani-like>
+          <ani-like .quote=${this.isRequote ? this.originalQuote : this.quote}></ani-like>
         </div>
         ${this.makeLink()}
         ${this.quote.note ? html`
@@ -93,7 +96,7 @@ export default class AniQuote extends LitElement {
 
   makeLink() {
     if (!this.isSingle) {
-      const documentId = this.originalQuote ? this.originalQuote.documentId : this.quote.documentId;
+      const documentId = this.isRequote && this.originalQuote ? this.originalQuote.documentId : this.quote.documentId;
       return html`
         <div>
           <a href="/quote/${documentId}"><kemet-icon icon="link" size="24"></kemet-icon></a>

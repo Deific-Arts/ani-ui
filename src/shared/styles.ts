@@ -148,6 +148,15 @@ export default css`
     text-align: right;
   }
 
+  kemet-modal {
+    position: relative;
+    z-index: -1;
+  }
+
+  kemet-modal[opened] {
+    z-index: 10;
+  }
+
   ::part(input) {
     outline-offset: 6px;
   }

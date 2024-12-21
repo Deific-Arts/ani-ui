@@ -28,14 +28,18 @@ export default class AniLike extends LitElement {
   @state()
   modalsState: IModalsStore = modalsStore.getInitialState();
 
-  updated() {
-    this.likes = this.quote.likes.length;
-    if (this.userState.isLoggedIn) this.liked = this.quote.likes.includes(this.userState.user.user.id);
+  firstUpdated() {
+    if (this.quote) {
+      this.likes = this.quote.likes.length;
+      if (this.userState.isLoggedIn) this.liked = this.quote.likes.includes(this.userState.user.user.id);
+    }
   }
 
   render() {
     return html`
-      <button aria-label="Like"><kemet-icon icon="${this.liked ? 'heart-fill' : 'heart'}" size="24" @click=${() => this.handleLike()}></kemet-icon></button>
+      <button aria-label="Like">
+        <kemet-icon icon="${this.liked ? 'heart-fill' : 'heart'}" size="24" @click=${() => this.handleLike()}></kemet-icon>
+      </button>
       <span>${this.likes}</span>
     `
   }
@@ -68,6 +72,7 @@ export default class AniLike extends LitElement {
 
       // swap the likes AFTER above logic is complete
       this.liked = !this.liked;
+      console.log(this.liked);
     } else {
       this.modalsState.setSignInOpened(true);
     }

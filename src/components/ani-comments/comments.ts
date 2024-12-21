@@ -27,7 +27,7 @@ export default class AniComments extends LitElement {
   modalsState: IModalsStore = modalsStore.getInitialState();
 
   updated(changedProperties: Map<string, any>) {
-    if (changedProperties.has('quote')) {
+    if (changedProperties.has('quote') && this.quote) {
       this.getComments();
     }
   }
