@@ -5,6 +5,7 @@ export default css`
     display: grid;
     gap: 1rem;
     grid-template-columns: auto 1fr;
+    position: relative;
     padding: 2rem 2rem 0 2rem;
   }
 
@@ -55,5 +56,12 @@ export default css`
   header span {
     opacity: 0.75;
     font-size: 0.85rem;
+  }
+
+  [aria-label="Delete"] {
+    position: absolute;
+    top: 3rem;
+    right: 3rem;
+    z-index: 1;
   }
 `;

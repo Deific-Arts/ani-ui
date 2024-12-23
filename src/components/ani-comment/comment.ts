@@ -1,6 +1,12 @@
 import { LitElement, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { formatDistance } from 'date-fns';
+import { IComment } from '../../shared/interfaces';
+import userStore, { IUserStore } from '../../store/user';
+import Autolinker from 'autolinker';
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
@@ -11,10 +17,17 @@ export default class AniComment extends LitElement {
   static styles = [styles, sharedStyles];
 
   @property({ type: Object })
-  comment!: any;
+  comment!: IComment;
+
+  @state()
+  userState: IUserStore = userStore.getInitialState();
 
   render() {
     return this.comment ? html`
+      ${this.comment.user.id === this.userState.profile?.id
+        ? html`<button aria-label="Delete"><kemet-icon icon="x-lg" size="16" @click=${() => this.deleteComment()}></kemet-icon></button>`
+        : null
+      }
       <div>
         ${this.comment.user.avatar
           ? html`<img src="${API_URL}/${this.comment.user.avatar.url}" alt="${this.comment.user.username}" />`
@@ -27,7 +40,7 @@ export default class AniComment extends LitElement {
         </header>
         <figure>
           <br />
-          <div>${this.comment.comment}</div>
+          <div>${this.autoLink(this.comment.comment)}</div>
         </figure>
       </div>
     ` : null
@@ -37,6 +50,21 @@ export default class AniComment extends LitElement {
     const now = new Date();
     const then = new Date(this.comment.createdAt);
     return formatDistance(now, then);
+  }
+
+  deleteComment() {
+    fetch(`${API_URL}/api/comments/${this.comment.documentId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${this.userState.user.jwt}`
+      }
+    });
+    this.setAttribute("hidden", '');
+  }
+
+  autoLink(comment: string) {
+    const sanitizedComment = DOMPurify.sanitize(marked.parse(comment) as string);
+    return html`${unsafeHTML(Autolinker.link(sanitizedComment))}`;
   }
 }
 

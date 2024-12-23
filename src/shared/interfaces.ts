@@ -17,6 +17,17 @@ export interface IQuote {
   author: any;
 }
 
+export interface IComment {
+  id: number;
+  quoteId: number;
+  documentId: string;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  user: any;
+}
+
 export interface IBook {
   id: number;
   documentId: string;

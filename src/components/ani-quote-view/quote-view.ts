@@ -1,11 +1,14 @@
 import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { IQuote } from '../../shared/interfaces';
+import { IComment, IQuote } from '../../shared/interfaces';
+import quoteStore, { IQuoteStore } from '../../store/quote';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
 import '../ani-quote/quote';
 import '../ani-comment/comment';
+import { switchRoute } from '../../shared/utilities';
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -17,10 +20,25 @@ export default class AniQuoteView extends LitElement {
   quote!: IQuote;
 
   @state()
+  hasFetchedQuote: boolean = false;
+
+  @state()
   documentId: string = '';
 
   @state()
-  comments: any = [];
+  comments: IComment[] = [];
+
+  @state()
+  quoteState: IQuoteStore = quoteStore.getInitialState();
+
+  constructor() {
+    super();
+    quoteStore.subscribe((state) => {
+      console.log(state);
+      this.quoteState = state;
+      this.comments = state.comments;
+    });
+  }
 
   firstUpdated() {
     this.getQuote();
@@ -29,8 +47,16 @@ export default class AniQuoteView extends LitElement {
   render() {
     return html`
       <hr />
-      <ani-quote .quote=${this.quote}></ani-quote>
-      <ul>${this.makeComments()}</ul>
+      ${this.quote && this.hasFetchedQuote ?
+        html `
+          <ani-quote .quote=${this.quote}></ani-quote>
+          <ul>${this.makeComments()}</ul>
+        `
+        : html`
+          <p>Could not find the requested quote.</p>
+          <kemet-button variant="rounded" @click=${() => switchRoute('home', 'Ani | Home')}>Go home</kemet-button>
+        `
+      }
     `
   }
 
@@ -39,6 +65,7 @@ export default class AniQuoteView extends LitElement {
     this.documentId = path[path.length - 1];
     const response = await fetch(`${API_URL}/api/quotes/${this.documentId}?populate=user.avatar&populate=book`);
     const { data } = await response.json();
+    this.hasFetchedQuote = true;
     this.quote = data;
     // we need quote data before we get comments
     this.getComments();
@@ -47,12 +74,12 @@ export default class AniQuoteView extends LitElement {
   async getComments() {
     const commentsResponse = await fetch(`${API_URL}/api/comments?filters[quoteId][$eq]=${this.quote.id}&populate=user.avatar`);
     const { data } = await commentsResponse.json();
-    this.comments = data;
+    this.quoteState.addInitialComments(data);
   }
 
   makeComments() {
     if (this.comments.length > 0) {
-      return this.comments.map((comment: any) => html`<li><ani-comment .comment=${comment}></ani-comment></li>`);
+      return this.comments.map((comment: IComment) => html`<li><ani-comment .comment=${comment}></ani-comment></li>`);
     }
     return null;
   }

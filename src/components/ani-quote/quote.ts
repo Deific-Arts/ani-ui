@@ -9,6 +9,7 @@ import sharedStyles from '../../shared/styles';
 import '../ani-like/like';
 import '../ani-comments/comments';
 import '../ani-requotes/requotes';
+import { switchRoute } from '../../shared/utilities';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -107,13 +108,18 @@ export default class AniQuote extends LitElement {
   }
 
   deleteQuote() {
-    this.setAttribute('hidden', '');
     fetch(`${API_URL}/api/quotes/${this.quote.documentId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${this.userState.user.jwt}`
       }
     });
+
+    if (this.isSingle) {
+      switchRoute('home', 'Ani | Home');
+    } else {
+      this.setAttribute("hidden", '');
+    }
   }
 
   async fetchOriginalQuote() {

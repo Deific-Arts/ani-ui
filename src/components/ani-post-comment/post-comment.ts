@@ -7,7 +7,7 @@ import alertStore, { IAlertStore } from '../../store/alert.ts';
 import { ENUM_ALERT_STATUS } from '../../shared/enums.ts';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
-
+import quoteStore, { IQuoteStore } from '../../store/quote.ts';
 import 'kemet-ui/dist/components/kemet-field/kemet-field';
 import 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
 import 'kemet-ui/dist/components/kemet-count/kemet-count';
@@ -29,6 +29,9 @@ export default class AniPostComment extends LitElement {
   @state()
   alertState: IAlertStore = alertStore.getInitialState();
 
+  @state()
+  quoteState: IQuoteStore = quoteStore.getInitialState();
+
   @query('form')
   commentForm!: HTMLFormElement
 
@@ -49,7 +52,7 @@ export default class AniPostComment extends LitElement {
         </kemet-field>
         ${this.modalsState.currentQuote && html`<p>Commenting on <em>${this.modalsState.currentQuote.book.title}</em>, ${this.modalsState.currentQuote.page && html`page: ${this.modalsState.currentQuote.page}`}</p>`}
         <kemet-button variant="circle">
-          <kemet-icon icon="send" size="24" style="width: 24px; height: 24px;"></kemet-icon>
+          <kemet-icon icon="send" size="24"></kemet-icon>
         </kemet-button>
       </form>
     `
@@ -83,14 +86,15 @@ export default class AniPostComment extends LitElement {
 
     setTimeout(async () => {
       if (!commentTextarea.invalid) {
-        const commentResponse = await fetch(`${API_URL}/${endpoint}`, options);
-        const { error } = await commentResponse.json();
+        const commentResponse = await fetch(`${API_URL}/${endpoint}?populate=user`, options);
+        const { error, data } = await commentResponse.json();
 
         if (!error) {
           this.modalsState.setCommentOpened(false);
           this.alertState.setStatus(ENUM_ALERT_STATUS.PRIMARY);
           this.alertState.setMessage('Your comment has been posted!');
           this.alertState.setOpened(true);
+          this.quoteState.addComment(data);
         } else {
           this.alertState.setStatus(ENUM_ALERT_STATUS.ERROR);
           this.alertState.setMessage(error.message);
