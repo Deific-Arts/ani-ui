@@ -9,8 +9,6 @@ import styles from './styles';
 
 import '../ani-feed/feed';
 
-
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-home')
@@ -22,6 +20,12 @@ export default class AniHome extends LitElement {
 
   @state()
   myQuotes: IQuote[] = [];
+
+  @state()
+  followingQuotes: IQuote[] = [];
+
+  @state()
+  likedQuotes: IQuote[] = [];
 
   @state()
   modalsState: IModalsStore = modalsStore.getInitialState();
@@ -45,7 +49,9 @@ export default class AniHome extends LitElement {
     quoteStore.subscribe((state) => {
       this.quoteState = state;
       this.searchQuery = state.searchQuery;
-      this.myQuotes = state.quotes.filter(quote => quote.user.id === this.userState.user.user.id);
+      this.myQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => quote.user.id === this.userState.user.user.id) : [];
+      this.followingQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => this.userState.profile.following?.includes(quote.user.id)) : [];
+      this.likedQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => quote.likes.includes(this.userState.user.user.id)) : [];
     })
   }
 
@@ -63,20 +69,40 @@ export default class AniHome extends LitElement {
     return html`
       <kemet-tabs divider>
         <kemet-tab slot="tab">All</kemet-tab>
-        <kemet-tab slot="tab">Following</kemet-tab>
-        <kemet-tab slot="tab">Mine</kemet-tab>
+        ${this.userState.isLoggedIn ? html`<kemet-tab slot="tab">Following</kemet-tab>` : null}
+        ${this.userState.isLoggedIn ? html`<kemet-tab slot="tab">Mine</kemet-tab>` : null}
+        ${this.userState.isLoggedIn ? html`<kemet-tab slot="tab">Liked</kemet-tab>` : null}
         <kemet-tab-panel slot="panel">
           <br />
           <ani-feed .quotes=${this.quoteState.quotes}></ani-feed>
         </kemet-tab-panel>
-        <kemet-tab-panel slot="panel">Following</kemet-tab-panel>
-        <kemet-tab-panel slot="panel">
-          <br />
-          ${this.myQuotes.length > 0
-            ? html`<ani-feed .quotes=${this.myQuotes}></ani-feed>`
-            : html`<p>Looks like you haven't added any quotes yet.</p>`
-          }
-        </kemet-tab-panel>
+        ${this.userState.isLoggedIn ? html`
+          <kemet-tab-panel slot="panel">
+            <br />
+            ${this.followingQuotes.length > 0
+              ? html`<ani-feed .quotes=${this.followingQuotes}></ani-feed>`
+              : html`<p>Looks like you haven't added any quotes yet.</p>`
+            }
+          </kemet-tab-panel>
+        ` : null}
+        ${this.userState.isLoggedIn ? html`
+          <kemet-tab-panel slot="panel">
+            <br />
+            ${this.myQuotes.length > 0
+              ? html`<ani-feed .quotes=${this.myQuotes}></ani-feed>`
+              : html`<p>Looks like you haven't added any quotes yet.</p>`
+            }
+          </kemet-tab-panel>
+          ` : null}
+          ${this.userState.isLoggedIn ? html`
+            <kemet-tab-panel slot="panel">
+              <br />
+              ${this.likedQuotes.length > 0
+                ? html`<ani-feed .quotes=${this.likedQuotes}></ani-feed>`
+                : html`<p>Looks like you haven't added any quotes yet.</p>`
+              }
+            </kemet-tab-panel>
+            ` : null}
       </kemet-tabs>
 
       ${this.userState.isLoggedIn ? html`

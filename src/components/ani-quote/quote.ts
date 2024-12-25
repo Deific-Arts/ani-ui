@@ -46,12 +46,12 @@ export default class AniQuote extends LitElement {
         : null
       }
       <header>
-        <div>
+        <button @click=${() => switchRoute(`user/${this.quote.user.id}`, `Ani | ${this.quote.user.username}`)}>
           ${this.quote.user.avatar
             ? html`<img src="${API_URL}${this.quote.user.avatar.url}" alt="${this.quote.user.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.quote.user.username}" alt="${this.quote?.user?.username}" />`
           }
-        </div>
+        </button>
         <div>
           ${this.isRequote && this.originalQuote
             ? html`<strong>${this.quote.user.username}</strong> <span>requoted ${this.originalQuote.user.username} ${this.displayDate()} ago</span>`

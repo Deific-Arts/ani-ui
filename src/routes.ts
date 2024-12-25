@@ -19,6 +19,7 @@ export default [
   { path: '/', component: 'ani-home' },
   { path: '/home', component: 'ani-home' },
   { path: '/quote/:id', component: 'ani-quote-view' },
+  { path: '/user/:id', component: 'ani-user-view' },
   { path: '/add', component: 'ani-add', action: redirectHomeWhenNotLoggedIn },
   { path: '/profile', component: 'ani-profile', action: redirectHomeWhenNotLoggedIn },
   { path: '/login', component: 'ani-login', action: redirectHomeWhenLoggedIn },

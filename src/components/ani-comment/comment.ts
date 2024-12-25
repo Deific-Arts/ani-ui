@@ -40,7 +40,7 @@ export default class AniComment extends LitElement {
         </header>
         <figure>
           <br />
-          <div>${this.autoLink(this.comment.comment)}</div>
+          <div>${this.parse(this.comment.comment)}</div>
         </figure>
       </div>
     ` : null
@@ -62,7 +62,7 @@ export default class AniComment extends LitElement {
     this.setAttribute("hidden", '');
   }
 
-  autoLink(comment: string) {
+  parse(comment: string) {
     const sanitizedComment = DOMPurify.sanitize(marked.parse(comment) as string);
     return html`${unsafeHTML(Autolinker.link(sanitizedComment))}`;
   }

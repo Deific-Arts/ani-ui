@@ -72,10 +72,17 @@ export default class aniInformation extends LitElement {
       <kemet-card>
         <form method="post" action="api/users" @submit=${(event: SubmitEvent) => this.updateProfile(event)}>
           <fieldset>
-            <p><kemet-button variant="text" @click=${() => this.logout()}>Log Out</kemet-button></p>
             <legend>Welcome, ${this.userState?.profile?.username}</legend>
             <section class="profile">
+              <br />
               <div class="profile-image">${this.makeProfileImage()}</div>
+              <hr />
+              <p>
+                <kemet-button variant="text" @click=${() => switchRoute(`user/${this.userState?.profile?.id}`, `Ani | ${this.userState?.profile?.username}`)}>View Profile</kemet-button>
+                &nbsp;|&nbsp;
+                <kemet-button variant="text" @click=${() => this.logout()}>Log Out</kemet-button>
+              </p>
+              <hr /><br />
               <div>
                 <p>
                   <kemet-field label="First Name">
@@ -90,6 +97,12 @@ export default class aniInformation extends LitElement {
                 <p>
                   <kemet-field label="Email">
                     <kemet-input slot="input" name="email" rounded filled value=${this.userState?.profile?.email}></kemet-input>
+                  </kemet-field>
+                </p>
+                <p>
+                  <kemet-field label="Bio">
+                    <kemet-textarea slot="input" name="bio" rounded filled value=${this.userState?.profile?.bio}></kemet-textarea>
+                    <kemet-count slot="component" message="characters remaining." limit="300" validate-immediately></kemet-count>
                   </kemet-field>
                 </p>
               </div>
@@ -125,9 +138,9 @@ export default class aniInformation extends LitElement {
         <button class="image" @click=${() => this.showUploadProfileImage = true}>
           <div class="profile-picture" style="background-image: url('${API_URL}${profileImage}')"></div>
         </button>
-        <button class="delete" aria-label="delete" @click=${(event: SubmitEvent) => this.deleteProfileImage(event)}>
-          <kemet-icon icon="trash" size="32"></kemet-icon>
-        </button>
+        <kemet-button variant="circle" class="delete" aria-label="delete" title="Delete profile image" outlined @click=${(event: SubmitEvent) => this.deleteProfileImage(event)}>
+          <kemet-icon icon="trash" size="24"></kemet-icon>
+        </kemet-button>
       `;
     }
 

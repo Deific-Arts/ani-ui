@@ -72,7 +72,6 @@ export default class AniLike extends LitElement {
 
       // swap the likes AFTER above logic is complete
       this.liked = !this.liked;
-      console.log(this.liked);
     } else {
       this.modalsState.setSignInOpened(true);
     }

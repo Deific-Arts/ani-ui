@@ -5,6 +5,10 @@ export default css`
     display: none;
   }
 
+  a {
+    color: var(--app-link-color)
+  }
+
   button {
     cursor: pointer;
     color: inherit;
@@ -149,11 +153,12 @@ export default css`
   }
 
   kemet-modal {
-    position: relative;
+    position: absolute;
     z-index: -1;
   }
 
   kemet-modal[opened] {
+    position: relative;
     z-index: 10;
   }
 

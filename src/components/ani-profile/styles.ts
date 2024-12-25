@@ -16,10 +16,6 @@ export const informationStyles = css`
     z-index: 99;
   }
 
-  button.delete {
-    margin-top: 1rem;
-  }
-
   legend {
     text-align: center;
     margin-bottom: 0;
@@ -27,7 +23,24 @@ export const informationStyles = css`
 
   fieldset {
     text-align: center;
-    margin-top: 1rem;
+  }
+
+  kemet-card {
+    margin: 0 auto;
+  }
+
+  kemet-count {
+    text-align: left;
+  }
+
+  kemet-textarea {
+    width: 100%;
+  }
+
+  .delete {
+    position: absolute;
+    top: 5rem;
+    right: -2rem;
   }
 
   .profile {
@@ -37,7 +50,7 @@ export const informationStyles = css`
 
   .profile-image {
     text-align: center;
-    max-width: 320px;
+    max-width: 128px;
     position: relative;
     margin: auto;
   }
@@ -57,7 +70,7 @@ export const libraryStyles = css`
 
   ul {
     display: grid;
-    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    grid-template-columns: repeat(1, minmax(150px, 1fr));
     gap: var(--kemet-spacer-xl);
     flex-wrap: wrap;
     margin: var(--kemet-spacer-xl);
@@ -77,5 +90,23 @@ export const libraryStyles = css`
 
   kemet-field {
     padding: 1rem;
+  }
+
+  @media screen and (min-width: 768px) {
+    ul {
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    ul {
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
+    }
+  }
+
+  @media screen and (min-width: 1280px) {
+    ul {
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+    }
   }
 `;

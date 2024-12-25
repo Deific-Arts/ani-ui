@@ -77,6 +77,7 @@ export default class aniLibrary extends LitElement {
 
   makeBooks() {
     if (this.books && this.books.length > 0) {
+      console.log(this.books);
       return html`
         <ul>
           ${this.books.map((book: IBook) => html`
@@ -94,7 +95,7 @@ export default class aniLibrary extends LitElement {
   }
 
   hasBook(identifier: string) {
-    return this.userState.profile.books.some((book: any) => book.identifier === identifier);
+    return this.userState.profile.books.some((book: IBook) => book.identifier === identifier);
   }
 
   makeMyBooks() {
