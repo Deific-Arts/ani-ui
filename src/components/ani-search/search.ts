@@ -34,8 +34,9 @@ export class AniSearch extends LitElement {
   render() {
     return html`
       <form>
-        <kemet-field label="Search Quotes">
+        <kemet-field label="Search Quotes" slug="search">
           <kemet-input
+            id="search"
             slot="input"
             name="search"
             rounded

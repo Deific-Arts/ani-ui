@@ -20,7 +20,7 @@ import '../ani-login/login';
 import '../ani-mine/mine';
 import '../ani-quote-view/quote-view';
 import '../ani-user-view/user-view';
-import '../ani-search/ani-search';
+import '../ani-search/search';
 
 
 @customElement('ani-app')
@@ -92,7 +92,7 @@ export class AniApp extends LitElement {
         </div>
       </kemet-alert>
       <section>
-        ${this.appState.currentRoute === '/home' ? html`<ani-search></ani-search>` : null}
+        ${this.appState.currentRoute === '/home' || this.appState.currentRoute === '/' ? html`<ani-search></ani-search>` : null}
         <div class="wrapper">
           <ani-top-nav></ani-top-nav>
           <main></main>

@@ -1,10 +1,9 @@
 import { page } from '@vitest/browser/context';
 import { html, render } from 'lit';
-import { vi, expect, test, describe, beforeEach } from 'vitest';
-
+import { vi, expect, test, describe, beforeEach, afterEach } from 'vitest';
+import { switchRoute } from '../../shared/utilities';
 import './top-nav';
 import 'kemet-ui/dist/components/kemet-icon/kemet-icon';
-import { switchRoute } from '../../shared/utilities';
 
 describe('Top Nav', () => {
   beforeEach(() => {
@@ -16,6 +15,10 @@ describe('Top Nav', () => {
     vi.mock('../../shared/utilities', () => ({
       switchRoute: vi.fn(),
     }));
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   test('displays search icon on home page and allows users to search', async () => {
