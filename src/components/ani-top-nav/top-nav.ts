@@ -46,7 +46,7 @@ export default class AniTopNav extends LitElement {
     return html`
       <nav>
         ${this.appState.currentRoute.includes('home') || this.appState.currentRoute === '/' ? html`
-          <button aria-label="Menu" @click=${() => this.appState.setIsDrawerOpened(!this.appState.isDrawerOpened)}>
+          <button aria-label="Search" @click=${() => this.appState.setIsDrawerOpened(!this.appState.isDrawerOpened)}>
             <kemet-icon icon="search" size="24"></kemet-icon>
           </button>
           <span>${this.quoteState.searchQuery ? html`Looking for: <strong>${this.quoteState.searchQuery}</strong>` : ''}</span>
