@@ -6,6 +6,7 @@ export interface IQuoteStore {
   setSearchQuery: (query: string) => void;
   quotes: IQuote[],
   addQuote: (quote: IQuote) => void,
+  addQuotes: (quotes: IQuote[]) => void,
   addInitialQuotes: (quotes: IQuote[]) => void,
   comments: IComment[],
   addComment: (comment: any) => void,
@@ -15,6 +16,7 @@ export interface IQuoteStore {
 const store = createStore<IQuoteStore>(set => ({
   quotes: [],
   addQuote: (quote: IQuote) => set(state => { return { quotes: [quote, ...state.quotes] } }),
+  addQuotes: (quotes: IQuote[]) => set(state => { return { quotes: [...state.quotes, ...quotes] } }),
   addInitialQuotes: (quotes: IQuote[]) => set(() => { return { quotes } }),
   searchQuery: '',
   setSearchQuery: (query: string) => set(() => { return { searchQuery: query } }),

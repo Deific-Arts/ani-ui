@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, query, state } from 'lit/decorators.js';
 import modalsStore, { IModalsStore } from '../../store/modals';
 import userStore, { IUserStore } from '../../store/user';
 import appStore, { IAppStore } from '../../store/app';
@@ -28,6 +28,12 @@ export default class AniHome extends LitElement {
   likedQuotes: IQuote[] = [];
 
   @state()
+  currentPage: number = 1;
+
+  @state()
+  pagination: any;
+
+  @state()
   modalsState: IModalsStore = modalsStore.getInitialState();
 
   @state()
@@ -38,6 +44,9 @@ export default class AniHome extends LitElement {
 
   @state()
   quoteState: IQuoteStore = quoteStore.getInitialState();
+
+  @query('kemet-tabs')
+  tabsElement!: HTMLElement;
 
   constructor() {
     super();
@@ -57,6 +66,7 @@ export default class AniHome extends LitElement {
 
   firstUpdated() {
     this.getQuotes();
+    window.addEventListener('scroll', () => this.handleScroll());
   }
 
   updated(changedProperties: Map<string, unknown>) {
@@ -114,12 +124,30 @@ export default class AniHome extends LitElement {
     `
   }
 
-  async getQuotes() {
+  async getQuotes(isPagination: boolean = false) {
     // search by whether or not the user, book, or quote contain the search query
     const searchParams = this.quoteState.searchQuery ?`&filters[$or][0][quote][$contains]=${this.quoteState.searchQuery}&filters[$or][1][book][title][$contains]=${this.quoteState.searchQuery}&filters[$or][2][user][username][$contains]=${this.quoteState.searchQuery}` : '';
-    const response = await fetch(`${API_URL}/api/quotes?sort[0]=createdAt:desc&populate=user.avatar&populate=book${searchParams}&pagination[pageSize]=10&pagination[page]=1`);
-    const { data } = await response.json();
-    this.quoteState.addInitialQuotes(data);
+    const response = await fetch(`${API_URL}/api/quotes?sort[0]=createdAt:desc&populate=user.avatar&populate=book${searchParams}&pagination[pageSize]=4&pagination[page]=${this.currentPage}`);
+    const { data, meta } = await response.json();
+
+    this.pagination = meta.pagination;
+
+    if (isPagination) {
+      this.quoteState.addQuotes(data);
+    } else {
+      this.quoteState.addInitialQuotes(data);
+    }
+  }
+
+  handleScroll() {
+    const tabsOffset = this.tabsElement.offsetTop + this.tabsElement.clientHeight;
+    const pageOffset = window.scrollY + window.innerHeight;
+    const isAtBottom = pageOffset > tabsOffset;
+
+    if (isAtBottom && this.pagination.page < this.pagination.pageCount) {
+      this.currentPage++;
+      this.getQuotes(true);
+    }
   }
 }
 

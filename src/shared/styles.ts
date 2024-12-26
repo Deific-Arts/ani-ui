@@ -71,8 +71,9 @@ export default css`
     --kemet-button-padding: 0.75rem 1rem;
   }
 
-  kemet-drawer {
-    --kemet-drawer-height: auto;
+  kemet-tooltip {
+    --kemet-popper-width: 80vw;
+    position: relative;
   }
 
   kemet-toggle {
@@ -195,5 +196,11 @@ export default css`
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
+  }
+
+  @media (min-width: 768px) {
+    kemet-tooltip {
+      --kemet-popper-width: 480px;
+    }
   }
 `;

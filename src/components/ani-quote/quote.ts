@@ -72,7 +72,6 @@ export default class AniQuote extends LitElement {
         <div>
           <ani-like .quote=${this.isRequote ? this.originalQuote : this.quote}></ani-like>
         </div>
-        ${this.makeLink()}
         ${this.quote.note ? html`
           <div>
             <kemet-tooltip distance="24" strategy="absolute">
@@ -85,6 +84,7 @@ export default class AniQuote extends LitElement {
             <kemet-icon icon="journal" size="24"></kemet-icon>
           </div>
         `}
+        ${this.makeLink()}
       </footer>
     ` : null
   }
