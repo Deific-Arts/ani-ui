@@ -1,11 +1,11 @@
 import { LitElement, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import Autolinker from 'autolinker';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { switchRoute } from '../../shared/utilities';
-import { IBook, IQuote } from '../../shared/interfaces';
+import { IBook, IQuote, IUser } from '../../shared/interfaces';
 import userStore, { IUserStore } from '../../store/user';
 import sharedStyles from '../../shared/styles';
 import styles from './styles';
@@ -19,17 +19,17 @@ const API_URL = import.meta.env.VITE_API_URL;
 export default class AniUserView extends LitElement {
   static styles = [styles, sharedStyles];
 
-  @state()
+  @property()
+  user: any;
+
+  @property()
+  userId: string = '';
+
+  @property({ attribute: false })
   quotes: IQuote[] = [];
 
   @state()
   hasFetchedUser: boolean = false;
-
-  @state()
-  user: any;
-
-  @state()
-  userId: string = '';
 
   @state()
   follow: boolean = false;
@@ -46,7 +46,7 @@ export default class AniUserView extends LitElement {
 
   updated(changedProperties: Map<string, any>) {
     if (changedProperties.has('user')) {
-      this.follow = this.userState.profile.following?.includes(this.user.id) || false;
+      this.follow = this.userState.profile?.following?.includes(this.user.id) || false;
     }
   }
 
@@ -91,9 +91,9 @@ export default class AniUserView extends LitElement {
 
   async getUser() {
     const path = location.pathname.split('/');
-    this.userId = path[path.length - 1];
+    this.userId = this.userId || path[path.length - 1];
     const response = await fetch(`${API_URL}/api/users/${this.userId}?populate=*`);
-    this.user = await response.json();
+    this.user = !!this.user ? this.user : await response.json();
     this.hasFetchedUser = true;
     this.getQuotes();
     this.getFollowers();
@@ -108,7 +108,7 @@ export default class AniUserView extends LitElement {
   async getFollowers() {
     const response = await fetch(`${API_URL}/api/users`);
     const responseData = await response.json();
-    this.followers = responseData.filter((user: any) => user.following?.includes(this.user.id)).length;
+    this.followers = responseData.filter((user: IUser) => user.following?.includes(this.user.id)).length;
   }
 
   makeBooks() {

@@ -1,12 +1,13 @@
 {
-  "name": "ani-cards",
+  "name": "ani-ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest --workspace=vitest.workspace.ts"
   },
   "dependencies": {
     "@lit/task": "^1.0.1",
@@ -23,17 +24,18 @@
     "filepond-plugin-image-resize": "^2.0.10",
     "filepond-plugin-image-transform": "^3.8.7",
     "js-cookie": "^3.0.5",
+    "lit": "^3.2.1",
     "kemet-ui": "^3.1.0",
-    "lit": "^3.2.0",
     "marked": "^15.0.4",
     "sass": "^1.78.0",
-    "shufflejs": "^6.1.1",
+    "typescript": "^5.5.3",
     "vite-plugin-lit-css": "^2.0.0",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
-    "typescript": "^5.5.3",
+    "@vitest/browser": "^2.1.8",
+    "playwright": "^1.49.1",
     "vite": "^5.4.1"
   }
 }

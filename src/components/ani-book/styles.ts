@@ -42,9 +42,6 @@ export default css`
 
   header,
   footer {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     padding: 0 var(--kemet-spacer-md);
   }
 `;
