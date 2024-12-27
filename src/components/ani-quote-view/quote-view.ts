@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { IComment, IQuote } from '../../shared/interfaces';
 import quoteStore, { IQuoteStore } from '../../store/quote';
 import styles from './styles';
@@ -9,21 +9,20 @@ import '../ani-quote/quote';
 import '../ani-comment/comment';
 import { switchRoute } from '../../shared/utilities';
 
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-quote-view')
 export default class AniQuoteView extends LitElement {
   static styles = [styles, sharedStyles];
 
+  @property()
+  documentId: string = '';
+
   @state()
   quote!: IQuote;
 
   @state()
   hasFetchedQuote: boolean = false;
-
-  @state()
-  documentId: string = '';
 
   @state()
   comments: IComment[] = [];
@@ -34,7 +33,6 @@ export default class AniQuoteView extends LitElement {
   constructor() {
     super();
     quoteStore.subscribe((state) => {
-      console.log(state);
       this.quoteState = state;
       this.comments = state.comments;
     });
@@ -62,7 +60,7 @@ export default class AniQuoteView extends LitElement {
 
   async getQuote() {
     const path = location.pathname.split('/');
-    this.documentId = path[path.length - 1];
+    this.documentId = !!this.documentId ? this.documentId : path[path.length - 1];
     const response = await fetch(`${API_URL}/api/quotes/${this.documentId}?populate=user.avatar&populate=book`);
     const { data } = await response.json();
     this.hasFetchedQuote = true;

@@ -33,7 +33,7 @@ export default class AniRequotes extends LitElement {
 
   makeRequotesBtn() {
     const isSameUser = this.userState.user?.user?.id === this.quote.user.id;
-    const hasRequoted = this.quote.requotes.includes(this.userState.user?.user?.id)
+    const hasRequoted = this.quote.requotes.includes(this.userState.user?.user?.id);
 
     if (isSameUser || hasRequoted) {
       return html`
