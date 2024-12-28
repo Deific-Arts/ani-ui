@@ -52,10 +52,10 @@ export default class AniNewQuote extends LitElement {
             <kemet-count slot="component" message="characters remaining." limit="300"></kemet-count>
           </kemet-field>
           <footer>
-            <kemet-button type="submit" variant="rounded" @click=${() => this.modalsState.setNewQuoteOpened(false)}>
+            <kemet-button type="submit" variant="rounded" @click=${() => this.handleCancel()}>
               Cancel
             </kemet-button>
-            <kemet-button variant="circle" @click=${() => this.addQuote()}>
+            <kemet-button variant="circle" @click=${() => this.addQuote()} aria-label="Submit">
               <kemet-icon icon="send" size="24"></kemet-icon>
             </kemet-button>
           </footer>
@@ -102,6 +102,10 @@ export default class AniNewQuote extends LitElement {
 
   makeBookOptions() {
     return this.userState.profile.books.map((book: IBook) => html`<kemet-option label="${book.title}" value="${book.identifier}"></kemet-option>`)
+  }
+
+  handleCancel() {
+    this.modalsState.setNewQuoteOpened(false)
   }
 }
 

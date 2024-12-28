@@ -12,7 +12,7 @@ import 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
 import 'kemet-ui/dist/components/kemet-button/kemet-button';
 
 
-describe('Information', () => {
+describe('Post Comment', () => {
   beforeEach(() => {
     render(
       html`<ani-post-comment></ani-post-comment>`,
