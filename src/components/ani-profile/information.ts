@@ -85,22 +85,22 @@ export default class aniInformation extends LitElement {
               <hr /><br />
               <div>
                 <p>
-                  <kemet-field label="First Name">
+                  <kemet-field label="First Name" slug="first-name">
                     <kemet-input slot="input" name="firstName" rounded filled value=${this.userState?.profile?.firstName}></kemet-input>
                   </kemet-field>
                 </p>
                 <p>
-                  <kemet-field label="Last Name">
+                  <kemet-field label="Last Name" slug="last-name">
                     <kemet-input slot="input" name="lastName" rounded filled value=${this.userState?.profile?.lastName}></kemet-input>
                   </kemet-field>
                 </p>
                 <p>
-                  <kemet-field label="Email">
+                  <kemet-field label="Email" slug="email">
                     <kemet-input slot="input" name="email" rounded filled value=${this.userState?.profile?.email}></kemet-input>
                   </kemet-field>
                 </p>
                 <p>
-                  <kemet-field label="Bio">
+                  <kemet-field label="Bio" slug="bio">
                     <kemet-textarea slot="input" name="bio" rounded filled value=${this.userState?.profile?.bio}></kemet-textarea>
                     <kemet-count slot="component" message="characters remaining." limit="300" validate-immediately></kemet-count>
                   </kemet-field>
