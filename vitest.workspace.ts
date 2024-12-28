@@ -11,7 +11,7 @@ export default defineWorkspace([
         name: 'chromium',
         provider: 'playwright',
         providerOptions: {},
-        headless: true,
+        //headless: true,
       },
       include: ['./src/**/test.ts'],
     },
