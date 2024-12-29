@@ -144,7 +144,7 @@ export default class AniHome extends LitElement {
     const pageOffset = window.scrollY + window.innerHeight;
     const isAtBottom = pageOffset > tabsOffset;
 
-    if (isAtBottom && this.pagination.page < this.pagination.pageCount) {
+    if (isAtBottom && this.pagination?.page < this.pagination?.pageCount) {
       this.currentPage++;
       this.getQuotes(true);
     }

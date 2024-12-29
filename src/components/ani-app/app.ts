@@ -17,7 +17,6 @@ import '../ani-top-nav/top-nav';
 import '../ani-home/home';
 import '../ani-profile/profile';
 import '../ani-login/login';
-import '../ani-mine/mine';
 import '../ani-quote-view/quote-view';
 import '../ani-user-view/user-view';
 import '../ani-search/search';
