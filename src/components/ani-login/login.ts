@@ -18,7 +18,7 @@ interface ICredentials {
 const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-login')
-export class aniLogin extends LitElement {
+export default class aniLogin extends LitElement {
   static styles = [styles, sharedStyles];
 
   @state()

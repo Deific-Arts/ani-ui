@@ -5,7 +5,7 @@ import './book';
 import { userEvent } from '@vitest/browser/context';
 
 
-describe('Home', () => {
+describe('Book', () => {
   test('adds or removes a book when clicked', async () => {
     render(
       html`<ani-book selectable identifier="Iaqe9CG_s6cC"></ani-book>`,

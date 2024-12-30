@@ -5,7 +5,7 @@ import AniComments from './comments';
 import './comments';
 import 'kemet-ui/dist/components/kemet-icon/kemet-icon';
 
-describe('Home', () => {
+describe('Comments', () => {
   beforeEach(() => {
     render(
       html`<ani-comments></ani-comments>`,

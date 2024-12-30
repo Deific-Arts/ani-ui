@@ -15,7 +15,7 @@ const loginTestUser = () => {
   component!.comment = fixtureCommentUser1;
 }
 
-describe('Home', () => {
+describe('Comment', () => {
   beforeEach(() => {
     render(
       html`<ani-comment></ani-comment>`,
