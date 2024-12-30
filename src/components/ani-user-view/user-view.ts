@@ -20,7 +20,7 @@ export default class AniUserView extends LitElement {
   static styles = [styles, sharedStyles];
 
   @property()
-  user: any;
+  user!: IUser;
 
   @property()
   userId: string = '';
@@ -44,7 +44,7 @@ export default class AniUserView extends LitElement {
     this.getUser();
   }
 
-  updated(changedProperties: Map<string, any>) {
+  updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('user')) {
       this.follow = this.userState.profile?.following?.includes(this.user.id) || false;
     }

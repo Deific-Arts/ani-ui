@@ -210,8 +210,8 @@ export const fixtureQuotes: IQuote[] = [
       "title": "Pagan Origins of the Christ Myth",
       "identifier": "zN1UEAAAQBAJ"
     },
-    comments: undefined,
-    author: undefined
+    // comments: undefined,
+    // author: undefined
   },
   {
     "id": 49,
@@ -287,8 +287,8 @@ export const fixtureQuotes: IQuote[] = [
       "title": "The Ancient Egyptian Roots of Christianity",
       "identifier": "5PvI4IefhAoC"
     },
-    comments: undefined,
-    author: undefined
+    // comments: undefined,
+    // author: undefined
   },
   {
     "id": 50,
@@ -364,8 +364,8 @@ export const fixtureQuotes: IQuote[] = [
       "title": "Isis in the Ancient World",
       "identifier": "WpOTnGH6X9wC"
     },
-    comments: undefined,
-    author: undefined
+    // comments: undefined,
+    // author: undefined
   },
   {
     "id": 51,
@@ -441,8 +441,8 @@ export const fixtureQuotes: IQuote[] = [
       "title": "The Secret Lore of Egypt",
       "identifier": "SB_y56Vlz5kC"
     },
-    comments: undefined,
-    author: undefined
+    // comments: undefined,
+    // author: undefined
   },
   {
     "id": 52,
@@ -518,8 +518,8 @@ export const fixtureQuotes: IQuote[] = [
       "title": "The Secret Lore of Egypt",
       "identifier": "SB_y56Vlz5kC"
     },
-    comments: undefined,
-    author: undefined
+    // comments: undefined,
+    // author: undefined
   },
   {
     "id": 1,
@@ -600,8 +600,6 @@ export const fixtureQuotes: IQuote[] = [
       "publishedAt": "2024-12-15T06:26:35.963Z",
       "title": "Osiris Death and Afterlife of a God",
       "identifier": "BUEiI-VXwi4C"
-    },
-    comments: undefined,
-    author: undefined
+    }
   }
 ];

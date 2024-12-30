@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import styles from './styles.ts';
 import sharedStyles from '../../shared/styles.ts';
 import userStore,{ IUserStore } from '../../store/user.ts';
-import { IGoogleBook } from '../../shared/interfaces.ts';
+import { IBook, IGoogleBook } from '../../shared/interfaces.ts';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -91,9 +91,11 @@ export default class aniBook extends LitElement {
       book = createResponse.data;
     }
 
+    const books = this.userState.profile.books as IBook[];
+
     this.userState.updateProfile({
       ...this.userState.profile,
-      books: [...this.userState.profile.books, book]
+      books: [...books, book]
     })
 
     const updateBooksOptions = {
@@ -113,9 +115,11 @@ export default class aniBook extends LitElement {
   }
 
   async removeBook() {
+    const books = this.userState.profile.books as IBook[];
+
     this.userState.updateProfile({
       ...this.userState.profile,
-      books: this.userState.profile.books.filter((book: any) => book.identifier !== this.identifier)
+      books: books.filter((book: IBook) => book.identifier !== this.identifier)
     });
 
     const updateBooksOptions = {

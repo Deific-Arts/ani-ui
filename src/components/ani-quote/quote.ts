@@ -32,7 +32,7 @@ export default class AniQuote extends LitElement {
   @state()
   userState: IUserStore = userStore.getInitialState();
 
-  updated(changedProperties: Map<string, any>) {
+  updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('quote')) {
       this.isRequote = !!this.quote.requote;
       this.quote.requote && this.fetchOriginalQuote();

@@ -1,10 +1,14 @@
 import { page } from '@vitest/browser/context';
 import { html, render } from 'lit';
 import { expect, test, describe, vi } from 'vitest';
+import "@vitest/browser/matchers.d.ts";
 import { fixtureQuoteHasRequoteFromUser1, fixtureQuoteUser1 } from './fixtures';
+import { fixtureUser } from '../ani-user-view/fixtures';
+
 import AniRequotes from './requotes';
 import './requotes';
 import 'kemet-ui/dist/components/kemet-icon/kemet-icon';
+
 
 describe('Requotes', () => {
   test('if user is logged in renders the icons without the button', async () => {
@@ -26,13 +30,9 @@ describe('Requotes', () => {
     );
 
     const component = document.querySelector('ani-requotes');
-    component!.userState.user = {
-        user: {
-          id: 1,
-        }
-    };
+    component!.userState.user = { jwt: 'token', user: fixtureUser };
 
-    await expect.element(page.getByRole('button')).not.toBeInTheDocument();
+    await expect.element(page.getByRole('button', { name: 'Requote' })).not.toBeInTheDocument();
   });
 
   test('does a requote when button is clicked', async () => {
@@ -42,14 +42,17 @@ describe('Requotes', () => {
     );
 
     const component = document.querySelector('ani-requotes');
+
     component!.userState.user = {
-        user: {
-          id: 9,
-        }
+      jwt: 'token',
+      user: {
+        ...fixtureUser,
+        id: 9,
+      }
     };
 
     const spyPostRequote = vi.spyOn(AniRequotes.prototype, 'postRequote');
-    await page.getByRole('button').click();
+    await page.getByRole('button', { name: 'Requote' }).click();
     expect(spyPostRequote).toHaveBeenCalled();
   });
 });

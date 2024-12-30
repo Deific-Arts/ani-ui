@@ -1,9 +1,11 @@
 import { page } from '@vitest/browser/context';
 import { html, render } from 'lit';
 import { vi, expect, test, describe, beforeEach, afterEach } from 'vitest';
+import "@vitest/browser/matchers.d.ts";
 import { switchRoute } from '../../shared/utilities';
 import './top-nav';
 import 'kemet-ui/dist/components/kemet-icon/kemet-icon';
+import { fixtureProfile } from '../ani-profile/fixtures';
 
 describe('Top Nav', () => {
   beforeEach(() => {
@@ -56,14 +58,14 @@ describe('Top Nav', () => {
   test('display profile image when logged in', async () => {
     const component = document.querySelector('ani-top-nav');
     component!.userState.isLoggedIn = true;
-    component!.userState.profile = { username: 'Ani'};
+    component!.userState.profile = fixtureProfile;
 
     render(
       html`<ani-top-nav></ani-top-nav>`,
       document.body,
     );
 
-    const profileImage = await page.getByAltText(/Ani/i);
+    const profileImage = await page.getByAltText(/OgdoadPantheon/i);
     await expect.element(profileImage).toBeInTheDocument();
   });
 
@@ -76,10 +78,10 @@ describe('Top Nav', () => {
   test('switches route to profile when profile image is clicked', async () => {
     const component = document.querySelector('ani-top-nav');
     component!.userState.isLoggedIn = true;
-    component!.userState.profile = { username: 'Ani'};
+    component!.userState.profile = fixtureProfile;
 
-    const profileImage = await page.getByAltText(/Ani/i);
+    const profileImage = await page.getByAltText(/OgdoadPantheon/i);
     await profileImage.click();
-    await expect(switchRoute).toBeCalledWith('profile', 'Ani | Profile');
+    await expect(switchRoute).toHaveBeenCalledWith('profile', 'Ani | Profile');
   });
 });

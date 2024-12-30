@@ -1,12 +1,14 @@
 import { html, render } from 'lit';
 import { expect, test, describe, vi, beforeEach, afterEach } from 'vitest';
 import { page } from '@vitest/browser/context';
+import "@vitest/browser/matchers.d.ts";
 import { fixtureQuote } from './fixtures';
 import { switchRoute } from '../../shared/utilities';
 
 import './quote';
 import 'kemet-ui/dist/components/kemet-icon/kemet-icon';
 import 'kemet-ui/dist/components/kemet-tooltip/kemet-tooltip';
+import { fixtureProfile } from '../ani-profile/fixtures';
 
 describe('Quote', () => {
   beforeEach(() => {
@@ -32,7 +34,7 @@ describe('Quote', () => {
 
   test('displays delete button when quote user is logged in', async () => {
     const component = document.querySelector('ani-quote');
-    component!.userState.profile = { id: 1 };
+    component!.userState.profile = { ...fixtureProfile, id: 1 };
     // we need to re-render after updating the userState
     render(
       html`<ani-quote .quote=${fixtureQuote}></ani-quote>`,

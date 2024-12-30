@@ -41,8 +41,8 @@ export class AniSearch extends LitElement {
             name="search"
             rounded
             filled
-            @kemet-input-focused=${(event: CustomEvent<any>) => this.handleSearchFocus(event)}
-            @kemet-input-input=${(event: CustomEvent<any>) => this.handleSearch(event)}></kemet-input>
+            @kemet-input-focused=${(event: CustomEvent<KemetInput>) => this.handleSearchFocus(event)}
+            @kemet-input-input=${(event: CustomEvent<KemetInput>) => this.handleSearch(event)}></kemet-input>
         </kemet-field>
       </form>
     `;

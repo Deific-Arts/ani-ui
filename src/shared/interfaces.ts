@@ -11,10 +11,10 @@ export interface IQuote {
   page: string;
   note: string;
   private: boolean;
-  comments: any;
-  user: any;
-  book: any;
-  author: any;
+  comments?: IComment[];
+  user: IUser;
+  book: IBook;
+  // author: any;
 }
 
 export interface IComment {
@@ -25,7 +25,7 @@ export interface IComment {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  user: any;
+  user: IUser;
 }
 
 export interface IBook {
@@ -50,7 +50,7 @@ export interface IGoogleBook {
 
 export interface IUser {
   id: number;
-  documentId: string;
+  documentId?: string;
   username: string;
   email: string;
   provider: string;
@@ -63,10 +63,12 @@ export interface IUser {
   lastName: string;
   bio: string;
   following: number[],
-  role: IRole;
-  books: IBook[];
+  role?: IRole;
+  books?: IBook[];
   avatar: IAvatar
 }
+
+export interface IProfile extends IUser {}
 
 export interface IRole {
   id: number;
@@ -99,4 +101,16 @@ export interface IAvatar {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
+}
+
+export interface IUserCookie {
+  jwt: string;
+  user: IUser;
+}
+
+export interface IPagination {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
 }

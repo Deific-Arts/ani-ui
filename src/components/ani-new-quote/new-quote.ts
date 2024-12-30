@@ -101,7 +101,8 @@ export default class AniNewQuote extends LitElement {
   }
 
   makeBookOptions() {
-    return this.userState.profile.books.map((book: IBook) => html`<kemet-option label="${book.title}" value="${book.identifier}"></kemet-option>`)
+    const books = this.userState.profile.books as IBook[];
+    return books.map((book: IBook) => html`<kemet-option label="${book.title}" value="${book.identifier}"></kemet-option>`)
   }
 
   handleCancel() {

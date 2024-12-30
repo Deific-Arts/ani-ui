@@ -144,6 +144,7 @@ export default class aniLogin extends LitElement {
 
         // success
         if (response.jwt) {
+          console.log(response);
           const options = {
             method: 'GET',
             headers: {
@@ -250,6 +251,8 @@ export default class aniLogin extends LitElement {
     event.preventDefault();
 
     const formData = new FormData(this.setPasswordForm) as any;
+
+    console.log(formData);
 
     const options = {
       method: 'POST',

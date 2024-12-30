@@ -1,6 +1,7 @@
 import { page } from '@vitest/browser/context';
 import { html, render } from 'lit';
 import { expect, test, describe, beforeEach } from 'vitest';
+import "@vitest/browser/matchers.d.ts";
 import { fixtureQuotes, fixtureUser } from './fixtures';
 
 import './user-view';

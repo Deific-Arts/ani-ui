@@ -43,7 +43,7 @@ export default class AniRequotes extends LitElement {
     }
 
     return html`
-      <button @click=${() => this.postRequote()}>
+      <button @click=${() => this.postRequote()} aria-label="Requote">
         <kemet-icon icon="arrow-clockwise" size="24"></kemet-icon>
         <span>${this.quote.requotes?.length || 0}</span>
       </button>

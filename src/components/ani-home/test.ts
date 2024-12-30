@@ -1,6 +1,7 @@
 import { html, render } from 'lit';
 import { expect, test, describe, vi, beforeEach } from 'vitest';
 import { page } from '@vitest/browser/context';
+import "@vitest/browser/matchers.d.ts";
 import { fixtureUser } from '../ani-user-view/fixtures';
 import { fixtureProfile } from '../ani-profile/fixtures';
 import { fireEvent } from '@testing-library/dom';
@@ -27,7 +28,7 @@ const logoutTestUser = () => {
 const loginTestUser = () => {
   const component = document.querySelector('ani-home');
   component!.userState.isLoggedIn = true;
-  component!.userState.user = { user: fixtureUser };
+  component!.userState.user = { user: fixtureUser, jwt: 'token' };
   component!.userState.profile = fixtureProfile;
 }
 

@@ -3,7 +3,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import userStore, { IUserStore } from '../../store/user.ts';
 import modalsStore, { IModalsStore } from '../../store/modals.ts';
-import { IQuote } from '../../shared/interfaces';
+import { IComment, IQuote } from '../../shared/interfaces';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
@@ -18,7 +18,7 @@ export default class AniComments extends LitElement {
   quote!: IQuote;
 
   @state()
-  comments: any = [];
+  comments: IComment[] = [];
 
   @state()
   userState: IUserStore = userStore.getInitialState();
@@ -26,7 +26,7 @@ export default class AniComments extends LitElement {
   @state()
   modalsState: IModalsStore = modalsStore.getInitialState();
 
-  updated(changedProperties: Map<string, any>) {
+  updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('quote') && this.quote) {
       this.getComments();
     }

@@ -1,12 +1,13 @@
 import { createStore } from 'zustand/vanilla';
 import Cookies from 'js-cookie';
+import { IProfile, IUserCookie } from '../shared/interfaces';
 
 export interface IUserStore {
-  user: any;
-  profile: any;
-  updateProfile: (profile: any) => void;
+  user: IUserCookie;
+  profile: IProfile;
+  updateProfile: (profile: IProfile) => void;
   isLoggedIn: boolean;
-  login: (loginData: any) => void;
+  login: (loginData: IUserCookie) => void;
   logout: () => void;
 }
 
@@ -42,7 +43,7 @@ const profileResponse = await getProfile();
 const store = createStore<IUserStore>(set => ({
   user: Cookies.get('ani-user') ? JSON.parse(Cookies.get('ani-user') || '') : {},
   profile: profileResponse,
-  updateProfile: (profile: any) => set(() => { return { profile } }),
+  updateProfile: (profile: IProfile) => set(() => { return { profile } }),
   isLoggedIn: !!Cookies.get('ani-user'),
   login: (loginData) => set(() => {
     Cookies.set('ani-user', JSON.stringify(loginData), { expires: 7 });

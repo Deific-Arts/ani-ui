@@ -9,8 +9,8 @@ export interface IQuoteStore {
   addQuotes: (quotes: IQuote[]) => void,
   addInitialQuotes: (quotes: IQuote[]) => void,
   comments: IComment[],
-  addComment: (comment: any) => void,
-  addInitialComments: (comments: any) => void
+  addComment: (comment: IComment) => void,
+  addInitialComments: (comments: IComment[]) => void,
 }
 
 const store = createStore<IQuoteStore>(set => ({

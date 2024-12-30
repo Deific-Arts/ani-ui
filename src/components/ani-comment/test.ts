@@ -1,6 +1,7 @@
 import { html, render } from 'lit';
-import { expect, test, describe, vi, beforeEach } from 'vitest';
+import { expect, test, describe, beforeEach } from 'vitest';
 import { page } from '@vitest/browser/context';
+import "@vitest/browser/matchers.d.ts";
 import { fixtureUser } from '../ani-user-view/fixtures';
 import { fixtureProfile } from '../ani-profile/fixtures';
 import { fixtureCommentUser1, fixtureCommentUser2 } from './fixtures';
@@ -10,7 +11,7 @@ import 'kemet-ui/dist/components/kemet-icon/kemet-icon';
 const loginTestUser = () => {
   const component = document.querySelector('ani-comment');
   component!.userState.isLoggedIn = true;
-  component!.userState.user = { user: fixtureUser };
+  component!.userState.user = { user: fixtureUser, jwt: 'token' };
   component!.userState.profile = fixtureProfile;
   component!.comment = fixtureCommentUser1;
 }

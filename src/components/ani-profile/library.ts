@@ -39,7 +39,7 @@ export default class aniLibrary extends LitElement {
   }
 
   updated() {
-    this.myBooks = this.userState.profile.books;
+    this.myBooks = this.userState.profile.books as IBook[];
   }
 
   render() {
@@ -58,7 +58,7 @@ export default class aniLibrary extends LitElement {
 
   handleBookSearch() {
     clearTimeout(this.searchID);
-    if (this.search) this.searchID = setTimeout(() => this.fetchBooks(), 500);
+    if (this.search) this.searchID = window.setTimeout(() => this.fetchBooks(), 500);
   }
 
   handleBookSearchFocus(event: CustomEvent) {
@@ -95,7 +95,8 @@ export default class aniLibrary extends LitElement {
   }
 
   hasBook(identifier: string) {
-    return this.userState.profile.books.some((book: IBook) => book.identifier === identifier);
+    const books = this.userState.profile.books as IBook[];
+    return books.some((book: IBook) => book.identifier === identifier);
   }
 
   makeMyBooks() {

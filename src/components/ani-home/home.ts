@@ -4,7 +4,7 @@ import modalsStore, { IModalsStore } from '../../store/modals';
 import userStore, { IUserStore } from '../../store/user';
 import appStore, { IAppStore } from '../../store/app';
 import quoteStore, { IQuoteStore } from '../../store/quote';
-import { IQuote } from '../../shared/interfaces';
+import { IPagination, IQuote } from '../../shared/interfaces';
 import styles from './styles';
 
 import '../ani-feed/feed';
@@ -31,7 +31,7 @@ export default class AniHome extends LitElement {
   currentPage: number = 1;
 
   @state()
-  pagination: any;
+  pagination!: IPagination;
 
   @state()
   modalsState: IModalsStore = modalsStore.getInitialState();

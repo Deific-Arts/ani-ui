@@ -1,6 +1,7 @@
 import { html, render } from 'lit';
 import { expect, test, describe, vi, beforeEach, afterEach } from 'vitest';
 import { page, userEvent } from '@vitest/browser/context';
+import "@vitest/browser/matchers.d.ts";
 import { fixtureUser } from '../ani-user-view/fixtures';
 import { fixtureProfile } from './fixtures';
 import { switchRoute } from '../../shared/utilities';
@@ -32,7 +33,7 @@ describe('Information', () => {
     );
 
     const component = document.querySelector('ani-information');
-    component!.userState.user = { user: fixtureUser };
+    component!.userState.user = { user: fixtureUser, jwt: 'token' };
     component!.userState.profile = fixtureProfile;
 
     render(

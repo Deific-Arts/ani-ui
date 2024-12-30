@@ -87,7 +87,7 @@ export default class aniChangePassword extends LitElement {
           'Authorization': `Bearer ${this.userState.user.jwt}`
         },
         body: JSON.stringify({
-          user_id: this.userState.user.user_id,
+          user_id: this.userState.user.user.id,
           currentPassword: currentPasswordInput.value,
           password: newPasswordInput.value,
           passwordConfirmation: confirmPasswordInput.value

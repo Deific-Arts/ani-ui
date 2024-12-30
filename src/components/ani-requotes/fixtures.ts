@@ -74,8 +74,8 @@ export const fixtureQuoteUser1: IQuote = {
     "title": "Pagan Origins of the Christ Myth",
     "identifier": "zN1UEAAAQBAJ"
   },
-  comments: undefined,
-  author: undefined
+  // comments: undefined,
+  // author: undefined
 };
 
 export const fixtureQuoteHasRequoteFromUser1: IQuote = {
@@ -152,6 +152,6 @@ export const fixtureQuoteHasRequoteFromUser1: IQuote = {
     "title": "Pagan Origins of the Christ Myth",
     "identifier": "zN1UEAAAQBAJ"
   },
-  comments: undefined,
-  author: undefined
+  // comments: undefined,
+  // author: undefined
 };
