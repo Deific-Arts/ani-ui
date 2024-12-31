@@ -1,7 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import userStore, { IUserStore } from '../../store/user';
-import { switchRoute } from '../../shared/utilities';
 import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
 import alertStore, { IAlertStore } from '../../store/alert';
 import styles from './styles';
@@ -144,7 +143,6 @@ export default class aniLogin extends LitElement {
 
         // success
         if (response.jwt) {
-          console.log(response);
           const options = {
             method: 'GET',
             headers: {
@@ -155,7 +153,7 @@ export default class aniLogin extends LitElement {
           const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options).then((response) => response.json());
           this.userState.updateProfile(userProfile);
           this.userState.login(response);
-          switchRoute('home');
+          window.location.href = '/';
         }
       })
       // .catch(() => {

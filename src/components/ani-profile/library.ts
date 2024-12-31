@@ -77,7 +77,6 @@ export default class aniLibrary extends LitElement {
 
   makeBooks() {
     if (this.books && this.books.length > 0) {
-      console.log(this.books);
       return html`
         <ul>
           ${this.books.map((book: IBook) => html`

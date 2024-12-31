@@ -255,7 +255,7 @@ export default class aniInformation extends LitElement {
 
   logout() {
     this.userState.logout();
-    switchRoute('home', 'Ani | Home');
+    window.location.href = "/";
   }
 }
 

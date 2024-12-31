@@ -55,6 +55,10 @@ export default class AniHome extends LitElement {
       this.appState = state;
     });
 
+    userStore.subscribe((state) => {
+      this.userState = state;
+    });
+
     quoteStore.subscribe((state) => {
       this.quoteState = state;
       this.searchQuery = state.searchQuery;
@@ -76,53 +80,65 @@ export default class AniHome extends LitElement {
   }
 
   render() {
+    return this.userState.isLoggedIn
+      ? this.makeLoggedIn()
+      : this.makeLoggedOut();
+  }
+
+  makeLoggedIn() {
+    console.log('make logged in');
     return html`
       <kemet-tabs divider>
         <kemet-tab slot="tab">All</kemet-tab>
-        ${this.userState.isLoggedIn ? html`<kemet-tab slot="tab">Following</kemet-tab>` : null}
-        ${this.userState.isLoggedIn ? html`<kemet-tab slot="tab">Mine</kemet-tab>` : null}
-        ${this.userState.isLoggedIn ? html`<kemet-tab slot="tab">Liked</kemet-tab>` : null}
+        <kemet-tab slot="tab">Following</kemet-tab>
+        <kemet-tab slot="tab">Mine</kemet-tab>
+        <kemet-tab slot="tab">Liked</kemet-tab>
         <kemet-tab-panel slot="panel">
           <br />
           <ani-feed .quotes=${this.quoteState.quotes}></ani-feed>
         </kemet-tab-panel>
-        ${this.userState.isLoggedIn ? html`
-          <kemet-tab-panel slot="panel">
-            <br />
-            ${this.followingQuotes.length > 0
-              ? html`<ani-feed .quotes=${this.followingQuotes}></ani-feed>`
-              : html`<p>Looks like you haven't added any quotes yet.</p>`
-            }
-          </kemet-tab-panel>
-        ` : null}
-        ${this.userState.isLoggedIn ? html`
-          <kemet-tab-panel slot="panel">
-            <br />
-            ${this.myQuotes.length > 0
-              ? html`<ani-feed .quotes=${this.myQuotes}></ani-feed>`
-              : html`<p>Looks like you haven't added any quotes yet.</p>`
-            }
-          </kemet-tab-panel>
-          ` : null}
-          ${this.userState.isLoggedIn ? html`
-            <kemet-tab-panel slot="panel">
-              <br />
-              ${this.likedQuotes.length > 0
-                ? html`<ani-feed .quotes=${this.likedQuotes}></ani-feed>`
-                : html`<p>Looks like you haven't added any quotes yet.</p>`
-              }
-            </kemet-tab-panel>
-            ` : null}
+        <kemet-tab-panel slot="panel">
+          <br />
+          ${this.followingQuotes.length > 0
+            ? html`<ani-feed .quotes=${this.followingQuotes}></ani-feed>`
+            : html`<p>Looks like you haven't added any quotes yet.</p>`
+          }
+        </kemet-tab-panel>
+        <kemet-tab-panel slot="panel">
+          <br />
+          ${this.myQuotes.length > 0
+            ? html`<ani-feed .quotes=${this.myQuotes}></ani-feed>`
+            : html`<p>Looks like you haven't added any quotes yet.</p>`
+          }
+        </kemet-tab-panel>
+        <kemet-tab-panel slot="panel">
+          <br />
+          ${this.likedQuotes.length > 0
+            ? html`<ani-feed .quotes=${this.likedQuotes}></ani-feed>`
+            : html`<p>Looks like you haven't added any quotes yet.</p>`
+          }
+        </kemet-tab-panel>
       </kemet-tabs>
 
-      ${this.userState.isLoggedIn ? html`
-        <kemet-fab pill @click=${() => this.modalsState.setNewQuoteOpened(true)}>
-          <kemet-icon slot="icon" icon="pencil-square" size="24"></kemet-icon>
-          New Quote
-        </kemet-fab>` : null
-      }
+      <kemet-fab pill @click=${() => this.modalsState.setNewQuoteOpened(true)}>
+        <kemet-icon slot="icon" icon="pencil-square" size="24"></kemet-icon>
+        New Quote
+      </kemet-fab>
     `
   }
+
+  makeLoggedOut() {
+    return html`
+      <kemet-tabs divider>
+        <kemet-tab slot="tab">All</kemet-tab>
+        <kemet-tab-panel slot="panel">
+          <br />
+          <ani-feed .quotes=${this.quoteState.quotes}></ani-feed>
+        </kemet-tab-panel>
+      </kemet-tabs>
+    `
+  }
+
 
   async getQuotes(isPagination: boolean = false) {
     // search by whether or not the user, book, or quote contain the search query

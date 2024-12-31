@@ -39,7 +39,6 @@ export default class AniTopNav extends LitElement {
 
     appStore.subscribe((state) => {
       this.appState = state;
-      console.log(state);
     })
   }
 
