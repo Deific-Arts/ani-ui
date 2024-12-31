@@ -48,7 +48,7 @@ export default class AniPostComment extends LitElement {
       <form method="post" action="api/comments" @submit=${(event: SubmitEvent) => this.handlePost(event)}>
         <kemet-field slug="comment" label="What do you have to say?" message="Your comment cannot be blank">
           <kemet-textarea slot="input" name="comment" rows="5" rounded required filled></kemet-textarea>
-          <kemet-count slot="component" message="characters remaining." limit="300" validate-immediately></kemet-count>
+          <kemet-count slot="component" message="characters remaining." limit="1000" validate-immediately></kemet-count>
         </kemet-field>
         ${this.modalsState.currentQuote && html`<p>Commenting on <em>${this.modalsState.currentQuote.book.title}</em>, ${this.modalsState.currentQuote.page && html`page: ${this.modalsState.currentQuote.page}`}</p>`}
         <kemet-button variant="circle">

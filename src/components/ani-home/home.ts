@@ -86,7 +86,6 @@ export default class AniHome extends LitElement {
   }
 
   makeLoggedIn() {
-    console.log('make logged in');
     return html`
       <kemet-tabs divider>
         <kemet-tab slot="tab">All</kemet-tab>

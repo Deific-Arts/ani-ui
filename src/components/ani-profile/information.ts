@@ -102,7 +102,7 @@ export default class aniInformation extends LitElement {
                 <p>
                   <kemet-field label="Bio" slug="bio">
                     <kemet-textarea slot="input" name="bio" rounded filled value=${this.userState?.profile?.bio}></kemet-textarea>
-                    <kemet-count slot="component" message="characters remaining." limit="300" validate-immediately></kemet-count>
+                    <kemet-count slot="component" message="characters remaining." limit="1000" validate-immediately></kemet-count>
                   </kemet-field>
                 </p>
               </div>

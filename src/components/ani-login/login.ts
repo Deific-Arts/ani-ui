@@ -249,9 +249,6 @@ export default class aniLogin extends LitElement {
     event.preventDefault();
 
     const formData = new FormData(this.setPasswordForm) as any;
-
-    console.log(formData);
-
     const options = {
       method: 'POST',
       headers: {
@@ -260,7 +257,6 @@ export default class aniLogin extends LitElement {
       },
       body: JSON.stringify(Object.fromEntries(formData))
     };
-
     const endpoint = this.setPasswordForm.getAttribute('action');
 
     fetch(`${API_URL}/${endpoint}`, options)

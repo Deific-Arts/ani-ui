@@ -4,9 +4,13 @@ import modalsStore, { IModalsStore } from '../../store/modals';
 import quoteStore, { IQuoteStore } from '../../store/quote';
 import userStore,{ IUserStore } from '../../store/user';
 import { IBook } from '../../shared/interfaces';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import alertStore, { IAlertStore } from '../../store/alert';
 import KemetSelect from 'kemet-ui/dist/components/kemet-select/kemet-select';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
+import KemetTextarea from 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
+import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -23,19 +27,30 @@ export default class AniNewQuote extends LitElement {
   @state()
   quoteState: IQuoteStore = quoteStore.getInitialState();
 
+  @state()
+  alertState: IAlertStore = alertStore.getInitialState();
+
   @query('kemet-select')
   userBook!: KemetSelect;
 
   @query('form')
   quoteForm!: HTMLFormElement;
 
+  @query('[name=quote]')
+  quoteInput!: KemetTextarea;
+
+  @query('[name=page]')
+  pageInput!: KemetInput;
+
+  @query('[name=note]')
+  noteInput!: KemetTextarea;
   render() {
     if (this.userState.isLoggedIn) {
       return html`
         <form>
           <kemet-field slug="quote" label="The quote">
             <kemet-textarea slot="input" name="quote" filled rounded required></kemet-textarea>
-            <kemet-count slot="component" message="characters remaining." limit="300"></kemet-count>
+            <kemet-count slot="component" message="characters remaining." limit="1000"></kemet-count>
           </kemet-field>
           <div>
             <kemet-field slug="book" label="Book">
@@ -49,7 +64,7 @@ export default class AniNewQuote extends LitElement {
           </div>
           <kemet-field slug="note" label="Enter any notes you may have about this quote">
             <kemet-textarea slot="input" name="note" filled rounded></kemet-textarea>
-            <kemet-count slot="component" message="characters remaining." limit="300"></kemet-count>
+            <kemet-count slot="component" message="characters remaining." limit="1000"></kemet-count>
           </kemet-field>
           <footer>
             <kemet-button type="submit" variant="rounded" @click=${() => this.handleCancel()}>
@@ -87,7 +102,7 @@ export default class AniNewQuote extends LitElement {
       likes: []
     }
 
-    const newQuoteResponse = await fetch(`${API_URL}/api/quotes?populate=*`, {
+    const newQuoteResponse = await fetch(`${API_URL}/api/quotes?populate=user.avatar&populate=book`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -96,8 +111,24 @@ export default class AniNewQuote extends LitElement {
       body: JSON.stringify({ data: payload })
     }).then((response) => response.json());
 
+    const { error, data: newData } = newQuoteResponse;
+
+    if (error) {
+      this.alertState.setStatus('error');
+      this.alertState.setMessage(unsafeHTML(error.message));
+      this.alertState.setOpened(true);
+      this.alertState.setIcon('exclamation-circle');
+    }
+
     this.modalsState.setNewQuoteOpened(false);
-    this.quoteState.addQuote(newQuoteResponse.data);
+    newData && this.quoteState.addQuote(newData);
+    newData && this.clearForm();
+  }
+
+  clearForm() {
+    this.quoteInput.value = '';
+    this.pageInput.value = '';
+    this.noteInput.value = '';
   }
 
   makeBookOptions() {
