@@ -13,7 +13,8 @@ jobs:
         working-directory: ./
         env:
           NODE_ENV: production
-          VITE_API_URL: https://api.anibookquotes.io
+          VITE_API_URL: https://api.anibookquotes.com
+          VITE_BOOKS_API_KEY: ${{ secrets.VITE_BOOKS_API_KEY }}
         run: |
           npm install
           npm run build
