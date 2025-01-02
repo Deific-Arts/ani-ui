@@ -35,10 +35,12 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
     "@types/js-cookie": "^3.0.6",
     "@vitest/browser": "^2.1.8",
     "husky": "^9.1.7",
     "playwright": "^1.49.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "vitest": "^2.1.8"
   }
 }
