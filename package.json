@@ -9,8 +9,7 @@
     "preview": "vite preview",
     "tsc": "tsc",
     "test": "vitest --workspace=vitest.workspace.ts",
-    "test:cli": "vitest run --browser.name=chrome --browser.headless",
-    "prepare": "husky"
+    "test:cli": "vitest run --browser.name=chrome --browser.headless"
   },
   "dependencies": {
     "@lit/task": "^1.0.1",
