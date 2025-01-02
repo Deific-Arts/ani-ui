@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@lit/task": "^1.0.1",
+    "@types/js-cookie": "^3.0.6",
     "@vaadin/router": "^1.7.5",
     "autolinker": "^4.0.1",
     "date-fns": "^4.1.0",
@@ -36,7 +37,6 @@
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
-    "@types/js-cookie": "^3.0.6",
     "@vitest/browser": "^2.1.8",
     "husky": "^9.1.7",
     "playwright": "^1.49.1",
