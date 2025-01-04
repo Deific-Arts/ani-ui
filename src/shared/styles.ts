@@ -163,6 +163,10 @@ export default css`
     z-index: 10;
   }
 
+  kemet-modal::part(dialog) {
+    position: fixed;
+  }
+
   ::part(input) {
     outline-offset: 6px;
   }
