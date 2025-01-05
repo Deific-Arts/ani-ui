@@ -136,7 +136,7 @@ export default class aniInformation extends LitElement {
     if (profileImage && !this.showUploadProfileImage) {
       return html`
         <button class="image" @click=${() => this.showUploadProfileImage = true}>
-          <div class="profile-picture" style="background-image: url('${API_URL}${profileImage}')"></div>
+          <div class="profile-picture" style="background-image: url('${profileImage}')"></div>
         </button>
         <kemet-button variant="circle" class="delete" aria-label="delete" title="Delete profile image" outlined @click=${(event: SubmitEvent) => this.deleteProfileImage(event)}>
           <kemet-icon icon="trash" size="24"></kemet-icon>

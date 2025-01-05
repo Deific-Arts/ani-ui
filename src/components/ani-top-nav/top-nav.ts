@@ -8,8 +8,6 @@ import { switchRoute } from '../../shared/utilities';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 @customElement('ani-top-nav')
 export default class AniTopNav extends LitElement {
   static styles = [styles, sharedStyles];
@@ -65,7 +63,7 @@ export default class AniTopNav extends LitElement {
       return html`
         <button @click=${() => switchRoute('profile', 'Ani | Profile')}>
           ${profileImage
-            ? html`<img src="${API_URL}${profileImage}" alt="${this.userState.profile.username}" />`
+            ? html`<img src="${profileImage}" alt="${this.userState.profile.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.userState.profile.username}" alt="${this.userState.profile.username}" />`
           }
         </button>
