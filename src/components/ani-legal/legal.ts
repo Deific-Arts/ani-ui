@@ -11,6 +11,10 @@ export class AniLegal extends LitElement {
   @state()
   slug: string = location.pathname.split('/')[2];
 
+  updated() {
+    this.slug = location.pathname.split('/')[2];
+  }
+
   render() {
     if (this.slug === 'terms') {
       return terms;

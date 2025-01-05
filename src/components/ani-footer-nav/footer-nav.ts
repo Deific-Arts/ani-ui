@@ -15,9 +15,9 @@ export class AniFooterNav extends LitElement {
           Created by <a href="https://deificarts.com" target="_blank">Deific Arts LLC</a>
         </div>
         <div>
-          <button title="Terms & Conditions" @click=${() =>switchRoute('legal/terms', 'Ani | Terms & Conditions')}>Terms & Conditions</a>
+          <button title="Terms & Conditions" @click=${() =>switchRoute('legal/terms', 'Ani | Terms & Conditions')}>Terms & Conditions</button>
           &nbsp;&nbsp;
-          <button title="Privacy Policy" @click=${() => switchRoute('legal/privacy', 'Ani | Privacy Policy')}>Privacy Policy</a>
+          <button title="Privacy Policy" @click=${() => switchRoute('legal/privacy', 'Ani | Privacy Policy')}>Privacy Policy</button>
         </div>
       </nav>
     `;
