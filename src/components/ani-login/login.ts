@@ -4,7 +4,7 @@ import userStore, { IUserStore } from '../../store/user';
 import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
 import alertStore, { IAlertStore } from '../../store/alert';
 import styles from './styles';
-import sharedStyles from '../../shared/styles';
+import sharedStyles, { stylesVendors } from '../../shared/styles';
 import KemetButton from 'kemet-ui/dist/components/kemet-button/kemet-button';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { ENUM_ALERT_STATUS } from '../../shared/enums';
@@ -18,7 +18,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-login')
 export default class aniLogin extends LitElement {
-  static styles = [styles, sharedStyles];
+  static styles = [styles, sharedStyles, stylesVendors];
 
   @state()
   userState: IUserStore = userStore.getInitialState();
@@ -79,6 +79,26 @@ export default class aniLogin extends LitElement {
               <kemet-button variant="rounded">
                Login <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
               </kemet-button>
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+              <small>OR</small>
+              <div class="vendor-logins">
+                <a href="${API_URL}/api/connect/google">
+                  <div class="google-btn">
+                    <div class="google-icon-wrapper">
+                      <img class="google-icon" src="https://i.ibb.co/ydLySMx/google.png" />
+                    </div>
+                    <p class="btn-text">Login with Google</p>
+                  </div>
+                </a>
+                <a class="btn-fb" href="">
+                  <div class="fb-content">
+                    <div class="logo">
+                      <img src="https://i.ibb.co/pnpDRC6/facebook.png" alt="" width="32px" height="32px">
+                    </div>
+                    <p>Login with Facebook</p>
+                  </div>
+                </a>
+              </div>
             </form>
           </kemet-tab-panel>
           <kemet-tab-panel slot="panel">

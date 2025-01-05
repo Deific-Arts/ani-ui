@@ -24,4 +24,5 @@ export default [
   { path: '/profile', component: 'ani-profile', action: redirectHomeWhenNotLoggedIn },
   { path: '/login', component: 'ani-login', action: redirectHomeWhenLoggedIn },
   { path: '/mine', component: 'ani-mine', action: redirectHomeWhenNotLoggedIn },
+  { path: '/providers/:provider', component: 'ani-providers', action: redirectHomeWhenLoggedIn },
 ];

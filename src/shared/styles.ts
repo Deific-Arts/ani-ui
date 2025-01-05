@@ -208,3 +208,129 @@ export default css`
     }
   }
 `;
+
+export const stylesVendors = css`
+  .google-btn,
+  .btn-fb {
+    width: 50%;
+  }
+
+  /* Facebook Button */
+  .btn-fb {
+    display: inline-block;
+    border-radius: 3px;
+    text-decoration: none;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+    -webkit-transition: background-color 0.218s, border-color 0.218s,
+      box-shadow 0.218s;
+    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
+  }
+
+  .fb-content,
+  .btn-fb,
+  .btn-fb .fb-content {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 210px;
+    height: 40px;
+  }
+
+  .fb-content .logo,
+  .btn-fb .logo,
+  .btn-fb .fb-content .logo {
+    padding: 3px;
+    height: inherit;
+  }
+
+  .fb-content svg,
+  .btn-fb svg,
+  .btn-fb .fb-content svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .fb-content p,
+  .btn-fb,
+  .btn-fb .fb-content p {
+    width: 100%;
+    width: 220px;
+    line-height: 1;
+    letter-spacing: 0.21px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+    /* font-family: "Roboto", sans-serif; */
+  }
+
+  .btn-fb {
+    padding-top: 1.5px;
+    background: #1877f2;
+    background-color: #1877f2;
+  }
+
+  .btn-fb:hover {
+    box-shadow: 0 0 3px 3px rgba(59, 89, 152, 0.3);
+  }
+
+  .btn-fb .fb-content p {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  /* Google Button */
+  @import url(
+    https://fonts.googleapis.com/css?family=Roboto:300,
+    400,
+    500,
+    700&subset=cyrillic
+  );
+
+  .google-btn {
+    width: 200px;
+    height: 40px;
+    background-color: #4285f4;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+    -webkit-transition: background-color 0.218s, border-color 0.218s,
+      box-shadow 0.218s;
+    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
+  }
+
+  .google-btn .google-icon-wrapper {
+    position: absolute;
+    margin-top: 1px;
+    margin-left: 1px;
+    width: 38px;
+    height: 38px;
+    border-radius: 2px;
+    background-color: #fff;
+  }
+
+  .google-btn .google-icon {
+    position: absolute;
+    margin-top: 11px;
+    margin-left: 11px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .google-btn .btn-text {
+    float: right;
+    margin: 11px 18px 0 0;
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    /* font-family: "Roboto"; */
+    font-weight: 500;
+  }
+
+  .google-btn:hover {
+    box-shadow: 0 0 6px #4285f4;
+    cursor: pointer;
+  }
+
+  .google-btn:active {
+    background: #1669f2;
+  }
+`;

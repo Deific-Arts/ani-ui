@@ -20,6 +20,7 @@ import '../ani-login/login';
 import '../ani-quote-view/quote-view';
 import '../ani-user-view/user-view';
 import '../ani-search/search';
+import '../ani-providers/providers';
 
 
 @customElement('ani-app')
