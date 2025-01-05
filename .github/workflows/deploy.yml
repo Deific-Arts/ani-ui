@@ -9,8 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: 18
       - name: Build Site
         working-directory: ./
         env:
@@ -18,7 +16,7 @@ jobs:
           VITE_API_URL: https://api.anibookquotes.com
           VITE_BOOKS_API_KEY: ${{ secrets.VITE_BOOKS_API_KEY }}
         run: |
-          npm install
+          npm install --include=dev
           npm run build
       - name: Deploy
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
