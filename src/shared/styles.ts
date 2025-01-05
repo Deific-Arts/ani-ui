@@ -202,6 +202,10 @@ export default css`
     background-repeat: no-repeat;
   }
 
+  ol.abc {
+    list-style-type: lower-alpha;
+  }
+
   @media (min-width: 768px) {
     kemet-tooltip {
       --kemet-popper-width: 480px;

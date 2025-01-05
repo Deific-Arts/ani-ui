@@ -14,6 +14,7 @@ import routes from '../../routes';
 import KemetAlert from 'kemet-ui/dist/components/kemet-alert/kemet-alert';
 
 import '../ani-top-nav/top-nav';
+import '../ani-footer-nav/footer-nav';
 import '../ani-home/home';
 import '../ani-profile/profile';
 import '../ani-login/login';
@@ -21,7 +22,7 @@ import '../ani-quote-view/quote-view';
 import '../ani-user-view/user-view';
 import '../ani-search/search';
 import '../ani-providers/providers';
-
+import '../ani-legal/legal';
 
 @customElement('ani-app')
 export class AniApp extends LitElement {
@@ -96,6 +97,7 @@ export class AniApp extends LitElement {
         <div class="wrapper">
           <ani-top-nav></ani-top-nav>
           <main></main>
+          <ani-footer-nav></ani-footer-nav>
         </div>
       </section>
       <kemet-modal id="modal-sign-in" close-on-click rounded effect="fadein-scaleup" .opened=${signInOpened} @kemet-modal-closed=${() => modalsStore.setState({ signInOpened: false })}>
