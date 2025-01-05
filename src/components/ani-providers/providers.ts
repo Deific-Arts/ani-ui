@@ -24,7 +24,7 @@ export class AniProviders extends LitElement {
   }
 
   async login() {
-    const response = await fetch(`${API_URL}/api/auth/${this.provider}/callback?${window.location.search}`)
+    const response = await fetch(`${API_URL}/api/auth/${this.provider}/callback${window.location.search}`)
     const userdata = await response.json();
 
     if (userdata.jwt) {
