@@ -58,7 +58,7 @@ export default class AniUserView extends LitElement {
           <header>
             <div>
               ${this.user.avatar.url
-                ? html`<img class="profile" src="${API_URL}${this.user.avatar.url}" alt="${this.user.username}" />`
+                ? html`<img class="profile" src="${this.user.avatar.url}" alt="${this.user.username}" />`
                 : html`<img class="profile" src="https://placehold.co/80x80?text=${this.user.username}" alt="${this.user?.username}" />`
               }
               ${this.userState.isLoggedIn && this.user.id !== this.userState.user.user.id ? html`
