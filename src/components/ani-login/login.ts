@@ -90,7 +90,7 @@ export default class aniLogin extends LitElement {
                     <p class="btn-text">Login with Google</p>
                   </div>
                 </a>
-                <a class="btn-fb" href="">
+                <a class="btn-fb" href="${API_URL}/api/connect/facebook">
                   <div class="fb-content">
                     <div class="logo">
                       <img src="https://i.ibb.co/pnpDRC6/facebook.png" alt="" width="32px" height="32px">

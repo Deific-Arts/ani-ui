@@ -10,13 +10,10 @@ export class AniProviders extends LitElement {
   provider: string = location.pathname.split('/')[2];
 
   @state()
-  token: string = new URLSearchParams(window.location.search).get("id_token") || '';
-
-  @state()
   userState: IUserStore = userStore.getInitialState();
 
   firstUpdated(){
-    !!this.token && this.login();
+    this.login();
   }
 
   render() {
@@ -24,22 +21,24 @@ export class AniProviders extends LitElement {
   }
 
   async login() {
-    const response = await fetch(`${API_URL}/api/auth/${this.provider}/callback${window.location.search}`)
-    const userdata = await response.json();
+    if (!!window.location.search) {
+      const response = await fetch(`${API_URL}/api/auth/${this.provider}/callback${window.location.search}`)
+      const userdata = await response.json();
 
-    if (userdata.jwt) {
-      const options = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userdata.jwt}`
-        }
-      };
-      const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options).then((response) => response.json());
-      this.userState.updateProfile(userProfile);
-      this.userState.login(userdata);
-      window.location.href = '/';
+      if (userdata.jwt) {
+        const options = {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userdata.jwt}`
+          }
+        };
+        const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options).then((response) => response.json());
+        this.userState.updateProfile(userProfile);
+        this.userState.login(userdata);
+      }
     }
+    window.location.href = '/';
   }
 }
 
