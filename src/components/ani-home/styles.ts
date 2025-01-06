@@ -12,7 +12,7 @@ export default css`
   kemet-fab {
     position: fixed;
     z-index: 9;
-    bottom: var(--kemet-spacer-xl);
-    right: var(--kemet-spacer-xl);
+    bottom: var(--kemet-spacer-3xl);
+    right: var(--kemet-spacer-lg);
   }
 `;
