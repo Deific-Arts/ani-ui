@@ -5,7 +5,7 @@ export default css`
     display: block;
     max-width: var(--app-page-width);
     margin: auto;
-    padding: var(--kemet-spacer-4xl) var(--kemet-spacer-md) var(--kemet-spacer-md) var(--kemet-spacer-md);
+    padding: 0 var(--kemet-spacer-md);
   }
 
   figure {

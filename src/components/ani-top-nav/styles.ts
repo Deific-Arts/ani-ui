@@ -2,10 +2,11 @@ import { css } from 'lit';
 
 export default  css`
   :host {
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     z-index: 9;
+    display: block;
     width: 100%;
     padding: 1rem;
     box-sizing: border-box;
