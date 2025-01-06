@@ -93,7 +93,6 @@ export class AniApp extends LitElement {
         </div>
       </kemet-alert>
       <section>
-        ${this.appState.currentRoute === '/home' || this.appState.currentRoute === '/' ? html`<ani-search></ani-search>` : null}
         <div class="wrapper">
           <ani-top-nav></ani-top-nav>
           <main></main>

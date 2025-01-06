@@ -2,9 +2,15 @@ import { css } from 'lit';
 
 export default  css`
   :host {
-    display: flex;
-    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9;
+    width: 100%;
     padding: 1rem;
+    box-sizing: border-box;
+    justify-content: space-between;
+    background: var(--app-background-color);
   }
 
   svg {
@@ -18,18 +24,22 @@ export default  css`
     border-radius: 50%;
   }
 
-  [aria-label="Home"] {
-    position: absolute;
-    top: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
+  section {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    margin: 0 var(--kemet-spacer-lg);
+  }
+
+  section > :last-child {
+    text-align: right;
   }
 
   nav {
     display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: center;
+    gap: var(--kemet-spacer-md);
     max-width: 40vw;
   }
 `;

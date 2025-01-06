@@ -8,6 +8,8 @@ import { switchRoute } from '../../shared/utilities';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
+import '../ani-search/search';
+
 @customElement('ani-top-nav')
 export default class AniTopNav extends LitElement {
   static styles = [styles, sharedStyles];
@@ -42,17 +44,20 @@ export default class AniTopNav extends LitElement {
 
   render() {
     return html`
-      <nav>
-        ${this.appState.currentRoute.includes('home') || this.appState.currentRoute === '/' ? html`
-          <button aria-label="Search" @click=${() => this.appState.setIsDrawerOpened(!this.appState.isDrawerOpened)}>
-            <kemet-icon icon="search" size="24"></kemet-icon>
-          </button>
-          <span>${this.quoteState.searchQuery ? html`Looking for: <strong>${this.quoteState.searchQuery}</strong>` : ''}</span>
-          ` : null
-        }
-      </nav>
-      <button aria-label="Home" @click=${() => switchRoute('home', 'Ani | Home')}>${svgLogo}</button>
-      <div>${this.makeProfileImage()}</div>
+      ${this.appState.currentRoute === '/home' || this.appState.currentRoute === '/' ? html`<ani-search></ani-search>` : null}
+      <section>
+        <nav>
+          ${this.appState.currentRoute.includes('home') || this.appState.currentRoute === '/' ? html`
+            <button aria-label="Search" @click=${() => this.appState.setIsDrawerOpened(!this.appState.isDrawerOpened)}>
+              <kemet-icon icon="search" size="24"></kemet-icon>
+            </button>
+            <span>${this.quoteState.searchQuery ? html`Looking for: <strong>${this.quoteState.searchQuery}</strong>` : ''}</span>
+            ` : null
+          }
+        </nav>
+        <button aria-label="Home" @click=${() => switchRoute('home', 'Ani | Home')}>${svgLogo}</button>
+        <div>${this.makeProfileImage()}</div>
+      </section>
     `
   }
 
