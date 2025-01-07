@@ -25,5 +25,6 @@ export default [
   { path: '/login', component: 'ani-login', action: redirectHomeWhenLoggedIn },
   { path: '/mine', component: 'ani-mine', action: redirectHomeWhenNotLoggedIn },
   { path: '/providers/:provider', component: 'ani-providers', action: redirectHomeWhenLoggedIn },
-  { path: '/legal/:slug', component: 'ani-legal' }
+  { path: '/legal/:slug', component: 'ani-legal' },
+  { path: '/membership/:slug', component: 'ani-membership', action: redirectHomeWhenNotLoggedIn }
 ];

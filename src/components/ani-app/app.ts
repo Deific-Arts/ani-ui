@@ -23,6 +23,7 @@ import '../ani-user-view/user-view';
 import '../ani-search/search';
 import '../ani-providers/providers';
 import '../ani-legal/legal';
+import '../ani-membership/membership';
 
 @customElement('ani-app')
 export class AniApp extends LitElement {
