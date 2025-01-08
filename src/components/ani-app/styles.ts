@@ -4,6 +4,7 @@ export default css`
   main {
     display: block;
     max-width: var(--app-page-width);
+    min-height: calc(100vh - 150px);
     margin: auto;
     padding: 0 var(--kemet-spacer-xl);
   }
