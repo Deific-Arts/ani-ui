@@ -81,6 +81,10 @@ export default class aniInformation extends LitElement {
                 <kemet-button variant="text" @click=${() => switchRoute(`user/${this.userState?.profile?.id}`, `Ani | ${this.userState?.profile?.username}`)}>View Profile</kemet-button>
                 &nbsp;|&nbsp;
                 <kemet-button variant="text" @click=${() => this.logout()}>Log Out</kemet-button>
+                ${!!this.userState.profile.memberId
+                  ? html`&nbsp;|&nbsp;<kemet-button variant="text" @click=${() => this.handleManageMembership()}>Manage Membership</kemet-button>`
+                  : null
+                }
               </p>
               <hr /><br />
               <div>
@@ -256,6 +260,26 @@ export default class aniInformation extends LitElement {
   logout() {
     this.userState.logout();
     window.location.href = "/";
+  }
+
+  async handleManageMembership() {
+    const response = await fetch(`${API_URL}/api/qenna/create-portal-session`, {
+      method: "POST",
+      body: JSON.stringify({
+        member_id: this.userState.profile.memberId || ''
+      })
+    });
+
+    const { url, error } = await response.json();
+
+    if (error) {
+      this.alertState.setStatus('error');
+      this.alertState.setMessage(error.message);
+      this.alertState.setOpened(true);
+      this.alertState.setIcon('exclamation-circle');
+    } else {
+      window.location.href = url;
+    }
   }
 }
 

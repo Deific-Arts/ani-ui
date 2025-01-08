@@ -65,7 +65,8 @@ export interface IUser {
   following: number[],
   role?: IRole;
   books?: IBook[];
-  avatar: IAvatar
+  avatar: IAvatar;
+  memberId?: string;
 }
 
 export interface IProfile extends IUser {}
