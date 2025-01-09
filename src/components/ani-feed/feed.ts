@@ -67,9 +67,7 @@ export default class AniFeed extends LitElement {
     quoteStore.subscribe((state) => {
       this.quoteState = state;
       this.searchQuery = state.searchQuery;
-      // this.myQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => quote.user.id === this.userState.user.user.id) : [];
       // this.followingQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => this.userState.profile.following?.includes(quote.user.id)) : [];
-      // this.likedQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => quote.likes.includes(this.userState.user.user.id)) : [];
     })
   }
 
@@ -99,13 +97,14 @@ export default class AniFeed extends LitElement {
         this.hasFetched[this.feed] && html`<p>There are no quotes from people you follow yet.</p>`;
         break;
       case 'mine' :
-        console.log('mine: ',this.quoteState.mineQuotes);
+        // console.log('mine: ',this.quoteState.mineQuotes);
         if (this.quoteState.mineQuotes.length > 0) {
           return html`<ul>${this.quoteState.mineQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         }
         this.hasFetched[this.feed] && html`<p>Looks like you haven't added any quotes yet.</p>`;
         break;
       case 'liked' :
+        // console.log('liked: ', this.quoteState.likedQuotes);
         if (this.quoteState.likedQuotes.length > 0) {
           return html`<ul>${this.quoteState.likedQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         }
@@ -140,18 +139,18 @@ export default class AniFeed extends LitElement {
   async getQuotes(isPagination = false) { // search by whether or not the user, book, or quote contain the search query
     this.hasFetched[this.current] = true;
     const quotesPerPage = '3';
-    const searchParams = this.quoteState.searchQuery ?`&filters[$or][0][quote][$contains]=${this.quoteState.searchQuery}&filters[$or][1][book][title][$contains]=${this.quoteState.searchQuery}&filters[$or][2][user][username][$contains]=${this.quoteState.searchQuery}` : '';
+    const searchParams = this.quoteState.searchQuery ? `&filters[$or][0][quote][$contains]=${this.quoteState.searchQuery}&filters[$or][1][book][title][$contains]=${this.quoteState.searchQuery}&filters[$or][2][user][username][$contains]=${this.quoteState.searchQuery}` : '';
     let filters;
 
     switch(this.current) {
       case "following" :
-        filters = '';
+        filters = `&filters[$or][0][user][following][$contains]=${this.userState.user.user.id}`;
         break;
       case "mine" :
         filters = `&filters[user][id][$eq]=${this.userState.user.user.id}`;
         break;
       case "liked" :
-        filters = `&filters[likes][$in]=${this.userState.user.user.id}`;
+        filters = `&filters[$or][0][likes][$contains]=${this.userState.user.user.id}`;
         break;
       default :
         filters = '';
@@ -162,11 +161,11 @@ export default class AniFeed extends LitElement {
 
     console.log(this.current);
     console.log(filters);
-    console.log(data);
+    console.log('what ', data);
 
     this.pagination[this.feed] = meta.pagination;
 
-    switch(this.feed) {
+    switch(this.current) {
       case 'following' :
         isPagination ? this.quoteState.addFollowingQuotes(data) : this.quoteState.addInitialFollowingQuotes(data);
         break;
@@ -179,8 +178,6 @@ export default class AniFeed extends LitElement {
       default :
         isPagination ? this.quoteState.addQuotes(data) : this.quoteState.addInitialQuotes(data);
     }
-
-
   }
 }
 
