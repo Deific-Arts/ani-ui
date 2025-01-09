@@ -14,7 +14,7 @@ export const signInModalTemplate = html`
       variant="rounded"
       @click=${() => {
         modalsStore.setState({ signInOpened: false });
-        switchRoute('login', 'Login');
+        switchRoute('/login');
       }}>
       Login
     </kemet-button>

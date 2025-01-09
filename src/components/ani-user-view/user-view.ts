@@ -14,6 +14,7 @@ import '../ani-quote/quote';
 import '../ani-comment/comment';
 
 const API_URL = import.meta.env.VITE_API_URL;
+const APP_URL = window.location.origin;
 
 @customElement('ani-user-view')
 export default class AniUserView extends LitElement {
@@ -82,7 +83,7 @@ export default class AniUserView extends LitElement {
         : html`
           <header>
             <p>Sorry, we couldn't find the requested user.</p>
-            <kemet-button variant="rounded" @click=${() => switchRoute('home', 'Ani | Home')}>Go home</kemet-button>
+            <kemet-button variant="rounded" @click=${() => switchRoute('/home')}>Go home</kemet-button>
           </header>
         `
       }
@@ -91,10 +92,20 @@ export default class AniUserView extends LitElement {
 
   async getUser() {
     const path = location.pathname.split('/');
+    const metaDescription = document.querySelector('meta[name="description"]') as HTMLMetaElement;
+    const metaPropertyTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement;
+    const metaPropertyUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
+
     this.userId = this.userId || path[path.length - 1];
     const response = await fetch(`${API_URL}/api/users/${this.userId}?populate=*`);
     this.user = !!this.user ? this.user : await response.json();
     this.hasFetchedUser = true;
+
+    document.title = `${this.user.username} | Ani Book Quotes`;
+    if (metaDescription) metaDescription.content = this.user.bio || `User profile for ${this.user.username}`;
+    if (metaPropertyTitle) metaPropertyTitle.content = `${this.user.username} | Ani Book Quotes`;
+    if (metaPropertyUrl) metaPropertyUrl.content = `${APP_URL}/user/${this.user.id}`;
+
     this.getQuotes();
     this.getFollowers();
   }

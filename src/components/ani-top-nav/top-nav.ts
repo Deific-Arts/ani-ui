@@ -60,7 +60,7 @@ export default class AniTopNav extends LitElement {
             ` : null
           }
         </nav>
-        <button aria-label="Home" @click=${() => switchRoute('home', 'Ani | Home')}>${svgLogo}</button>
+        <button aria-label="Home" @click=${() => switchRoute('/home')}>${svgLogo}</button>
         <div>${this.makeProfileImage()}</div>
       </section>
     `
@@ -72,7 +72,7 @@ export default class AniTopNav extends LitElement {
 
     if (this.userState.isLoggedIn) {
       return html`
-        <button @click=${() => switchRoute('profile', 'Ani | Profile')}>
+        <button @click=${() => switchRoute('/profile')}>
           ${profileImage
             ? html`<img src="${profileImage}" alt="${this.userState.profile.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.userState.profile.username}" alt="${this.userState.profile.username}" />`
@@ -83,7 +83,7 @@ export default class AniTopNav extends LitElement {
 
     if (!isLoginPage) {
       return html`
-        <button @click=${() => switchRoute('login', 'Ani | Login')} aria-label="Login">
+        <button @click=${() => switchRoute('/login')} aria-label="Login">
           <kemet-icon icon="door-open" size="24"></kemet-icon>
         </button>
       `;

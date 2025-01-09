@@ -56,6 +56,11 @@ export default class aniLogin extends LitElement {
   @query('form[action*=jwt-auth] kemet-button')
   loginButton!: KemetButton;
 
+  constructor() {
+    super();
+    document.title = 'Login | Ani Book Quotes';
+  }
+
   render() {
     return html`
       <kemet-card>

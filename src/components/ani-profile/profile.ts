@@ -10,6 +10,11 @@ import './library.ts';
 export default class aniProfile extends LitElement {
   static styles = [sharedStyles];
 
+  constructor() {
+    super();
+    document.title = 'Profile | Ani Book Quotes';
+  }
+
   render() {
     return html`
       <kemet-tabs placement="top" divider>

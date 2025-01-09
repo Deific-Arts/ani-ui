@@ -126,9 +126,8 @@ export class AniApp extends LitElement {
     `
   }
 
-  switchRoute(route: string, title: string) {
-    document.title = title;
-    Router.go(`/${route}`);
+  switchRoute(route: string) {
+    Router.go(route);
   }
 
   handlePolarity() {

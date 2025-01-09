@@ -46,6 +46,6 @@ describe('Quote', () => {
   test('goes to the user profile page when avatar is clicked', async () => {
     const avatar = await page.getByAltText(/OgdoadPantheon/i);
     await avatar.click();
-    expect(switchRoute).toBeCalledWith('user/1', 'Ani | OgdoadPantheon');
+    expect(switchRoute).toBeCalledWith('/user/1');
   });
 });

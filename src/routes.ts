@@ -3,14 +3,14 @@ import userStore from './store/user';
 
 const redirectHomeWhenLoggedIn = () => {
   if (userStore.getState().isLoggedIn) {
-    switchRoute('home');
+    switchRoute('/home');
   }
   return;
 }
 
 const redirectHomeWhenNotLoggedIn = () => {
   if (!userStore.getState().isLoggedIn) {
-    switchRoute('home');
+    switchRoute('/home');
   }
   return;
 }

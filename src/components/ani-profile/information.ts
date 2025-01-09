@@ -78,7 +78,7 @@ export default class aniInformation extends LitElement {
               <div class="profile-image">${this.makeProfileImage()}</div>
               <hr />
               <p>
-                <kemet-button variant="text" @click=${() => switchRoute(`user/${this.userState?.profile?.id}`, `Ani | ${this.userState?.profile?.username}`)}>View Profile</kemet-button>
+                <kemet-button variant="text" @click=${() => switchRoute(`/user/${this.userState?.profile?.id}`)}>View Profile</kemet-button>
                 &nbsp;|&nbsp;
                 <kemet-button variant="text" @click=${() => this.logout()}>Log Out</kemet-button>
                 ${!!this.userState.profile.memberId

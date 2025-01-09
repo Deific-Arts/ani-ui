@@ -72,7 +72,7 @@ describe('Top Nav', () => {
   test('switches route to home when logo is clicked', async () => {
     const logo = await page.getByLabelText(/Home/i);
     await logo.click();
-    await expect(switchRoute).toBeCalledWith('home', 'Ani | Home');
+    await expect(switchRoute).toBeCalledWith('/home');
   });
 
   test('switches route to profile when profile image is clicked', async () => {
@@ -82,6 +82,6 @@ describe('Top Nav', () => {
 
     const profileImage = await page.getByAltText(/OgdoadPantheon/i);
     await profileImage.click();
-    await expect(switchRoute).toHaveBeenCalledWith('profile', 'Ani | Profile');
+    await expect(switchRoute).toHaveBeenCalledWith('/profile');
   });
 });

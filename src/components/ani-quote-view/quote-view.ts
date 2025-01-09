@@ -10,6 +10,7 @@ import '../ani-comment/comment';
 import { switchRoute } from '../../shared/utilities';
 
 const API_URL = import.meta.env.VITE_API_URL;
+const APP_URL = window.location.origin;
 
 @customElement('ani-quote-view')
 export default class AniQuoteView extends LitElement {
@@ -52,7 +53,7 @@ export default class AniQuoteView extends LitElement {
         `
         : html`
           <p>Could not find the requested quote.</p>
-          <kemet-button variant="rounded" @click=${() => switchRoute('home', 'Ani | Home')}>Go home</kemet-button>
+          <kemet-button variant="rounded" @click=${() => switchRoute('/home')}>Go home</kemet-button>
         `
       }
     `
@@ -60,11 +61,21 @@ export default class AniQuoteView extends LitElement {
 
   async getQuote() {
     const path = location.pathname.split('/');
+    const metaDescription = document.querySelector('meta[name="description"]') as HTMLMetaElement;
+    const metaPropertyTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement;
+    const metaPropertyUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
+
     this.documentId = !!this.documentId ? this.documentId : path[path.length - 1];
     const response = await fetch(`${API_URL}/api/quotes/${this.documentId}?populate=user.avatar&populate=book`);
     const { data } = await response.json();
     this.hasFetchedQuote = true;
     this.quote = data;
+
+    document.title = `A quote by ${this.quote.user.username} | Ani Book Quotes`;
+    if (metaDescription) metaDescription.content = `"${this.quote.quote}" - ${this.quote.book.title}`;
+    if (metaPropertyTitle) metaPropertyTitle.content = `A quote by ${this.quote.user.username} | Ani Book Quotes`;
+    if (metaPropertyUrl) metaPropertyUrl.content = `${APP_URL}/quote/${this.quote.documentId}`;
+
     // we need quote data before we get comments
     this.getComments();
   }

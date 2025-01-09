@@ -1,9 +1,9 @@
 import appStore from '../store/app';
 
-export const switchRoute = (route: string, title: string = 'Ani') => {
+export const switchRoute = (route: string) => {
   const aniApp = document.querySelector('ani-app');
   appStore.setState({ isDrawerOpened: false, currentRoute: route });
-  aniApp?.switchRoute(route, title);
+  aniApp?.switchRoute(route);
 }
 
 export const emitEvent = (element: HTMLElement, name: string, detail = {}, bubbles = true, composed = true) => {

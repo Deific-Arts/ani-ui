@@ -38,6 +38,7 @@ export class AniMembership extends LitElement {
 
   constructor() {
     super();
+    document.title = 'Membership | Ani Book Quotes';
     appStore.subscribe(state => {
       this.appState = state;
     });
@@ -66,7 +67,10 @@ export class AniMembership extends LitElement {
 
   makeCheckout() {
     return html`
-      <hr /><br />
+      <hr />
+      <h1>Become a Member of Ani Book Quotes</h1>
+      <p>Being a member of Ani Book Quotes unlocks the full power of the app including features such as commenting and searching quotes.</p>
+      <br />
       <form id="checkout">
         <input type="hidden" name="lookup_key" value="standard_monthly" />
         <input type="hidden" name="email" value="${this.userState?.profile?.email}" />

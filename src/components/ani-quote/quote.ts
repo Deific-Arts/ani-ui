@@ -46,7 +46,7 @@ export default class AniQuote extends LitElement {
         : null
       }
       <header>
-        <button aria-label="Avatar" @click=${() => switchRoute(`user/${this.quote.user.id}`, `Ani | ${this.quote.user.username}`)}>
+        <button aria-label="Avatar" @click=${() => switchRoute(`/user/${this.quote.user.id}`)}>
           ${this.quote.user.avatar
             ? html`<img src="${this.quote.user.avatar.url}" alt="${this.quote.user.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.quote.user.username}" alt="${this.quote?.user?.username}" />`
@@ -116,7 +116,7 @@ export default class AniQuote extends LitElement {
     });
 
     if (this.isSingle) {
-      switchRoute('home', 'Ani | Home');
+      switchRoute('/home');
     } else {
       this.setAttribute("hidden", '');
     }
