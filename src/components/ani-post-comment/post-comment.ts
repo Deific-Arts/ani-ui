@@ -12,6 +12,7 @@ import 'kemet-ui/dist/components/kemet-field/kemet-field';
 import 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
 import 'kemet-ui/dist/components/kemet-count/kemet-count';
 import KemetTextarea from 'kemet-ui/dist/components/kemet-textarea/kemet-textarea';
+import { switchRoute } from '../../shared/utilities.ts';
 
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -43,19 +44,35 @@ export default class AniPostComment extends LitElement {
   }
 
   render() {
+    const isMember = this.userState.profile.memberFreePass || !!this.userState.profile.memberId;
+
+    if (isMember) {
+      return html`
+        <button aria-label="Close" @click=${() => this.modalsState.setCommentOpened(false)}><kemet-icon icon="x-lg" size="24"></kemet-icon></button>
+        <form method="post" action="api/comments" @submit=${(event: SubmitEvent) => this.handlePost(event)}>
+          <kemet-field slug="comment" label="What do you have to say?" message="Your comment cannot be blank">
+            <kemet-textarea slot="input" name="comment" rows="5" rounded required filled></kemet-textarea>
+            <kemet-count slot="component" message="characters remaining." limit="1000" validate-immediately></kemet-count>
+          </kemet-field>
+          ${this.modalsState.currentQuote && html`<p>Commenting on <em>${this.modalsState.currentQuote.book.title}</em>, ${this.modalsState.currentQuote.page && html`page: ${this.modalsState.currentQuote.page}`}</p>`}
+          <kemet-button variant="circle" aria-label="Comment">
+            <kemet-icon icon="send" size="24"></kemet-icon>
+          </kemet-button>
+        </form>
+      `
+    }
+
     return html`
-      <button aria-label="Close" @click=${() => this.modalsState.setCommentOpened(false)}><kemet-icon icon="x-lg" size="24"></kemet-icon></button>
-      <form method="post" action="api/comments" @submit=${(event: SubmitEvent) => this.handlePost(event)}>
-        <kemet-field slug="comment" label="What do you have to say?" message="Your comment cannot be blank">
-          <kemet-textarea slot="input" name="comment" rows="5" rounded required filled></kemet-textarea>
-          <kemet-count slot="component" message="characters remaining." limit="1000" validate-immediately></kemet-count>
-        </kemet-field>
-        ${this.modalsState.currentQuote && html`<p>Commenting on <em>${this.modalsState.currentQuote.book.title}</em>, ${this.modalsState.currentQuote.page && html`page: ${this.modalsState.currentQuote.page}`}</p>`}
-        <kemet-button variant="circle">
-          <kemet-icon icon="send" size="24"></kemet-icon>
-        </kemet-button>
-      </form>
-    `
+      <section>
+        <p>Have something to say about this quote? Become a member to join the discussion.</p>
+        <p><kemet-button variant="rounded" @click=${() => this.becomeAMemberButton()}>Become a member today</kemet-button></p>
+      </section>
+    `;
+  }
+
+  becomeAMemberButton() {
+    switchRoute('/membership/checkout');
+    this.modalsState.setCommentOpened(false);
   }
 
   async handlePost(event: SubmitEvent) {

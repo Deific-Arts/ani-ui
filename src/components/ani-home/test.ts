@@ -41,12 +41,6 @@ describe('Home', () => {
     loginTestUser();
   });
 
-  test('call handleScroll when window is scrolled to the bottom', async () => {
-    const spyHandleScroll = vi.spyOn(AniHome.prototype, 'handleScroll');
-    fireEvent.scroll(window, { target: { scrollY: window.innerHeight } });
-    expect(spyHandleScroll).toHaveBeenCalled();
-  });
-
   test('shows new quote fab when user is logged in', async () => {
     const newQuoteButton = page.getByRole('button', { name: 'New Quote' });
     await expect.element(newQuoteButton).toBeInTheDocument();

@@ -18,7 +18,7 @@ export default css`
     text-align: left;
   }
 
-  kemet-button {
+  [aria-label="Comment"]{
     position: absolute;
     right: 1rem;
     bottom: 1rem;
@@ -29,5 +29,9 @@ export default css`
     top: 0.5rem;
     right: 1rem;
     z-index: 9;
+  }
+
+  section p {
+    font-size: 1rem;
   }
 `;

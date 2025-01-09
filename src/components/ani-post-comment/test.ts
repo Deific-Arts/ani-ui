@@ -1,7 +1,8 @@
 import { html, render } from 'lit';
 import { expect, test, describe, vi, beforeEach } from 'vitest';
 import { userEvent, page } from '@vitest/browser/context';
-
+import { fixtureProfile } from '../ani-profile/fixtures';
+import { fixtureUser } from '../ani-user-view/fixtures';
 import KemetButton from 'kemet-ui/dist/components/kemet-button/kemet-button';
 import AniPostComment from './post-comment';
 import './post-comment';
@@ -18,6 +19,11 @@ describe('Post Comment', () => {
       html`<ani-post-comment></ani-post-comment>`,
       document.body,
     );
+
+    const component = document.querySelector('ani-post-comment');
+    component!.userState.isLoggedIn = true;
+    component!.userState.user = { user: fixtureUser, jwt: 'token' };
+    component!.userState.profile = fixtureProfile;
   });
 
   test('user is able to comment', async () => {

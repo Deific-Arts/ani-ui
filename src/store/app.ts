@@ -6,6 +6,8 @@ export interface IAppStore {
   setIsDrawerOpened: (isDrawerOpened: boolean) => void;
   currentRoute: string;
   setCurrentRoute: (route: string) => void;
+  checkout: any;
+  setCheckout: (checkout: any) => void;
 }
 
 const isMobile = () => {
@@ -18,6 +20,8 @@ const store = createStore<IAppStore>(set => ({
   setIsDrawerOpened: (isDrawerOpened: boolean) => set(() => { return { isDrawerOpened } }),
   currentRoute: location.pathname,
   setCurrentRoute: (route: string) => set(() => { return { currentRoute: route } }),
+  checkout: {},
+  setCheckout: (checkout: any) => set(() => { return { checkout } }),
 }));
 
 window.addEventListener('resize', () => {

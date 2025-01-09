@@ -18,8 +18,8 @@ const stripe = await loadStripe(isLocalhost ? STRIPE_PUBLIC_KEY_TEST : STRIPE_PU
 export class AniMembership extends LitElement {
   static styles = [sharedStyles, styles];
 
-  @state()
-  slug: string = location.pathname.split('/')[2];
+  // @state()
+  // slug: string = location.pathname.split('/')[2];
 
   @state()
   userState: IUserStore = userStore.getInitialState();
@@ -44,21 +44,22 @@ export class AniMembership extends LitElement {
     });
   }
 
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.appState.checkout.destroy();
+  }
+
   firstUpdated() {
     this.appState.currentRoute.includes('checkout') && this.initCheckout();
     this.appState.currentRoute.includes('success') && this.initSuccess();
   }
 
-  updated() {
-    this.slug = location.pathname.split('/')[2];
-  }
-
   render() {
-    if (this.slug === 'checkout') {
+    if (this.appState.currentRoute.includes('checkout')) {
       return this.makeCheckout();
     }
 
-    if (this.slug === 'success') {
+    if (this.appState.currentRoute.includes('success')) {
       return this.makeSuccess();
     }
 
@@ -89,13 +90,9 @@ export class AniMembership extends LitElement {
       const { clientSecret } = await response.json();
       return clientSecret;
     };
-
-    const checkout = await stripe?.initEmbeddedCheckout({
-      fetchClientSecret,
-    });
-
-    // Mount Checkout
-    checkout && checkout.mount(this.pageCheckout);
+    const checkout = await stripe?.initEmbeddedCheckout({ fetchClientSecret });
+    this.appState.setCheckout(checkout);
+    this.appState.checkout.mount(this.pageCheckout);
   }
 
   makeSuccess() {

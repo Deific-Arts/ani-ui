@@ -1,37 +1,16 @@
 import { LitElement, html } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import modalsStore, { IModalsStore } from '../../store/modals';
 import userStore, { IUserStore } from '../../store/user';
-import appStore, { IAppStore } from '../../store/app';
-import quoteStore, { IQuoteStore } from '../../store/quote';
-import { IPagination, IQuote } from '../../shared/interfaces';
 import styles from './styles';
 
 import '../ani-feed/feed';
+import AniFeed from '../ani-feed/feed';
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-home')
 export default class AniHome extends LitElement {
   static styles = [styles];
-
-  @state()
-  searchQuery: string = '';
-
-  @state()
-  myQuotes: IQuote[] = [];
-
-  @state()
-  followingQuotes: IQuote[] = [];
-
-  @state()
-  likedQuotes: IQuote[] = [];
-
-  @state()
-  currentPage: number = 1;
-
-  @state()
-  pagination!: IPagination;
 
   @state()
   modalsState: IModalsStore = modalsStore.getInitialState();
@@ -40,43 +19,14 @@ export default class AniHome extends LitElement {
   userState: IUserStore = userStore.getInitialState();
 
   @state()
-  appState: IAppStore = appStore.getInitialState();
-
-  @state()
-  quoteState: IQuoteStore = quoteStore.getInitialState();
-
-  @query('kemet-tabs')
-  tabsElement!: HTMLElement;
+  currentTab: string = 'all';
 
   constructor() {
     super();
 
-    appStore.subscribe((state) => {
-      this.appState = state;
-    });
-
     userStore.subscribe((state) => {
       this.userState = state;
     });
-
-    quoteStore.subscribe((state) => {
-      this.quoteState = state;
-      this.searchQuery = state.searchQuery;
-      this.myQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => quote.user.id === this.userState.user.user.id) : [];
-      this.followingQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => this.userState.profile.following?.includes(quote.user.id)) : [];
-      this.likedQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => quote.likes.includes(this.userState.user.user.id)) : [];
-    })
-  }
-
-  firstUpdated() {
-    this.getQuotes();
-    window.addEventListener('scroll', () => this.handleScroll());
-  }
-
-  updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('searchQuery')) {
-      this.getQuotes();
-    }
   }
 
   render() {
@@ -87,35 +37,26 @@ export default class AniHome extends LitElement {
 
   makeLoggedIn() {
     return html`
-      <kemet-tabs divider>
+      <kemet-tabs divider @kemet-tab-selected=${(event: CustomEvent<any>) => this.handleTabSelected(event)}>
         <kemet-tab slot="tab">All</kemet-tab>
         <kemet-tab slot="tab">Following</kemet-tab>
         <kemet-tab slot="tab">Mine</kemet-tab>
         <kemet-tab slot="tab">Liked</kemet-tab>
         <kemet-tab-panel slot="panel">
           <br />
-          <ani-feed .quotes=${this.quoteState.quotes}></ani-feed>
+          <ani-feed feed="all" current=${this.currentTab}></ani-feed>
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <br />
-          ${this.followingQuotes.length > 0
-            ? html`<ani-feed .quotes=${this.followingQuotes}></ani-feed>`
-            : html`<p>Looks like you haven't added any quotes yet.</p>`
-          }
+          <ani-feed feed="following" current=${this.currentTab}></ani-feed>
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <br />
-          ${this.myQuotes.length > 0
-            ? html`<ani-feed .quotes=${this.myQuotes}></ani-feed>`
-            : html`<p>Looks like you haven't added any quotes yet.</p>`
-          }
+          <ani-feed feed="mine" current=${this.currentTab}></ani-feed>
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <br />
-          ${this.likedQuotes.length > 0
-            ? html`<ani-feed .quotes=${this.likedQuotes}></ani-feed>`
-            : html`<p>Looks like you haven't added any quotes yet.</p>`
-          }
+          <ani-feed feed="liked" current=${this.currentTab}></ani-feed>
         </kemet-tab-panel>
       </kemet-tabs>
 
@@ -132,37 +73,18 @@ export default class AniHome extends LitElement {
         <kemet-tab slot="tab">All</kemet-tab>
         <kemet-tab-panel slot="panel">
           <br />
-          <ani-feed .quotes=${this.quoteState.quotes}></ani-feed>
+          <ani-feed></ani-feed>
         </kemet-tab-panel>
       </kemet-tabs>
     `
   }
 
-
-  async getQuotes(isPagination: boolean = false) {
-    // search by whether or not the user, book, or quote contain the search query
-    const searchParams = this.quoteState.searchQuery ?`&filters[$or][0][quote][$contains]=${this.quoteState.searchQuery}&filters[$or][1][book][title][$contains]=${this.quoteState.searchQuery}&filters[$or][2][user][username][$contains]=${this.quoteState.searchQuery}` : '';
-    const response = await fetch(`${API_URL}/api/quotes?sort[0]=createdAt:desc&populate=user.avatar&populate=book${searchParams}&pagination[pageSize]=4&pagination[page]=${this.currentPage}`);
-    const { data, meta } = await response.json();
-
-    this.pagination = meta.pagination;
-
-    if (isPagination) {
-      this.quoteState.addQuotes(data);
-    } else {
-      this.quoteState.addInitialQuotes(data);
-    }
-  }
-
-  handleScroll() {
-    const tabsOffset = this.tabsElement.offsetTop + this.tabsElement.clientHeight;
-    const pageOffset = window.scrollY + window.innerHeight;
-    const isAtBottom = pageOffset > tabsOffset;
-
-    if (isAtBottom && this.pagination?.page < this.pagination?.pageCount) {
-      this.currentPage++;
-      this.getQuotes(true);
-    }
+  handleTabSelected(event: CustomEvent) {
+    this.currentTab = event.detail.innerText.toLowerCase();
+    const currentFeedElement = this.shadowRoot?.querySelector('ani-feed') as AniFeed;
+    currentFeedElement.current = this.currentTab;
+    currentFeedElement.currentPage[this.currentTab] = 1;
+    if (!currentFeedElement.hasFetched[this.currentTab]) console.log('get quote from home'); currentFeedElement.getQuotes();
   }
 }
 

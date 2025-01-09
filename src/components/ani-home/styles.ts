@@ -15,4 +15,8 @@ export default css`
     bottom: var(--kemet-spacer-3xl);
     right: var(--kemet-spacer-lg);
   }
+
+  p {
+    text-align: center;
+  }
 `;

@@ -12,4 +12,8 @@ export const emitEvent = (element: HTMLElement, name: string, detail = {}, bubbl
   );
 };
 
+export const isObjectEmpty = <T extends object>(obj: T): boolean => {
+  return Object.entries(obj).length === 0;
+}
+
 export const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
