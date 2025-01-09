@@ -14,4 +14,8 @@ export default css`
     margin: 0 auto;
     max-width: 720px;
   }
+
+  p {
+    text-align: center;
+  }
 `;

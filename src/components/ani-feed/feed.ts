@@ -93,28 +93,27 @@ export default class AniFeed extends LitElement {
       case 'following' :
         if (this.quoteState.followingQuotes.length > 0) {
           return html`<ul>${this.quoteState.followingQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
+        } else {
+          return html`<p>There are no quotes from people you follow yet.</p>`;
         }
-        this.hasFetched[this.feed] && html`<p>There are no quotes from people you follow yet.</p>`;
-        break;
       case 'mine' :
-        // console.log('mine: ',this.quoteState.mineQuotes);
         if (this.quoteState.mineQuotes.length > 0) {
           return html`<ul>${this.quoteState.mineQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
+        } else {
+          return this.hasFetched[this.feed] && html`<p>Looks like you haven't added any quotes yet.</p>`;
         }
-        this.hasFetched[this.feed] && html`<p>Looks like you haven't added any quotes yet.</p>`;
-        break;
       case 'liked' :
-        // console.log('liked: ', this.quoteState.likedQuotes);
         if (this.quoteState.likedQuotes.length > 0) {
           return html`<ul>${this.quoteState.likedQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
+        } else {
+          return html`<p>Looks like you haven't liked any quotes yet.</p>`;
         }
-        this.hasFetched[this.feed] && html`<p>Looks like you haven't liked any quotes yet.</p>`;
-        break;
       default :
         if (this.quoteState.quotes.length > 0) {
           return html`<ul>${this.quoteState.quotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
+        } else {
+          return this.hasFetched[this.feed] && html`<p>Uh oh. We couldn't find any quotes.</p>`;
         }
-        this.hasFetched && html`<p>Uh oh. We couldn't find any quotes.</p>`;
     }
 
     return html`<p><ani-loader></ani-loader></p>`;
@@ -130,7 +129,6 @@ export default class AniFeed extends LitElement {
     const isAtBottom = pageOffset > tabsOffset;
 
     if (isAtBottom && this.pagination[this.current]?.page < this.pagination[this.current]?.pageCount) {
-      console.log(this.current);
       this.currentPage[this.current]++;
       this.getQuotes(true);
     }
@@ -144,7 +142,7 @@ export default class AniFeed extends LitElement {
 
     switch(this.current) {
       case "following" :
-        filters = `&filters[$or][0][user][following][$contains]=${this.userState.user.user.id}`;
+        filters = this.setFollowingUsers();
         break;
       case "mine" :
         filters = `&filters[user][id][$eq]=${this.userState.user.user.id}`;
@@ -158,10 +156,6 @@ export default class AniFeed extends LitElement {
 
     const response = await fetch(`${API_URL}/api/quotes?sort[0]=createdAt:desc&populate=user.avatar&populate=book${searchParams}&pagination[pageSize]=${quotesPerPage}&pagination[page]=${this.currentPage[this.current]}${filters}`);
     const { data, meta } = await response.json();
-
-    console.log(this.current);
-    console.log(filters);
-    console.log('what ', data);
 
     this.pagination[this.feed] = meta.pagination;
 
@@ -178,6 +172,16 @@ export default class AniFeed extends LitElement {
       default :
         isPagination ? this.quoteState.addQuotes(data) : this.quoteState.addInitialQuotes(data);
     }
+  }
+
+  setFollowingUsers() {
+    let users: string = '';
+
+    this.userState.profile.following.forEach((user) => {
+      users += `&filters[user][id][$eq]=${user}`;
+    });
+
+    return !!users ? users : '&filters[user][id][$eq]=0';
   }
 }
 
