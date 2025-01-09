@@ -76,18 +76,17 @@ export default class aniLogin extends LitElement {
                 </kemet-field>
               </p>
               <br />
-              <kemet-button variant="rounded">
-               Login <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
-              </kemet-button>
-              &nbsp;&nbsp;|&nbsp;&nbsp;
-              <small>OR</small>
-              <div class="vendor-logins">
+              <div class="logins">
+                <kemet-button variant="rounded">
+                Login <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
+                </kemet-button>
+                <small>OR</small>
                 <a href="${API_URL}/api/connect/google">
                   <div class="google-btn">
                     <div class="google-icon-wrapper">
                       <img class="google-icon" src="https://i.ibb.co/ydLySMx/google.png" />
                     </div>
-                    <p class="btn-text">Login with Google</p>
+                    <p class="btn-text">Google Login</p>
                   </div>
                 </a>
                 <a class="btn-fb" href="${API_URL}/api/connect/facebook">
@@ -95,7 +94,7 @@ export default class aniLogin extends LitElement {
                     <div class="logo">
                       <img src="https://i.ibb.co/pnpDRC6/facebook.png" alt="" width="32px" height="32px">
                     </div>
-                    <p>Login with Facebook</p>
+                    <p>Facebook Login</p>
                   </div>
                 </a>
               </div>

@@ -1,6 +1,8 @@
 import { page, userEvent } from '@vitest/browser/context';
 import { html, render } from 'lit';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
+import { fixtureProfile } from '../ani-profile/fixtures';
+import { fixtureUser } from '../ani-user-view/fixtures';
 import { AniSearch } from './search';
 
 import './search';
@@ -12,6 +14,11 @@ describe('Search', () => {
       html`<ani-search></ani-search>`,
       document.body,
     );
+
+    const component = document.querySelector('ani-search');
+    component!.userState.isLoggedIn = true;
+    component!.userState.user = { user: fixtureUser, jwt: 'token' };
+    component!.userState.profile = fixtureProfile;
   });
 
   test('accepts users input for searching', async () => {

@@ -67,6 +67,7 @@ export interface IUser {
   books?: IBook[];
   avatar: IAvatar;
   memberId?: string;
+  memberFreePass?: boolean;
 }
 
 export interface IProfile extends IUser {}

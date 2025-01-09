@@ -3,10 +3,12 @@ import { customElement, state, query } from 'lit/decorators.js';
 import { loadStripe } from '@stripe/stripe-js';
 import userStore, { IUserStore } from '../../store/user';
 import alertStore, { IAlertStore } from '../../store/alert';
+import appStore, { IAppStore } from '../../store/app';
 import { isLocalhost } from '../../shared/utilities';
 
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 const STRIPE_PUBLIC_KEY_LIVE = import.meta.env.VITE_STRIPE_PUBLIC_KEY_LIVE;
@@ -23,6 +25,9 @@ export class AniMembership extends LitElement {
   userState: IUserStore = userStore.getInitialState();
 
   @state()
+  appState: IAppStore = appStore.getState();
+
+  @state()
   alertState: IAlertStore = alertStore.getInitialState();
 
   @query('form#checkout')
@@ -31,9 +36,16 @@ export class AniMembership extends LitElement {
   @query('#checkout-embed')
   pageCheckout!: HTMLSelectElement;
 
+  constructor() {
+    super();
+    appStore.subscribe(state => {
+      this.appState = state;
+    });
+  }
+
   firstUpdated() {
-    this.slug === 'checkout' && this.initCheckout();
-    this.slug === 'success' && this.initSuccess();
+    this.appState.currentRoute.includes('checkout') && this.initCheckout();
+    this.appState.currentRoute.includes('success') && this.initSuccess();
   }
 
   updated() {
@@ -54,7 +66,7 @@ export class AniMembership extends LitElement {
 
   makeCheckout() {
     return html`
-      <hr />
+      <hr /><br />
       <form id="checkout">
         <input type="hidden" name="lookup_key" value="standard_monthly" />
         <input type="hidden" name="email" value="${this.userState?.profile?.email}" />

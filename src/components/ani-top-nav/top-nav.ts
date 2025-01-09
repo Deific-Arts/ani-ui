@@ -5,10 +5,12 @@ import userStore, { IUserStore } from '../../store/user';
 import quoteStore, { IQuoteStore } from '../../store/quote';
 import appStore, { IAppStore } from '../../store/app';
 import { switchRoute } from '../../shared/utilities';
+
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
 import '../ani-search/search';
+
 
 @customElement('ani-top-nav')
 export default class AniTopNav extends LitElement {
@@ -24,7 +26,7 @@ export default class AniTopNav extends LitElement {
   quoteState: IQuoteStore = quoteStore.getInitialState();
 
   @state()
-  appState: IAppStore = appStore.getInitialState();
+  appState: IAppStore = appStore.getState();
 
   constructor() {
     super();
@@ -39,12 +41,15 @@ export default class AniTopNav extends LitElement {
 
     appStore.subscribe((state) => {
       this.appState = state;
-    })
+    });
   }
 
   render() {
     return html`
-      ${this.appState.currentRoute === '/home' || this.appState.currentRoute === '/' ? html`<ani-search></ani-search>` : null}
+      ${this.appState.currentRoute.includes('home') || this.appState.currentRoute === '/'
+        ? html`<ani-search ?opened=${this.appState.isDrawerOpened}></ani-search>`
+        : null
+      }
       <section>
         <nav>
           ${this.appState.currentRoute.includes('home') || this.appState.currentRoute === '/' ? html`
@@ -63,6 +68,7 @@ export default class AniTopNav extends LitElement {
 
   makeProfileImage() {
     const profileImage = this.userState.profile?.avatar?.url;
+    const isLoginPage = this.appState.currentRoute.includes('login');
 
     if (this.userState.isLoggedIn) {
       return html`
@@ -75,11 +81,15 @@ export default class AniTopNav extends LitElement {
       `
     }
 
-    return html`
-      <button @click=${() => switchRoute('login', 'Ani | Login')} aria-label="Login">
-        <kemet-icon icon="door-open" size="24"></kemet-icon>
-      </button>
-    `;
+    if (!isLoginPage) {
+      return html`
+        <button @click=${() => switchRoute('login', 'Ani | Login')} aria-label="Login">
+          <kemet-icon icon="door-open" size="24"></kemet-icon>
+        </button>
+      `;
+    }
+
+    return null;
   }
 }
 

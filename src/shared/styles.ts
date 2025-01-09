@@ -237,7 +237,7 @@ export const stylesVendors = css`
     display: flex;
     -webkit-box-align: center;
     align-items: center;
-    width: 210px;
+    width: 170px;
     height: 40px;
   }
 
@@ -259,7 +259,7 @@ export const stylesVendors = css`
   .btn-fb,
   .btn-fb .fb-content p {
     width: 100%;
-    width: 220px;
+    width: 180px;
     line-height: 1;
     letter-spacing: 0.21px;
     text-align: center;
@@ -291,7 +291,7 @@ export const stylesVendors = css`
   );
 
   .google-btn {
-    width: 200px;
+    width: 170px;
     height: 40px;
     background-color: #4285f4;
     border-radius: 2px;

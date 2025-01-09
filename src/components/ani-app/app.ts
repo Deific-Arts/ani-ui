@@ -25,9 +25,13 @@ import '../ani-providers/providers';
 import '../ani-legal/legal';
 import '../ani-membership/membership';
 
+export const router = new Router();
 @customElement('ani-app')
 export class AniApp extends LitElement {
   static styles = [styles, sharedStyles];
+
+  @state()
+  router!: Router;
 
   @state()
   alertState: IAlertStore = alertStore.getInitialState();
@@ -71,9 +75,17 @@ export class AniApp extends LitElement {
   }
 
   firstUpdated() {
-    const router = new Router(this.main);
+    router.setOutlet(this.main);
     router.setRoutes(routes);
     this.handlePolarity();
+
+    this.main.addEventListener('click', () => {
+      this.appState.setIsDrawerOpened(false);
+    });
+
+    window.addEventListener('popstate', () => {
+      this.appState.setCurrentRoute(window.location.pathname);
+    });
   }
 
   render() {

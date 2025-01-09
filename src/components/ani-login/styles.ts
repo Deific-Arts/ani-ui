@@ -9,9 +9,17 @@ export default css`
     padding: 0.5rem;
   }
 
-  .vendor-logins {
+  .logins {
     margin-top: var(--kemet-spacer-2xl);
     display: flex;
-    gap: var(--kemet-spacer-2xl);
+    gap: var(--kemet-spacer-lg);
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 768px) {
+    .logins {
+      flex-direction: row;
+    }
   }
 `;

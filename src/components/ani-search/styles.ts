@@ -12,7 +12,8 @@ export default css`
     height: 120px;
   }
 
-  form {
+  form,
+  section {
     padding: var(--kemet-spacer-md);
   }
 `;

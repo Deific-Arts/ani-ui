@@ -130,5 +130,6 @@ export const fixtureProfile = {
       "createdAt": "2024-11-30T04:07:12.695Z",
       "updatedAt": "2024-11-30T04:07:12.695Z",
       "publishedAt": "2024-11-30T04:07:12.695Z"
-  }
+  },
+  memberFreePass: true,
 };
