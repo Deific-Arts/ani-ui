@@ -54,8 +54,8 @@ export default class AniQuote extends LitElement {
         </button>
         <div>
           ${this.isRequote && this.originalQuote
-            ? html`<strong>${this.quote.user.username}</strong> <span>requoted ${this.originalQuote.user.username} ${this.displayDate()} ago</span>`
-            : html`<strong>${this.quote.user.username}</strong> <span>quoted ${this.displayDate()} ago</span>`
+            ? html`<strong>${this.isMember()}${this.quote.user.username}</strong> <span>requoted ${this.originalQuote.user.username} ${this.displayDate()} ago</span>`
+            : html`<strong>${this.isMember()}${this.quote.user.username}</strong> <span>quoted ${this.displayDate()} ago</span>`
           }
         </div>
       </header>
@@ -126,6 +126,13 @@ export default class AniQuote extends LitElement {
     const { data } = await fetch(`${API_URL}/api/quotes/${this.quote.requote}?populate=*`)
       .then(response => response.json());
     this.originalQuote = data;
+  }
+
+  isMember() {
+    if (this.quote.user?.memberFreePass || !!this.quote.user?.memberId) {
+      return html`<kemet-icon icon="patch-check-fill"></kemet-icon>&nbsp;`;
+    }
+    return null;
   }
 }
 

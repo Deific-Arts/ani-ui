@@ -16,6 +16,11 @@ export default css`
     border-radius: 50%;
   }
 
+  strong {
+    display: inline-flex;
+    align-items: baseline;
+  }
+
   header {
     display: grid;
     gap: 1rem;

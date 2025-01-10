@@ -2,11 +2,11 @@ import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import modalsStore, { IModalsStore } from '../../store/modals';
 import userStore, { IUserStore } from '../../store/user';
+import quoteStore, { IQuoteStore } from '../../store/quote';
 import styles from './styles';
 
 import '../ani-feed/feed';
 import AniFeed from '../ani-feed/feed';
-
 
 @customElement('ani-home')
 export default class AniHome extends LitElement {
@@ -17,6 +17,9 @@ export default class AniHome extends LitElement {
 
   @state()
   userState: IUserStore = userStore.getInitialState();
+
+  @state()
+  quoteState: IQuoteStore = quoteStore.getInitialState();
 
   @state()
   currentTab: string = 'all';

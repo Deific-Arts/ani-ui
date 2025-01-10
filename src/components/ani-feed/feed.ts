@@ -6,6 +6,7 @@ import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
 import '../ani-quote/quote';
+import '../ani-loader/loader';
 import KemetTabs from 'kemet-ui/dist/components/kemet-tabs/kemet-tabs';
 
 
@@ -67,7 +68,6 @@ export default class AniFeed extends LitElement {
     quoteStore.subscribe((state) => {
       this.quoteState = state;
       this.searchQuery = state.searchQuery;
-      // this.followingQuotes = this.userState.isLoggedIn ? state.quotes.filter(quote => this.userState.profile.following?.includes(quote.user.id)) : [];
     })
   }
 
@@ -83,40 +83,64 @@ export default class AniFeed extends LitElement {
   }
 
   render() {
-    return html`
-      ${this.makeFeed()}
-    `
-  }
-
-  makeFeed() {
     switch (this.current) {
       case 'following' :
         if (this.quoteState.followingQuotes.length > 0) {
           return html`<ul>${this.quoteState.followingQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         } else {
-          return html`<p>There are no quotes from people you follow yet.</p>`;
+          if (this.searchQuery) {
+            return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
+          } else {
+            if (this.hasFetched[this.current]) {
+              return html`<p>Looks like you haven't followed anyone yet.</p>`;
+            } else {
+              return html`<p><ani-loader loading></ani-loader></p>`
+            }
+          }
         }
       case 'mine' :
         if (this.quoteState.mineQuotes.length > 0) {
           return html`<ul>${this.quoteState.mineQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         } else {
-          return this.hasFetched[this.feed] && html`<p>Looks like you haven't added any quotes yet.</p>`;
+          if (this.searchQuery) {
+            return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
+          } else {
+            if (this.hasFetched[this.current]) {
+              return html`<p>Looks like you haven't added any quotes yet.</p>`;
+            } else {
+              return html`<p><ani-loader loading></ani-loader></p>`
+            }
+          }
         }
       case 'liked' :
         if (this.quoteState.likedQuotes.length > 0) {
           return html`<ul>${this.quoteState.likedQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         } else {
-          return html`<p>Looks like you haven't liked any quotes yet.</p>`;
+          if (this.searchQuery) {
+            return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
+          } else {
+            if (this.hasFetched[this.current]) {
+              return html`<p>Looks like you haven't liked any quotes yet.</p>`;
+            } else {
+              return html`<p><ani-loader loading></ani-loader></p>`
+            }
+          }
         }
       default :
         if (this.quoteState.quotes.length > 0) {
           return html`<ul>${this.quoteState.quotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         } else {
-          return this.hasFetched[this.feed] && html`<p>Uh oh. We couldn't find any quotes.</p>`;
+          if (this.searchQuery) {
+            return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
+          } else {
+            if (this.hasFetched[this.current]) {
+              return html`<p>Uh oh. We couldn't find any quotes.</p>`;
+            } else {
+              return html`<p><ani-loader loading></ani-loader></p>`
+            }
+          }
         }
     }
-
-    return html`<p><ani-loader></ani-loader></p>`;
   }
 
   handleScroll() {
@@ -136,7 +160,7 @@ export default class AniFeed extends LitElement {
 
   async getQuotes(isPagination = false) { // search by whether or not the user, book, or quote contain the search query
     this.hasFetched[this.current] = true;
-    const quotesPerPage = '3';
+    const quotesPerPage = '10';
     const searchParams = this.quoteState.searchQuery ? `&filters[$or][0][quote][$contains]=${this.quoteState.searchQuery}&filters[$or][1][book][title][$contains]=${this.quoteState.searchQuery}&filters[$or][2][user][username][$contains]=${this.quoteState.searchQuery}` : '';
     let filters;
 
@@ -145,10 +169,10 @@ export default class AniFeed extends LitElement {
         filters = this.setFollowingUsers();
         break;
       case "mine" :
-        filters = `&filters[user][id][$eq]=${this.userState.user.user.id}`;
+        filters = `&filters[$and][0][user][id][$eq]=${this.userState.user.user.id}`;
         break;
       case "liked" :
-        filters = `&filters[$or][0][likes][$contains]=${this.userState.user.user.id}`;
+        filters = `&filters[$and][0][likes][$contains]=${this.userState.user.user.id}`;
         break;
       default :
         filters = '';
@@ -178,10 +202,10 @@ export default class AniFeed extends LitElement {
     let users: string = '';
 
     this.userState.profile.following.forEach((user) => {
-      users += `&filters[user][id][$eq]=${user}`;
+      users += `&filters[$and][0][user][id][$eq]=${user}`;
     });
 
-    return !!users ? users : '&filters[user][id][$eq]=0';
+    return !!users ? users : '&filters[$and][0][user][id][$eq]=0';
   }
 }
 

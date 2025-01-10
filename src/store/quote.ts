@@ -38,17 +38,17 @@ const store = createStore<IQuoteStore>(set => ({
 
   followingQuotes: [],
   addFollowingQuote: (quote: IQuote) => set(state => { return { followingQuotes: [quote, ...state.quotes] } }),
-  addFollowingQuotes: (quotes: IQuote[]) => set(state => { return { followingQuotes: [...state.quotes, ...quotes] } }),
+  addFollowingQuotes: (quotes: IQuote[]) => set(state => { return { followingQuotes: [...state.followingQuotes, ...quotes] } }),
   addInitialFollowingQuotes: (quotes: IQuote[]) => set(() => { return { followingQuotes: quotes } }),
 
   mineQuotes: [],
   addMineQuote: (quote: IQuote) => set(state => { return { mineQuotes: [quote, ...state.quotes] } }),
-  addMineQuotes: (quotes: IQuote[]) => set(state => { return { mineQuotes: [...state.quotes, ...quotes] } }),
+  addMineQuotes: (quotes: IQuote[]) => set(state => { return { mineQuotes: [...state.mineQuotes, ...quotes] } }),
   addInitialMineQuotes: (quotes: IQuote[]) => set(() => {  return { mineQuotes: quotes } }),
 
   likedQuotes: [],
   addLikedQuote: (quote: IQuote) => set(state => { return { likedQuotes: [quote, ...state.quotes] } }),
-  addLikedQuotes: (quotes: IQuote[]) => set(state => { return { likedQuotes: [...state.quotes, ...quotes] } }),
+  addLikedQuotes: (quotes: IQuote[]) => set(state => { return { likedQuotes: [...state.likedQuotes, ...quotes] } }),
   addInitialLikedQuotes: (quotes: IQuote[]) => set(() => { return { likedQuotes: quotes } }),
 
   searchQuery: '',
