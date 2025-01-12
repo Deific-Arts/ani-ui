@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import userStore, { IUserStore } from '../../store/user';
 import alertStore, { IAlertStore } from '../../store/alert';
 import appStore, { IAppStore } from '../../store/app';
-import { isLocalhost } from '../../shared/utilities';
+import { isProduction } from '../../shared/utilities';
 
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
@@ -13,13 +13,10 @@ import sharedStyles from '../../shared/styles';
 const API_URL = import.meta.env.VITE_API_URL;
 const STRIPE_PUBLIC_KEY_LIVE = import.meta.env.VITE_STRIPE_PUBLIC_KEY_LIVE;
 const STRIPE_PUBLIC_KEY_TEST = import.meta.env.VITE_STRIPE_PUBLIC_KEY_TEST;
-const stripe = await loadStripe(isLocalhost ? STRIPE_PUBLIC_KEY_TEST : STRIPE_PUBLIC_KEY_LIVE);
+const stripe = await loadStripe(isProduction ? STRIPE_PUBLIC_KEY_LIVE : STRIPE_PUBLIC_KEY_TEST);
 @customElement('ani-membership')
 export class AniMembership extends LitElement {
   static styles = [sharedStyles, styles];
-
-  // @state()
-  // slug: string = location.pathname.split('/')[2];
 
   @state()
   userState: IUserStore = userStore.getInitialState();

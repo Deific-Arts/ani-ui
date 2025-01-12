@@ -17,3 +17,5 @@ export const isObjectEmpty = <T extends object>(obj: T): boolean => {
 }
 
 export const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+export const isProduction = window.location.origin === 'https://anibookquotes.com';
