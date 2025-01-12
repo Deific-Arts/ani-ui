@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import userStore, { IUserStore } from '../../store/user.ts';
 import alertStore, { IAlertStore } from '../../store/alert.ts';
+import modalsStore, { IModalsStore } from '../../store/modals.ts';
 import { informationStyles } from './styles.ts';
 import sharedStyles from '../../shared/styles.ts';
 
@@ -16,6 +17,7 @@ import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import FilePondStyles from 'filepond/dist/filepond.min.css';
 import FilePondImagePreviewStyles from 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import { switchRoute } from '../../shared/utilities.ts';
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -38,6 +40,9 @@ export default class aniInformation extends LitElement {
 
   @state()
   alertState: IAlertStore = alertStore.getInitialState();
+
+  @state()
+  modalsState: IModalsStore= modalsStore.getInitialState();
 
   @state()
   filePond: any;
@@ -83,7 +88,7 @@ export default class aniInformation extends LitElement {
                 <kemet-button variant="text" @click=${() => this.logout()}>Log Out</kemet-button>
                 ${!!this.userState.profile.memberId
                   ? html`&nbsp;|&nbsp;<kemet-button variant="text" @click=${() => this.handleManageMembership()}>Manage Membership</kemet-button>`
-                  : null
+                  : html`&nbsp;|&nbsp;<kemet-button variant="text" @click=${() => switchRoute('/membership/checkout')}>Become a Member</kemet-button>`
                 }
               </p>
               <hr /><br />
@@ -115,6 +120,12 @@ export default class aniInformation extends LitElement {
             <kemet-button variant="rounded">
               Update Profile <kemet-icon slot="right" icon="chevron-right"></kemet-icon>
             </kemet-button>
+            <br ><br /><hr />
+            <p>
+              <kemet-button variant="text" @click=${() => this.modalsState.setDeleteUserOpened(true)}>
+                Remove Account
+              </kemet-button>
+            </p>
           </fieldset>
         </form>
       </kemet-card>
@@ -270,11 +281,11 @@ export default class aniInformation extends LitElement {
       })
     });
 
-    const { url, error } = await response.json();
+    const { url, error, message } = await response.json();
 
     if (error) {
       this.alertState.setStatus('error');
-      this.alertState.setMessage(error.message);
+      this.alertState.setMessage(message);
       this.alertState.setOpened(true);
       this.alertState.setIcon('exclamation-circle');
     } else {

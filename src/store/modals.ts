@@ -10,6 +10,8 @@ export interface IModalsStore {
   setCurrentQuote: (currentQuote: IQuote) => void;
   newQuoteOpened: boolean;
   setNewQuoteOpened: (opened: boolean) => void;
+  deleteUserOpened: boolean;
+  setDeleteUserOpened: (opened: boolean) => void;
 }
 
 const store = createStore<IModalsStore>(set => ({
@@ -21,6 +23,8 @@ const store = createStore<IModalsStore>(set => ({
   setCurrentQuote: (currentQuote: IQuote) => set(() => { return { currentQuote }}),
   newQuoteOpened: false,
   setNewQuoteOpened: (newQuoteOpened: boolean) => set(() => { return { newQuoteOpened } }),
+  deleteUserOpened: false,
+  setDeleteUserOpened: (deleteUserOpened: boolean) => set(() => { return { deleteUserOpened } })
 }));
 
 export default store;

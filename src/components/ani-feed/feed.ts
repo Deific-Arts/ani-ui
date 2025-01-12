@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import quoteStore, { IQuoteStore } from '../../store/quote';
 import userStore, { IUserStore } from '../../store/user';
+import appStore, { IAppStore } from '../../store/app';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
 
@@ -10,18 +11,14 @@ import '../ani-loader/loader';
 import KemetTabs from 'kemet-ui/dist/components/kemet-tabs/kemet-tabs';
 
 
-const API_URL = import.meta.env.VITE_API_URL;
 
-// interface ICurrentPage {
-//   all: number;
-//   following: number;
-//   mine: number;
-//   liked: number;
-// };
+const API_URL = import.meta.env.VITE_API_URL;
 
 @customElement('ani-feed')
 export default class AniFeed extends LitElement {
   static styles = [sharedStyles, styles];
+
+  private handleScroll: () => void;
 
   @property({ type: String })
   feed: string = 'all';
@@ -30,12 +27,7 @@ export default class AniFeed extends LitElement {
   current: string = 'all';
 
   @state()
-  hasFetched: any = {
-    all: false,
-    following: false,
-    mine: false,
-    liked: false,
-  };
+  hasFetched: string[] = [this.current];
 
   @state()
   searchQuery: string = '';
@@ -57,13 +49,18 @@ export default class AniFeed extends LitElement {
   }
 
   @state()
-  quoteState: IQuoteStore = quoteStore.getInitialState();
+  quoteState: IQuoteStore = quoteStore.getState();
 
   @state()
-  userState: IUserStore = userStore.getInitialState();
+  userState: IUserStore = userStore.getState();
+
+  @state()
+  appState: IAppStore = appStore.getState()
 
   constructor() {
     super();
+
+    this.handleScroll = this.onScroll.bind(this);
 
     quoteStore.subscribe((state) => {
       this.quoteState = state;
@@ -71,15 +68,24 @@ export default class AniFeed extends LitElement {
     })
   }
 
-  firstUpdated() {
-    this.getQuotes();
-    window.addEventListener('scroll', () => this.handleScroll());
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('scroll', this.handleScroll);
   }
 
   updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('searchQuery')) {
+    if (changedProperties.has('searchQuery') && this.searchQuery) {
       this.getQuotes();
     }
+  }
+
+  firstUpdated() {
+    if (this.feed === this.current) this.getQuotes();
   }
 
   render() {
@@ -91,8 +97,8 @@ export default class AniFeed extends LitElement {
           if (this.searchQuery) {
             return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
           } else {
-            if (this.hasFetched[this.current]) {
-              return html`<p>Looks like you haven't followed anyone yet.</p>`;
+            if (this.appState.fetchedTabs.includes('following')) {
+              return html`<p>You either aren't following anyone or they haven't added any quotes yet.</p>`
             } else {
               return html`<p><ani-loader loading></ani-loader></p>`
             }
@@ -105,7 +111,7 @@ export default class AniFeed extends LitElement {
           if (this.searchQuery) {
             return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
           } else {
-            if (this.hasFetched[this.current]) {
+            if (this.appState.fetchedTabs.includes('mine')) {
               return html`<p>Looks like you haven't added any quotes yet.</p>`;
             } else {
               return html`<p><ani-loader loading></ani-loader></p>`
@@ -119,7 +125,7 @@ export default class AniFeed extends LitElement {
           if (this.searchQuery) {
             return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
           } else {
-            if (this.hasFetched[this.current]) {
+            if (this.appState.fetchedTabs.includes('liked')) {
               return html`<p>Looks like you haven't liked any quotes yet.</p>`;
             } else {
               return html`<p><ani-loader loading></ani-loader></p>`
@@ -133,7 +139,7 @@ export default class AniFeed extends LitElement {
           if (this.searchQuery) {
             return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
           } else {
-            if (this.hasFetched[this.current]) {
+            if (this.hasFetched.includes('all')) {
               return html`<p>Uh oh. We couldn't find any quotes.</p>`;
             } else {
               return html`<p><ani-loader loading></ani-loader></p>`
@@ -143,7 +149,7 @@ export default class AniFeed extends LitElement {
     }
   }
 
-  handleScroll() {
+  onScroll() {
     const tabsElement = document.querySelector('ani-app')
       ?.shadowRoot?.querySelector('ani-home')
       ?.shadowRoot?.querySelector('kemet-tabs') as KemetTabs;
@@ -158,13 +164,14 @@ export default class AniFeed extends LitElement {
     }
   }
 
-  async getQuotes(isPagination = false) { // search by whether or not the user, book, or quote contain the search query
-    this.hasFetched[this.current] = true;
-    const quotesPerPage = '10';
+  // search by whether or not the user, book, or quote contain the search query
+  async getQuotes(isPagination = false) {
+    this.appState.setFetchedTabs(this.current);
+    const quotesPerPage = '4';
     const searchParams = this.quoteState.searchQuery ? `&filters[$or][0][quote][$contains]=${this.quoteState.searchQuery}&filters[$or][1][book][title][$contains]=${this.quoteState.searchQuery}&filters[$or][2][user][username][$contains]=${this.quoteState.searchQuery}` : '';
     let filters;
 
-    switch(this.current) {
+    switch(this.feed) {
       case "following" :
         filters = this.setFollowingUsers();
         break;
@@ -183,9 +190,9 @@ export default class AniFeed extends LitElement {
 
     this.pagination[this.feed] = meta.pagination;
 
-    switch(this.current) {
+    switch(this.feed) {
       case 'following' :
-        isPagination ? this.quoteState.addFollowingQuotes(data) : this.quoteState.addInitialFollowingQuotes(data);
+        this.quoteState.addFollowingQuotes(data);
         break;
       case 'mine' :
         isPagination ? this.quoteState.addMineQuotes(data) : this.quoteState.addInitialMineQuotes(data);
@@ -201,7 +208,7 @@ export default class AniFeed extends LitElement {
   setFollowingUsers() {
     let users: string = '';
 
-    this.userState.profile.following.forEach((user) => {
+    this.userState.profile.following && this.userState.profile.following.forEach((user) => {
       users += `&filters[$and][0][user][id][$eq]=${user}`;
     });
 

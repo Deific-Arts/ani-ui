@@ -5,6 +5,7 @@ import modalsStore from "../../store/modals";
 
 import '../ani-post-comment/post-comment';
 import '../ani-new-quote/new-quote';
+import '../ani-delete-user/delete-user';
 
 export const signInModalTemplate = html`
   <section>
@@ -29,3 +30,6 @@ export const newQuoteModalTemplate = html`
   <ani-new-quote></ani-new-quote>
 `;
 
+export const deleteUserModalTemplate = html`
+  <ani-delete-user></ani-delete-user>
+`;

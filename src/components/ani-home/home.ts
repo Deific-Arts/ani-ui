@@ -26,7 +26,7 @@ export default class AniHome extends LitElement {
 
   constructor() {
     super();
-
+    document.title = 'Ani Book Quotes';
     userStore.subscribe((state) => {
       this.userState = state;
     });
@@ -51,15 +51,15 @@ export default class AniHome extends LitElement {
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <br />
-          <ani-feed feed="following" current=${this.currentTab}></ani-feed>
+          ${this.currentTab === 'following' ? html`<ani-feed feed="following" current=${this.currentTab}></ani-feed>` : ''}
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <br />
-          <ani-feed feed="mine" current=${this.currentTab}></ani-feed>
+          ${this.currentTab === 'mine' ? html`<ani-feed feed="mine" current=${this.currentTab}></ani-feed>` : ''}
         </kemet-tab-panel>
         <kemet-tab-panel slot="panel">
           <br />
-          <ani-feed feed="liked" current=${this.currentTab}></ani-feed>
+          ${this.currentTab === 'liked' ? html`<ani-feed feed="liked" current=${this.currentTab}></ani-feed>` : ''}
         </kemet-tab-panel>
       </kemet-tabs>
 
@@ -87,7 +87,7 @@ export default class AniHome extends LitElement {
     const currentFeedElement = this.shadowRoot?.querySelector('ani-feed') as AniFeed;
     currentFeedElement.current = this.currentTab;
     currentFeedElement.currentPage[this.currentTab] = 1;
-    if (!currentFeedElement.hasFetched[this.currentTab]) currentFeedElement.getQuotes();
+    currentFeedElement.getQuotes();
   }
 }
 

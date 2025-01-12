@@ -48,22 +48,27 @@ export default class AniNewQuote extends LitElement {
     if (this.userState.isLoggedIn) {
       return html`
         <form>
+        ${!this.userState.profile.books ? html`
+          <p class="error">You need to add a book to your library and select it before you can add a quote.</p>` : null }
           <kemet-field slug="quote" label="The quote">
-            <kemet-textarea slot="input" name="quote" filled rounded required></kemet-textarea>
+            <kemet-textarea slot="input" name="quote" filled rounded required ?disabled=${!this.userState.profile.books}></kemet-textarea>
             <kemet-count slot="component" message="characters remaining." limit="1000"></kemet-count>
           </kemet-field>
-          <div>
-            <kemet-field slug="book" label="Book">
-              <kemet-select slot="input" name="book" required filled rounded>
-                ${this.makeBookOptions()}
-              </kemet-select>
-            </kemet-field>
-            <kemet-field slug="page" label="Page">
-              <kemet-input slot="input" name="page" rounded filled></kemet-input>
-            </kemet-field>
+          ${this.userState.profile.books ? html`
+            <div>
+              <kemet-field slug="book" label="Book">
+                <kemet-select slot="input" name="book" required filled rounded>
+                  ${this.makeBookOptions()}
+                </kemet-select>
+              </kemet-field>
+              <kemet-field slug="page" label="Page">
+                <kemet-input slot="input" name="page" rounded filled></kemet-input>
+              </kemet-field>
+            </div>` : null
+          }
           </div>
           <kemet-field slug="note" label="Enter any notes you may have about this quote">
-            <kemet-textarea slot="input" name="note" filled rounded></kemet-textarea>
+            <kemet-textarea slot="input" name="note" filled rounded ?disabled=${!this.userState.profile.books}></kemet-textarea>
             <kemet-count slot="component" message="characters remaining." limit="1000"></kemet-count>
           </kemet-field>
           <footer>
@@ -95,7 +100,7 @@ export default class AniNewQuote extends LitElement {
       requote: '',
       requotes: [],
       user: user.id,
-      book: book.id,
+      book: book?.id,
       page: userData.page,
       note: userData.note,
       private: false,

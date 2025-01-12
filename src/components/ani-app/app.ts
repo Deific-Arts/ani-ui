@@ -6,7 +6,7 @@ import appStore, { IAppStore } from '../../store/app';
 import userStore, { IUserStore } from '../../store/user';
 import modalsStore, { IModalsStore } from '../../store/modals';
 import { ENUM_ALERT_STATUS } from '../../shared/enums';
-import { commentModalTemplate, signInModalTemplate, newQuoteModalTemplate } from './templates';
+import { commentModalTemplate, signInModalTemplate, newQuoteModalTemplate, deleteUserModalTemplate } from './templates';
 
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
@@ -90,7 +90,7 @@ export class AniApp extends LitElement {
 
   render() {
     const { status, message, opened, icon } = this.alertState;
-    const { signInOpened, commentOpened, newQuoteOpened } = this.modalsState;
+    const { signInOpened, commentOpened, newQuoteOpened, deleteUserOpened } = this.modalsState;
 
     return html`
       <kemet-alert
@@ -121,6 +121,9 @@ export class AniApp extends LitElement {
         </kemet-modal>
         <kemet-modal id="modal-new-quote" rounded effect="fadein-scaleup" .opened=${newQuoteOpened} @kemet-modal-closed=${() => modalsStore.setState({ newQuoteOpened: false })}>
           ${newQuoteModalTemplate}
+        </kemet-modal>
+        <kemet-modal id="modal-delete-user" rounded close-on-click effect="fadein-scaleup" .opened=${deleteUserOpened} @kemet-modal-closed=${() => modalsStore.setState({ deleteUserOpened: false })}>
+          ${deleteUserModalTemplate}
         </kemet-modal>
       ` : null}
     `

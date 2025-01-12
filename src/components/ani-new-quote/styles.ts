@@ -22,4 +22,8 @@ export default css`
     border-radius: var(--kemet-border-radius-xl);
     background: var(--app-input-filled-background-color);
   }
+
+  .error {
+    color: var(--app-error-color);
+  }
 `;

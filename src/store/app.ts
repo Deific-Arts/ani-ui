@@ -8,6 +8,8 @@ export interface IAppStore {
   setCurrentRoute: (route: string) => void;
   checkout: any;
   setCheckout: (checkout: any) => void;
+  fetchedTabs: string[];
+  setFetchedTabs: (tab: string) => void;
 }
 
 const isMobile = () => {
@@ -22,6 +24,8 @@ const store = createStore<IAppStore>(set => ({
   setCurrentRoute: (route: string) => set(() => { return { currentRoute: route } }),
   checkout: {},
   setCheckout: (checkout: any) => set(() => { return { checkout } }),
+  fetchedTabs: [],
+  setFetchedTabs: (tab) => set((state) => { return { fetchedTabs: [...state.fetchedTabs, tab]} })
 }));
 
 window.addEventListener('resize', () => {

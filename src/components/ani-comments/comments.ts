@@ -26,22 +26,20 @@ export default class AniComments extends LitElement {
   @state()
   modalsState: IModalsStore = modalsStore.getInitialState();
 
-  updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('quote') && this.quote) {
-      this.getComments();
-    }
+  firstUpdated() {
+    this.getComments();
   }
 
   render() {
     return html`
       <button aria-label="Comments"><kemet-icon icon="chat-left" size="24" @click=${() => this.openComment()}></kemet-icon></button>
-      <span>${this.comments.length}</span>
+      <span>${this.comments?.length}</span>
     `
   }
 
   async getComments() {
-    const commentsResponse = await fetch(`${API_URL}/api/comments?filters[quoteId][$eq]=${this.quote.id}`);
-    const { data } = await commentsResponse.json();
+    const commentsRequest = await fetch(`${API_URL}/api/comments?filters[quoteId][$eq]=${this.quote?.id}`);
+    const { data } = await commentsRequest.json();
     this.comments = data;
   }
 

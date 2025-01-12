@@ -2,7 +2,7 @@ import { LitElement } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import styles from './styles';
 import sharedStyles from '../../shared/styles';
-import { privacy, terms } from './templates';
+import { privacy, remove, terms } from './templates';
 
 @customElement('ani-legal')
 export class AniLegal extends LitElement {
@@ -21,7 +21,11 @@ export class AniLegal extends LitElement {
     }
 
     if (this.slug === "privacy") {
-      return privacy
+      return privacy;
+    }
+
+    if (this.slug === "remove") {
+      return remove;
     }
 
     return null;

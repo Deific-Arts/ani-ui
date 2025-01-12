@@ -122,6 +122,15 @@ export class AniMembership extends LitElement {
       this.alertState.setMessage(data.error.message);
       this.alertState.setOpened(true);
       this.alertState.setIcon('exclamation-circle');
+    } else {
+      const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.userState?.user?.jwt}`
+        }
+      }).then((response) => response.json());
+      this.userState.updateProfile(userProfile);
     }
   }
 }

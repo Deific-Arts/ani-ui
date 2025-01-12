@@ -104,6 +104,11 @@ export default css`
     right: 0;
   }
 
+  [icon="patch-check-fill"] {
+    position: relative;
+    top: 2px;
+  }
+
   @media screen and (min-width: 768px) {
     figure {
       margin-left: 5rem;

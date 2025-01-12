@@ -188,3 +188,11 @@ export const terms = html`
     </ol>
   </article>
 `;
+
+export const remove = html`
+  <hr />
+  <article>
+    <h1>User Removal Instructions</h1>
+    <p>Ani Book Quotes will only store your data so as long as you have an account. You may remove your account at any time by logging in and going to your <a href="/profile">settings page</a>. Once on the setting pages, go to the bottom of the page and click Remove Account. If you have a membership, your membership will be cancelled automatically when deleting your account.</p>
+  </article>
+`;
