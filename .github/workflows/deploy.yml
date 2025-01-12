@@ -15,6 +15,8 @@ jobs:
           NODE_ENV: production
           VITE_API_URL: https://api.anibookquotes.com
           VITE_BOOKS_API_KEY: ${{ secrets.VITE_BOOKS_API_KEY }}
+          VITE_STRIPE_PUBLIC_KEY_TEST: ${{ secrets.VITE_STRIPE_PUBLIC_KEY_TEST }}
+          VITE_STRIPE_PUBLIC_KEY_LIVE: ${{ secrets.VITE_STRIPE_PUBLIC_KEY_LIVE }}
         run: |
           npm install --include=dev
           npm run build
