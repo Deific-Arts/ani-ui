@@ -179,7 +179,7 @@ export default class AniFeed extends LitElement {
         filters = `&filters[$and][0][user][id][$eq]=${this.userState.user.user.id}`;
         break;
       case "liked" :
-        filters = `&filters[$and][0][likes][$contains]=${this.userState.user.user.id}`;
+        filters = `&filters[$and][0][likes][$containsi]=${this.userState.user.user.id}`;
         break;
       default :
         filters = '';
