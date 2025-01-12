@@ -75,58 +75,69 @@ export class AniApp extends LitElement {
   }
 
   firstUpdated() {
-    router.setOutlet(this.main);
-    router.setRoutes(routes);
-    this.handlePolarity();
+    if (!this.appState.maintenanceMode) {
+      router.setOutlet(this.main);
+      router.setRoutes(routes);
+      this.handlePolarity();
 
-    this.main.addEventListener('click', () => {
-      this.appState.setIsDrawerOpened(false);
-    });
+      this.main.addEventListener('click', () => {
+        this.appState.setIsDrawerOpened(false);
+      });
 
-    window.addEventListener('popstate', () => {
-      this.appState.setCurrentRoute(window.location.pathname);
-    });
+      window.addEventListener('popstate', () => {
+        this.appState.setCurrentRoute(window.location.pathname);
+      });
+    }
   }
 
   render() {
     const { status, message, opened, icon } = this.alertState;
     const { signInOpened, commentOpened, newQuoteOpened, deleteUserOpened } = this.modalsState;
 
+    if (!this.appState.maintenanceMode) {
+      return html`
+        <kemet-alert
+          closable
+          overlay=""
+          status="${status as ENUM_ALERT_STATUS}"
+          ?opened=${opened}
+          @kemet-alert-closed=${() => alertStore.setState({ opened: false })}
+        >
+          <div>
+            <kemet-icon icon="${icon}" size="24"></kemet-icon>&nbsp;
+            <div>${message}</div>
+          </div>
+        </kemet-alert>
+        <section>
+          <div class="wrapper">
+            <ani-top-nav></ani-top-nav>
+            <main></main>
+            <ani-footer-nav></ani-footer-nav>
+          </div>
+        </section>
+        <kemet-modal id="modal-sign-in" close-on-click rounded effect="fadein-scaleup" .opened=${signInOpened} @kemet-modal-closed=${() => modalsStore.setState({ signInOpened: false })}>
+          ${signInModalTemplate}
+        </kemet-modal>
+        ${this.userState.isLoggedIn ? html`
+          <kemet-modal id="modal-comment" rounded effect="fadein-scaleup" .opened=${commentOpened} @kemet-modal-closed=${() => modalsStore.setState({ commentOpened: false })}>
+            ${commentModalTemplate}
+          </kemet-modal>
+          <kemet-modal id="modal-new-quote" rounded effect="fadein-scaleup" .opened=${newQuoteOpened} @kemet-modal-closed=${() => modalsStore.setState({ newQuoteOpened: false })}>
+            ${newQuoteModalTemplate}
+          </kemet-modal>
+          <kemet-modal id="modal-delete-user" rounded close-on-click effect="fadein-scaleup" .opened=${deleteUserOpened} @kemet-modal-closed=${() => modalsStore.setState({ deleteUserOpened: false })}>
+            ${deleteUserModalTemplate}
+          </kemet-modal>
+        ` : null}
+      `
+    }
+
     return html`
-      <kemet-alert
-        closable
-        overlay=""
-        status="${status as ENUM_ALERT_STATUS}"
-        ?opened=${opened}
-        @kemet-alert-closed=${() => alertStore.setState({ opened: false })}
-      >
-        <div>
-          <kemet-icon icon="${icon}" size="24"></kemet-icon>&nbsp;
-          <div>${message}</div>
-        </div>
-      </kemet-alert>
-      <section>
-        <div class="wrapper">
-          <ani-top-nav></ani-top-nav>
-          <main></main>
-          <ani-footer-nav></ani-footer-nav>
-        </div>
+      <section class="maintenance">
+        <h1>Maintenance Mode</h1>
+        <p>Sorry for the inconvenience but the App is currently in maintenance mode. This probably means the app is being updated. Please check back soon.</p>
       </section>
-      <kemet-modal id="modal-sign-in" close-on-click rounded effect="fadein-scaleup" .opened=${signInOpened} @kemet-modal-closed=${() => modalsStore.setState({ signInOpened: false })}>
-        ${signInModalTemplate}
-      </kemet-modal>
-      ${this.userState.isLoggedIn ? html`
-        <kemet-modal id="modal-comment" rounded effect="fadein-scaleup" .opened=${commentOpened} @kemet-modal-closed=${() => modalsStore.setState({ commentOpened: false })}>
-          ${commentModalTemplate}
-        </kemet-modal>
-        <kemet-modal id="modal-new-quote" rounded effect="fadein-scaleup" .opened=${newQuoteOpened} @kemet-modal-closed=${() => modalsStore.setState({ newQuoteOpened: false })}>
-          ${newQuoteModalTemplate}
-        </kemet-modal>
-        <kemet-modal id="modal-delete-user" rounded close-on-click effect="fadein-scaleup" .opened=${deleteUserOpened} @kemet-modal-closed=${() => modalsStore.setState({ deleteUserOpened: false })}>
-          ${deleteUserModalTemplate}
-        </kemet-modal>
-      ` : null}
-    `
+    `;
   }
 
   switchRoute(route: string) {

@@ -10,6 +10,8 @@ export interface IAppStore {
   setCheckout: (checkout: any) => void;
   fetchedTabs: string[];
   setFetchedTabs: (tab: string) => void;
+  maintenanceMode: boolean;
+  setMaintenanceMode: (maintenanceMode: boolean) => void;
 }
 
 const isMobile = () => {
@@ -25,7 +27,9 @@ const store = createStore<IAppStore>(set => ({
   checkout: {},
   setCheckout: (checkout: any) => set(() => { return { checkout } }),
   fetchedTabs: [],
-  setFetchedTabs: (tab) => set((state) => { return { fetchedTabs: [...state.fetchedTabs, tab]} })
+  setFetchedTabs: (tab) => set((state) => { return { fetchedTabs: [...state.fetchedTabs, tab]} }),
+  maintenanceMode: false,
+  setMaintenanceMode: (maintenanceMode: boolean) => { return { maintenanceMode }}
 }));
 
 window.addEventListener('resize', () => {

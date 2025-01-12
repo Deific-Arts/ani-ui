@@ -45,6 +45,10 @@ export default css`
     position: relative;
   }
 
+  .maintenance {
+    text-align: center;
+  }
+
   #modal-sign-in svg {
     width: 128px;
   }

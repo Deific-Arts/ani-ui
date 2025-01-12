@@ -1,5 +1,6 @@
 import { createStore } from 'zustand/vanilla';
 import Cookies from 'js-cookie';
+import appStore from '../store/app';
 import { IProfile, IUserCookie } from '../shared/interfaces';
 
 export interface IUserStore {
@@ -28,11 +29,16 @@ const getProfile = async () => {
     }
   };
 
-  const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options)
-    .then((response) => response.json());
-
-  if (userProfile) {
-    return userProfile;
+  try {
+    const userProfile = await fetch(`${API_URL}/api/users/me?populate=*`, options)
+      .then((response) => response.json());
+    if (userProfile) {
+      return userProfile;
+    }
+  } catch (error) {
+    console.log(error);
+    // the api has failed turn on maintenance mode
+    appStore.setState({ maintenanceMode: true });
   }
 
   return;
