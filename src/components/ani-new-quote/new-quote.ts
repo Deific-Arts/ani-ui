@@ -44,6 +44,14 @@ export default class AniNewQuote extends LitElement {
 
   @query('[name=note]')
   noteInput!: KemetTextarea;
+
+  constructor() {
+    super();
+    userStore.subscribe((state) => {
+      this.userState = state;
+    });
+  }
+
   render() {
     const books = this.userState.profile.books;
     const hasBooks = books && books.length > 0;
