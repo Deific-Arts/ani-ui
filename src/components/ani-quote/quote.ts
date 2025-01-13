@@ -40,7 +40,7 @@ export default class AniQuote extends LitElement {
   }
 
   render() {
-    return this.quote ? html`
+    return this.quote && this.quote.user ? html`
       ${this.quote.user.id === this.userState.profile?.id
         ? html`<button aria-label="Delete"><kemet-icon icon="x-lg" size="16" @click=${() => this.deleteQuote()}></kemet-icon></button>`
         : null
