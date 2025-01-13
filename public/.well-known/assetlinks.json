@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.anibookquotes.twa",
+        "sha256_cert_fingerprints": ["1A:4E:6B:C5:19:0A:F6:E5:5F:63:83:FF:53:3B:6C:A9:5A:E9:D1:D7:AA:4D:E3:70:D0:09:A0:1E:10:37:D7:EF"]
+      }
+    }]
