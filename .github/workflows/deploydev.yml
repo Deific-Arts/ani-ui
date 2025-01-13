@@ -1,0 +1,32 @@
+name: deploy-dev
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: Build Site
+        working-directory: ./
+        env:
+          NODE_ENV: development
+          VITE_API_URL: https://devapi.anibookquotes.com
+          VITE_BOOKS_API_KEY: ${{ secrets.VITE_BOOKS_API_KEY }}
+          VITE_STRIPE_PUBLIC_KEY_TEST: ${{ secrets.VITE_STRIPE_PUBLIC_KEY_TEST }}
+          VITE_STRIPE_PUBLIC_KEY_LIVE: ${{ secrets.VITE_STRIPE_PUBLIC_KEY_LIVE }}
+        run: |
+          npm install --include=dev
+          npm run build
+      - name: Deploy
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ secrets.FTP_DEPLOY_USERNAME }}
+          server: ${{ secrets.FTP_DEPLOY_HOST }}
+          port: ${{ secrets.FTP_DEPLOY_PORT }}
+          local_path: "./dist/*"
+          remote_path: "./sites/ani-ui-dev/"
+          sftp_only: true
+          password: ${{ secrets.FTP_DEPLOY_PASSWORD }}
