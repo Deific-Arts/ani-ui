@@ -65,9 +65,18 @@ export default class aniBook extends LitElement {
   }
 
   handleSelected() {
-    this.addEventListener('click', () => {
+    this.addEventListener('click', async () => {
       this.selected = !this.selected;
       this.selected ? this.addBook() : this.removeBook();
+      const options = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.userState.user.jwt}`
+        }
+      };
+      const userProfile = await fetch(`${API_URL}/api/users/me?populate=books`, options).then((response) => response.json());
+      this.userState.updateProfile(userProfile);
     });
   }
 

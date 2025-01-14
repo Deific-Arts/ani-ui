@@ -23,7 +23,7 @@ export default class AniComment extends LitElement {
   userState: IUserStore = userStore.getInitialState();
 
   render() {
-    return this.comment ? html`
+    return this.comment && this.comment.user ? html`
       ${this.comment.user.id === this.userState.profile?.id
         ? html`<button aria-label="Delete"><kemet-icon icon="x-lg" size="16" @click=${() => this.deleteComment()}></kemet-icon></button>`
         : null

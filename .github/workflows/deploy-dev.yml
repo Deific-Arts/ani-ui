@@ -1,13 +1,13 @@
-name: deploy
+name: deploy-dev
 on:
   push:
     branches:
-      - main
+      - develop
   pull_request:
     branches:
-      - main
+      - develop
 jobs:
-  deploy:
+  deploy-dev:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,8 +15,8 @@ jobs:
       - name: Build Site
         working-directory: ./
         env:
-          NODE_ENV: production
-          VITE_API_URL: https://api.anibookquotes.com
+          NODE_ENV: development
+          VITE_API_URL: https://devapi.anibookquotes.com
           VITE_BOOKS_API_KEY: ${{ secrets.VITE_BOOKS_API_KEY }}
           VITE_STRIPE_PUBLIC_KEY_TEST: ${{ secrets.VITE_STRIPE_PUBLIC_KEY_TEST }}
           VITE_STRIPE_PUBLIC_KEY_LIVE: ${{ secrets.VITE_STRIPE_PUBLIC_KEY_LIVE }}
@@ -30,6 +30,6 @@ jobs:
           server: ${{ secrets.FTP_DEPLOY_HOST }}
           port: ${{ secrets.FTP_DEPLOY_PORT }}
           local_path: "./dist/*"
-          remote_path: "./sites/ani-ui/"
+          remote_path: "./sites/ani-ui-dev/"
           sftp_only: true
           password: ${{ secrets.FTP_DEPLOY_PASSWORD }}
