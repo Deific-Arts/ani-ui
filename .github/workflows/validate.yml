@@ -1,14 +1,8 @@
-name: validate-dev
+name: validate
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   workflow_run:
     workflows:
-      - deploy-dev
+      - deploy
     types:
       - completed
 jobs:
@@ -26,7 +20,7 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run E2E Tests
       env:
-        PLAYWRIGHT_BASE_URL: https://dev.anibookquotes.com
+        PLAYWRIGHT_BASE_URL: https://anibookquotes.com
       run: npm run test:e2e
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
