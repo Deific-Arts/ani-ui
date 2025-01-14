@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ develop ]
   workflow_run:
-    workflows: ['Deploy Dev']
+    workflows: ['deploy-dev']
     types: [completed]
 jobs:
   test:
