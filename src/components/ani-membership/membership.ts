@@ -70,7 +70,7 @@ export class AniMembership extends LitElement {
       <p>Being a member of Ani Book Quotes unlocks the full power of the app including features such as commenting and searching quotes.</p>
       <br />
       <form id="checkout">
-        <input type="hidden" name="lookup_key" value="standard_monthly" />
+        <input type="hidden" name="lookup_key" value="ani_standard_monthly" />
         <input type="hidden" name="email" value="${this.userState?.profile?.email}" />
       </form>
       <section id="checkout-embed"></section>
@@ -82,14 +82,20 @@ export class AniMembership extends LitElement {
       const formData = new FormData(this.formCheckout);
       const response = await fetch(`${API_URL}/api/qenna/create-checkout-session`, {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          email: formData.get("email"),
+          lookup_key: formData.get("lookup_key"),
+        }),
       });
       const { clientSecret } = await response.json();
       return clientSecret;
     };
-    const checkout = await stripe?.initEmbeddedCheckout({ fetchClientSecret });
-    this.appState.setCheckout(checkout);
-    this.appState.checkout.mount(this.pageCheckout);
+
+    if (await fetchClientSecret()) {
+      const checkout = await stripe?.initEmbeddedCheckout({ fetchClientSecret });
+      this.appState.setCheckout(checkout);
+      this.appState.checkout.mount(this.pageCheckout);
+    }
   }
 
   makeSuccess() {
