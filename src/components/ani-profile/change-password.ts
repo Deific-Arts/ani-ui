@@ -3,7 +3,6 @@ import { customElement, query, state } from 'lit/decorators.js';
 import userStore, { IUserStore } from '../../store/user.ts';
 import alertStore, { IAlertStore } from '../../store/alert.ts';
 import { ENUM_ALERT_STATUS } from '../../shared/enums.ts';
-import KemetInput from 'kemet-ui/dist/components/kemet-input/kemet-input';
 import sharedStyles from '../../shared/styles.ts';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -29,18 +28,18 @@ export default class aniChangePassword extends LitElement {
             <legend>Change Password</legend>
             <p>
               <kemet-field label="Current Password">
-                <kemet-input required rounded slot="input" type="password" name="current_password" validate-on-blur></kemet-input>
+                <kemet-input required rounded slot="input" type="password" name="currentPassword" validate-on-blur></kemet-input>
               </kemet-field>
             </p>
             <p>
               <kemet-field slug="new_password" label="New Password">
-                <kemet-input slot="input" rounded type="password" name="new_password" required validate-on-blur></kemet-input>
-                <kemet-password slot="component" message="Please make sure you meet all the requirements."></kemet-password>
+                <kemet-input slot="input" rounded type="password" name="password" required validate-on-blur></kemet-input>
+                <kemet-password slot="component" message="The following rules are optional but recommended while creating a password:"></kemet-password>
               </kemet-field>
             </p>
             <p>
               <kemet-field label="Confirm Password">
-                <kemet-input required rounded slot="input" type="password" name="confirm_password" validate-on-blur></kemet-input>
+                <kemet-input required rounded slot="input" type="password" name="passwordConfirmation" validate-on-blur></kemet-input>
               </kemet-field>
             </p>
             <br /><hr /><br />
@@ -53,16 +52,12 @@ export default class aniChangePassword extends LitElement {
     `;
   }
 
-  changePassword(event: SubmitEvent) {
+  async changePassword(event: SubmitEvent) {
     event.preventDefault();
 
-    setTimeout(async () => {
+    //setTimeout(async () => {
       const fields = this.changePasswordForm.querySelectorAll('kemet-input');
       const hasErrors = Array.from(fields).some((field) => field.status === 'error');
-
-      const currentPasswordInput = this.changePasswordForm.querySelector('[name="current_password"]') as KemetInput;
-      const newPasswordInput = this.changePasswordForm.querySelector('[name="new_password"]') as KemetInput;
-      const confirmPasswordInput = this.changePasswordForm.querySelector('[name="confirm_password"]') as KemetInput;
 
       if (hasErrors) {
         this.alertState.setStatus('error');
@@ -72,13 +67,8 @@ export default class aniChangePassword extends LitElement {
         return;
       }
 
-      if (newPasswordInput.value !== confirmPasswordInput.value) {
-        this.alertState.setStatus('error');
-        this.alertState.setMessage('Your passwords do not match.');
-        this.alertState.setOpened(true);
-        this.alertState.setIcon('exclamation-circle');
-        return;
-      }
+      const form = event.target as HTMLFormElement;
+      const formData = new FormData(form);
 
       const options = {
         method: 'POST',
@@ -86,12 +76,7 @@ export default class aniChangePassword extends LitElement {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.userState.user.jwt}`
         },
-        body: JSON.stringify({
-          user_id: this.userState.user.user.id,
-          currentPassword: currentPasswordInput.value,
-          password: newPasswordInput.value,
-          passwordConfirmation: confirmPasswordInput.value
-        })
+        body: JSON.stringify(Object.fromEntries(formData))
       }
 
       await fetch(`${API_URL}/api/auth/change-password`, options)
@@ -112,7 +97,7 @@ export default class aniChangePassword extends LitElement {
           }
         })
         .catch((error) => console.error(error));
-    }, 1);
+    //}, 1);
   }
 }
 
