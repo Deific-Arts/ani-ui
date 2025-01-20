@@ -55,49 +55,47 @@ export default class aniChangePassword extends LitElement {
   async changePassword(event: SubmitEvent) {
     event.preventDefault();
 
-    //setTimeout(async () => {
-      const fields = this.changePasswordForm.querySelectorAll('kemet-input');
-      const hasErrors = Array.from(fields).some((field) => field.status === 'error');
+    const fields = this.changePasswordForm.querySelectorAll('kemet-input');
+    const hasErrors = Array.from(fields).some((field) => field.status === 'error');
 
-      if (hasErrors) {
-        this.alertState.setStatus('error');
-        this.alertState.setMessage('Please correct any errors in the fields.');
+    if (hasErrors) {
+      this.alertState.setStatus('error');
+      this.alertState.setMessage('Please correct any errors in the fields.');
+      this.alertState.setOpened(true);
+      this.alertState.setIcon('exclamation-circle');
+      return;
+    }
+
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.userState.user.jwt}`
+      },
+      body: JSON.stringify(Object.fromEntries(formData))
+    }
+
+    await fetch(`${API_URL}/api/auth/change-password`, options)
+      .then((response) => response.json())
+      .then((responseData) => {
         this.alertState.setOpened(true);
-        this.alertState.setIcon('exclamation-circle');
-        return;
-      }
 
-      const form = event.target as HTMLFormElement;
-      const formData = new FormData(form);
+        if (responseData.error) {
+          this.alertState.setStatus(ENUM_ALERT_STATUS.ERROR);
+          this.alertState.setMessage(responseData.error.message);
+          this.alertState.setIcon('exclamation-circle');
+        }
 
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.userState.user.jwt}`
-        },
-        body: JSON.stringify(Object.fromEntries(formData))
-      }
-
-      await fetch(`${API_URL}/api/auth/change-password`, options)
-        .then((response) => response.json())
-        .then((responseData) => {
-          this.alertState.setOpened(true);
-
-          if (responseData.error) {
-            this.alertState.setStatus(ENUM_ALERT_STATUS.ERROR);
-            this.alertState.setMessage(responseData.error.message);
-            this.alertState.setIcon('exclamation-circle');
-          }
-
-          if (responseData.jwt) {
-            this.alertState.setStatus(ENUM_ALERT_STATUS.PRIMARY);
-            this.alertState.setMessage('Password changed successfully.');
-            this.alertState.setIcon('check-circle');
-          }
-        })
-        .catch((error) => console.error(error));
-    //}, 1);
+        if (responseData.jwt) {
+          this.alertState.setStatus(ENUM_ALERT_STATUS.PRIMARY);
+          this.alertState.setMessage('Password changed successfully.');
+          this.alertState.setIcon('check-circle');
+        }
+      })
+      .catch((error) => console.error(error));
   }
 }
 
