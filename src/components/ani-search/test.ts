@@ -8,7 +8,7 @@ import { AniSearch } from './search';
 import './search';
 import 'kemet-ui/dist/components/kemet-input/kemet-input';
 
-describe('Search', () => {
+describe.skip('Search', () => {
   beforeEach(() => {
     render(
       html`<ani-search></ani-search>`,

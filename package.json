@@ -10,7 +10,8 @@
     "tsc": "tsc",
     "test": "vitest --workspace=vitest.workspace.ts",
     "test:cli": "vitest run --browser.name=chrome --browser.headless",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:ui": "playwright test --ui"
   },
   "dependencies": {
     "@lit/task": "^1.0.1",

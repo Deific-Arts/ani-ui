@@ -5,11 +5,13 @@ export default css`
     display: block;
     height: 1px;
     overflow: hidden;
+    visibility: hidden;
     transition: height 0.3s ease-in-out;
   }
 
   :host([opened]) {
-    height: 120px;
+    height: 148px;
+    visibility: visible;
   }
 
   form,

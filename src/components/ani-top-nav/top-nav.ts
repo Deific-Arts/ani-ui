@@ -72,7 +72,7 @@ export default class AniTopNav extends LitElement {
 
     if (this.userState.isLoggedIn) {
       return html`
-        <button @click=${() => switchRoute('/profile')}>
+        <button @click=${() => switchRoute('/profile')} aria-label="Profile Avatar">
           ${profileImage
             ? html`<img src="${profileImage}" alt="${this.userState.profile.username}" />`
             : html`<img src="https://placehold.co/80x80?text=${this.userState.profile.username}" alt="${this.userState.profile.username}" />`

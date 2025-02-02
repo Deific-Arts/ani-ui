@@ -3,6 +3,9 @@ import litCss from 'vite-plugin-lit-css';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+  server: {
+    port: 5174,
+  },
   plugins: [
     litCss({
       // your global and rel="stylesheet" styles must be excluded
