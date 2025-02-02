@@ -1,10 +1,13 @@
 import { css } from 'lit';
 
 export default css`
-  :host,
-  button {
+  :host {
     display: flex;
+  }
+
+  button {
+    display: inline-flex;
     gap: var(--kemet-spacer-sm);
-    align-content: center;
+    align-items: center;
   }
 `;

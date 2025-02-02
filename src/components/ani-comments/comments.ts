@@ -32,8 +32,10 @@ export default class AniComments extends LitElement {
 
   render() {
     return html`
-      <button aria-label="Comments"><kemet-icon icon="chat-left" size="24" @click=${() => this.openComment()}></kemet-icon></button>
-      <span>${this.comments?.length}</span>
+      <button aria-label="Comments" @click=${() => this.openComment()}>
+        <kemet-icon icon="chat-left" size="24"></kemet-icon>
+        <span>${this.comments?.length}</span>
+      </button>
     `
   }
 

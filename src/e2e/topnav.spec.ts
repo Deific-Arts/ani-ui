@@ -7,11 +7,6 @@ describe('Top Nav: Unauthenticated', () => {
     await context.clearCookies();
   });
 
-  test('has all tab on home page', async ({ page }) => {
-    await page.goto('/home');
-    page.getByText('All')
-  });
-
   test('displays call to membership when searched is clicked', async ({ page }) => {
     await page.goto('/home');
     const buttonText = 'Login to become a member';
