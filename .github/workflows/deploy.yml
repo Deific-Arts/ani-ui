@@ -26,7 +26,7 @@ jobs:
           username: ${{ secrets.FTP_DEPLOY_USERNAME }}
           server: ${{ secrets.FTP_DEPLOY_HOST }}
           port: ${{ secrets.FTP_DEPLOY_PORT }}
-          local_path: "./dist/*"
+          local_path: "./dist/"
           remote_path: "./sites/ani-ui/"
           sftp_only: true
           password: ${{ secrets.FTP_DEPLOY_PASSWORD }}
