@@ -81,7 +81,7 @@ describe('Information', () => {
   });
 
   test('goes to the user profile page when "View Profile" button is clicked', async () => {
-    const profileButton= page.getByText(/View Profile/i);
+    const profileButton = page.getByText(/View Profile/i);
     await profileButton.click();
     expect(switchRoute).toBeCalledWith('/user/1');
   });

@@ -95,7 +95,7 @@ export default class AniFeed extends LitElement {
           return html`<ul>${this.quoteState.followingQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         } else {
           if (this.searchQuery) {
-            return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
+            return html`<p>We could not find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
           } else {
             if (this.appState.fetchedTabs.includes('following')) {
               return html`<p>You either aren't following anyone or they haven't added any quotes yet.</p>`
@@ -109,7 +109,7 @@ export default class AniFeed extends LitElement {
           return html`<ul>${this.quoteState.mineQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         } else {
           if (this.searchQuery) {
-            return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
+            return html`<p>We could not find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
           } else {
             if (this.appState.fetchedTabs.includes('mine')) {
               return html`<p>Looks like you haven't added any quotes yet.</p>`;
@@ -123,7 +123,7 @@ export default class AniFeed extends LitElement {
           return html`<ul>${this.quoteState.likedQuotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         } else {
           if (this.searchQuery) {
-            return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
+            return html`<p>We could not find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
           } else {
             if (this.appState.fetchedTabs.includes('liked')) {
               return html`<p>Looks like you haven't liked any quotes yet.</p>`;
@@ -137,7 +137,7 @@ export default class AniFeed extends LitElement {
           return html`<ul>${this.quoteState.quotes.map(quote => html`<li><ani-quote .quote=${quote}></ani-quote></li>`)}`;
         } else {
           if (this.searchQuery) {
-            return html`<p>We could't find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
+            return html`<p>We could not find any quotes, but you're searching for <strong>${this.searchQuery}</strong>. Try clearing the search for better results.</p>`;
           } else {
             if (this.hasFetched.includes('all')) {
               return html`<p>Uh oh. We couldn't find any quotes.</p>`;

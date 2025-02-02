@@ -50,15 +50,15 @@ describe('Top Nav: Authenticated', () => {
     const password = page.locator('[action="api/auth/local"] input[name=password]');
     const button = page.getByRole('button', { name: 'Login' });
 
-    await username.fill(users[0].name);
-    await password.fill(users[0].pass);
+    await username.fill(users.standard.name);
+    await password.fill(users.standard.pass);
     await button.press('Enter');
     await page.waitForTimeout(1000);
   });
 
   test('should display an avatar', async () => {
     await page.goto('/home');
-    const avatar = page.getByAltText(users[0].name);
+    const avatar = page.getByAltText(users.standard.name);
     expect(avatar).toBeVisible();
   });
 
@@ -77,5 +77,39 @@ describe('Top Nav: Authenticated', () => {
     const button = page.getByRole('button', { name: 'Search' });
     await button.press('Enter');
     await expect(page.getByText(searchText)).toBeVisible();
+  });
+});
+
+describe('Top Nav: Member', () => {
+  let page: Page;
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext();
+    page = await context.newPage();
+
+    // login
+    await page.goto('/login');
+    await page.waitForTimeout(1000);
+
+    const username = page.locator('[action="api/auth/local"] input[name=identifier]');
+    const password = page.locator('[action="api/auth/local"] input[name=password]');
+    const button = page.getByRole('button', { name: 'Login' });
+
+    await username.fill(users.member.name);
+    await password.fill(users.member.pass);
+    await button.press('Enter');
+    await page.waitForTimeout(1000);
+  });
+
+  test('clicking search should allow member to search', async () => {
+    await page.goto('/home');
+    // const searchText = 'Want to be able to easily search quotes by content, author, or book?';
+    // await expect(page.getByText(searchText)).not.toBeVisible();
+    const button = page.getByRole('button', { name: 'Search' });
+    await button.press('Enter');
+    await expect(page.getByText('Search by content, book, or user')).toBeVisible();
+    const searchInput = page.locator('input[name=search]');
+    await searchInput.fill('search');
+    searchInput.blur();
+    await expect(page.getByText(/We could not find any quotes/)).toBeVisible();
   });
 });
